@@ -1,0 +1,32 @@
+<ion-content class="ion-justify-content-center">
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <h1>StraviaTEC</h1>
+    </ion-col>
+  </ion-row>
+  
+  <form #form="ngForm" novalidate>
+    <ion-grid>
+      <ion-row class="ion-justify-content-center" >
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div>
+            <ion-item class="ion-margin">
+              <ion-input type="text" required #nombre="ngModel" [class.is-invalid]="nombre.invalid && nombre.touched"
+               placeholder="Nombre de usuario" name="usuario"[(ngModel)]="usuarioL.nombreUsuario" >
+              </ion-input>
+            </ion-item>
+            <ion-item class="ion-margin">
+              <ion-input type="password" required #contrasena="ngModel" [class.is-invalid]="contrasena.invalid && contrasena.touched"  
+               placeholder="Contraseña" name="contra"  [(ngModel)]="usuarioL.claveAcceso"></ion-input>
+            </ion-item>
+          </div>
+     
+          <div>
+            <ion-button (click)="submit()" size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
+          </div>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
