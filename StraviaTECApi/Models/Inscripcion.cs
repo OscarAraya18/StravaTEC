@@ -7,8 +7,7 @@ namespace StraviaTECApi.Models
     {
         public Inscripcion()
         {
-            InscripcionCarreraDeportistainscripcionNavigation = new HashSet<InscripcionCarrera>();
-            InscripcionCarreraIdinscripcionNavigation = new HashSet<InscripcionCarrera>();
+            InscripcionCarrera = new HashSet<InscripcionCarrera>();
         }
 
         public int Id { get; set; }
@@ -17,7 +16,6 @@ namespace StraviaTECApi.Models
         public byte[] Recibopago { get; set; }
 
         public virtual Deportista UsuariodeportistaNavigation { get; set; }
-        public virtual ICollection<InscripcionCarrera> InscripcionCarreraDeportistainscripcionNavigation { get; set; }
-        public virtual ICollection<InscripcionCarrera> InscripcionCarreraIdinscripcionNavigation { get; set; }
+        public virtual ICollection<InscripcionCarrera> InscripcionCarrera { get; set; }
     }
 }

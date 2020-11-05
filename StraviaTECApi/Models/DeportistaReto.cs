@@ -10,8 +10,7 @@ namespace StraviaTECApi.Models
         public string Admindeportista { get; set; }
         public bool Completado { get; set; }
 
-        public virtual Reto AdmindeportistaNavigation { get; set; }
-        public virtual Reto NombreretoNavigation { get; set; }
+        public virtual Reto Reto { get; set; }
         public virtual Deportista UsuariodeportistaNavigation { get; set; }
     }
 }

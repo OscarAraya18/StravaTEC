@@ -8,7 +8,7 @@ namespace StraviaTECApi.Models
         public Grupo()
         {
             GrupoCarrera = new HashSet<GrupoCarrera>();
-            GrupoDeportistaAdmindeportistaNavigation = new HashSet<GrupoDeportista>();
+            GrupoDeportista = new HashSet<GrupoDeportista>();
             GrupoReto = new HashSet<GrupoReto>();
         }
 
@@ -16,9 +16,8 @@ namespace StraviaTECApi.Models
         public string Admindeportista { get; set; }
 
         public virtual Deportista AdmindeportistaNavigation { get; set; }
-        public virtual GrupoDeportista GrupoDeportistaNombregrupoNavigation { get; set; }
         public virtual ICollection<GrupoCarrera> GrupoCarrera { get; set; }
-        public virtual ICollection<GrupoDeportista> GrupoDeportistaAdmindeportistaNavigation { get; set; }
+        public virtual ICollection<GrupoDeportista> GrupoDeportista { get; set; }
         public virtual ICollection<GrupoReto> GrupoReto { get; set; }
     }
 }

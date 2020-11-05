@@ -1,5 +1,5 @@
-﻿using EFConsole.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +7,12 @@ using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
-    class GrupoRepo
+    public class GrupoRepo
     {
-        private readonly StravaContext _context;
+        private readonly StraviaContext _context;
 
         // se inyecta el DB Context 
-        public GrupoRepo(StravaContext context)
+        public GrupoRepo(StraviaContext context)
         {
             _context = context;
         }
@@ -55,11 +55,10 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void agregarAgrupo(string usuarioDeportista, string nombreGrupo)
+        public void agregarAgrupo(string usuarioDeportista, Grupo grupo)
         {
             var deportista = _context.Deportista.FirstOrDefault(x => x.Usuario == usuarioDeportista);
             // también se podria recibir el grupo directamente desde los argumentos
-            var grupo = _context.Grupo.FirstOrDefault(x => x.Nombre == nombreGrupo);
 
             var grupoAgregado = new GrupoDeportista();
             grupoAgregado.Admindeportista = grupo.Admindeportista;
@@ -68,8 +67,10 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(grupoAgregado);
         }
 
-        public void accederCarreras(string nombreGrupo)
+        public List<Carrera> accederCarreras(string nombreGrupo)
         {
+            List<Carrera> carreras = new List<Carrera>();
+
             var verCarreras = _context.GrupoCarrera.
                     Where(x => x.Nombregrupo == nombreGrupo).
                     Include(x => x.Carrera).ToList();
@@ -77,15 +78,29 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach (var carrera in verCarreras)
             {
+                carreras.Add(carrera.Carrera);
                 Console.WriteLine(carrera.Carrera.Nombre);
             }
-
+            return carreras;
             // se debe retornar el resultado
         }
 
         public List<Grupo> verMisGruposAdministrados(string usuarioDeportista)
         {
             return _context.Grupo.Where(x => x.Admindeportista == usuarioDeportista).ToList();
+        }
+
+        public List<Grupo> verTodos()
+        {
+            return _context.Grupo.ToList();
+        }
+
+        /**         
+         * Save the changes made to the database
+         */
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
         }
     }
 }

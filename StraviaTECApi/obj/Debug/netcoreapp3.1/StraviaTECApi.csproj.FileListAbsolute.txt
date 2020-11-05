@@ -29,8 +29,6 @@ C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\S
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Npgsql.dll
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.csproj.CoreCompileInputs.cache
-C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
@@ -44,3 +42,5 @@ C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\M
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.dll
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.pdb
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.genruntimeconfig.cache
+C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.MvcApplicationPartsAssemblyInfo.cache

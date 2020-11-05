@@ -1,6 +1,6 @@
-﻿using EFConsole.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,13 @@ using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
-    class InscripcionRepo
+    public class InscripcionRepo
     {
 
-        private readonly StravaContext _context;
+        private readonly StraviaContext _context;
 
         // se inyecta el DB Context 
-        public InscripcionRepo(StravaContext context)
+        public InscripcionRepo(StraviaContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace EFConsole.DataAccess.Repositories
         public void Create(Inscripcion inscripcion, string nombreCarrera)
         {
             if (inscripcion == null)
-                throw new System.ArgumentNullException(nameof(inscripcion));
+                throw new ArgumentNullException(nameof(inscripcion));
 
             _context.Inscripcion.Add(inscripcion);
 
@@ -37,7 +37,6 @@ namespace EFConsole.DataAccess.Repositories
             inscripcionCarrera.Idinscripcion = inscripcion.Id;
             inscripcionCarrera.Nombrecarrera = nombreCarrera;
 
-            Console.WriteLine("Numero: " + inscripcion.Id);
             _context.Add(inscripcionCarrera);
 
         }
@@ -74,5 +73,12 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(deportistaCarrera);
         }
 
+        /**         
+         * Save the changes made to the database
+         */
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
     }
 }

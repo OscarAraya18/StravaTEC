@@ -9,8 +9,13 @@ namespace StraviaTECApi.Models
         {
             AmigoDeportistaAmigo = new HashSet<AmigoDeportista>();
             AmigoDeportistaUsuariodeportistaNavigation = new HashSet<AmigoDeportista>();
+            Carrera = new HashSet<Carrera>();
             DeportistaCarrera = new HashSet<DeportistaCarrera>();
             DeportistaReto = new HashSet<DeportistaReto>();
+            Grupo = new HashSet<Grupo>();
+            GrupoDeportista = new HashSet<GrupoDeportista>();
+            Inscripcion = new HashSet<Inscripcion>();
+            Reto = new HashSet<Reto>();
         }
 
         public string Usuario { get; set; }
@@ -25,14 +30,14 @@ namespace StraviaTECApi.Models
 
         public virtual Categoria NombrecategoriaNavigation { get; set; }
         public virtual Actividad Actividad { get; set; }
-        public virtual Carrera Carrera { get; set; }
-        public virtual Grupo Grupo { get; set; }
-        public virtual GrupoDeportista GrupoDeportista { get; set; }
-        public virtual Inscripcion Inscripcion { get; set; }
-        public virtual Reto Reto { get; set; }
         public virtual ICollection<AmigoDeportista> AmigoDeportistaAmigo { get; set; }
         public virtual ICollection<AmigoDeportista> AmigoDeportistaUsuariodeportistaNavigation { get; set; }
+        public virtual ICollection<Carrera> Carrera { get; set; }
         public virtual ICollection<DeportistaCarrera> DeportistaCarrera { get; set; }
         public virtual ICollection<DeportistaReto> DeportistaReto { get; set; }
+        public virtual ICollection<Grupo> Grupo { get; set; }
+        public virtual ICollection<GrupoDeportista> GrupoDeportista { get; set; }
+        public virtual ICollection<Inscripcion> Inscripcion { get; set; }
+        public virtual ICollection<Reto> Reto { get; set; }
     }
 }

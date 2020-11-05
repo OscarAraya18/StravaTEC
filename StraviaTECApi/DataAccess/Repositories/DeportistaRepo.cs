@@ -1,20 +1,21 @@
-﻿using EFConsole.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
-    class DeportistaRepo
+    public class DeportistaRepo
     {
 
-        private readonly StravaContext _context;
+        private readonly StraviaContext _context;
 
         // se inyecta el DB Context 
-        public DeportistaRepo(StravaContext context)
+        public DeportistaRepo(StraviaContext context)
         {
             _context = context;
         }
@@ -59,17 +60,19 @@ namespace EFConsole.DataAccess.Repositories
 
         public Deportista obtenerPorUsuario(string usuario)
         {
+            //l
             return _context.Deportista.FirstOrDefault(x => x.Usuario == usuario);
         }
 
-        public void verActividadesAmigos(string usuario)
+        public List<Actividad> verActividadesAmigos(string usuario)
         {
-            var deportista = _context.Deportista.FirstOrDefault(x => x.Usuario == usuario);
+            List<Actividad> actividades = new List<Actividad>();
             
             // Hay que buscar los amigos y por cada uno retornar las actividades
             var amigoDeportista = _context.AmigoDeportista.
                     Where(x => x.Usuariodeportista == usuario).
-                    Include(x => x.Amigo).ToList();
+                    Include(x => x.Amigo).
+                    ThenInclude(x => x.Actividad).ToList();
 
             foreach (var amigo in amigoDeportista)
             {
@@ -77,8 +80,9 @@ namespace EFConsole.DataAccess.Repositories
                 Console.Write(amigo.Amigo.Apellido1 + " ");
                 Console.Write(amigo.Amigo.Apellido2 + " ");
                 Console.WriteLine();
+                actividades.Add(amigo.Amigo.Actividad);
             }
-
+            return actividades;
         }
 
         public void seguirDeportista(string usuarioDeportista, string usuarioAmigo)
@@ -90,8 +94,10 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(amigoDeportista);
         }
 
-        public void verCarrerasInscritas(string UsuarioDeportista)
+        public List<Carrera> verCarrerasInscritas(string UsuarioDeportista)
         {
+            List<Carrera> carreras = new List<Carrera>();
+
             var carrerasInscritas = _context.DeportistaCarrera.
                     Where(x => x.Usuariodeportista == UsuarioDeportista).
                     Include(x => x.Carrera).ToList();
@@ -99,14 +105,16 @@ namespace EFConsole.DataAccess.Repositories
             foreach (var carrera in carrerasInscritas)
             {
                 Console.WriteLine(carrera.Carrera.Nombre);
+                carreras.Add(carrera.Carrera);
             }
             // se debe retornar el resultado
+            return carreras;
         }
 
-        public void agregarCarreraDeportista(string UsuarioDeportista, string nombreCarrera)
+        // creo que no es necesaria
+        public void agregarCarreraDeportista(string UsuarioDeportista, Carrera carrera)
         {
             var deportista = _context.Deportista.FirstOrDefault(x => x.Usuario == UsuarioDeportista);
-            var carrera = _context.Carrera.FirstOrDefault(x => x.Nombre == nombreCarrera);
 
             var deportistaCarrera = new DeportistaCarrera();
             deportistaCarrera.Admindeportista = carrera.Admindeportista;
@@ -115,18 +123,6 @@ namespace EFConsole.DataAccess.Repositories
             deportistaCarrera.Completada = false;
 
             _context.Add(deportistaCarrera);
-        }
-
-        public void agregarGrupo(string usuarioDeportista, string nombreGrupo)
-        {
-            var deportista = _context.Deportista.FirstOrDefault(x => x.Usuario == usuarioDeportista);
-            var grupo = _context.Grupo.FirstOrDefault(x => x.Nombre == nombreGrupo);
-
-            var grupoAgregado = new GrupoDeportista();
-            grupoAgregado.Admindeportista = grupo.Admindeportista;
-            grupoAgregado.Nombregrupo = grupo.Nombre;
-            grupoAgregado.Usuariodeportista = deportista.Usuario;
-            _context.Add(grupoAgregado);
         }
 
         public void mostrarTodosDeportistasNoAmigos(string usuarioDeportista)

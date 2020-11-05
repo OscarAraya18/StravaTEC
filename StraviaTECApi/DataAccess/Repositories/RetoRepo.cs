@@ -1,5 +1,5 @@
-﻿using EFConsole.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +7,12 @@ using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
-    class RetoRepo
+    public class RetoRepo
     {
-        private readonly StravaContext _context;
+        private readonly StraviaContext _context;
 
         // se inyecta el DB Context 
-        public RetoRepo(StravaContext context)
+        public RetoRepo(StraviaContext context)
         {
             _context = context;
         }
@@ -55,17 +55,35 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void verEstadoReto(string nombreReto, string UsuarioDeportista)
+        public List<Reto> verEstadoRetos(string UsuarioDeportista)
         {
-            var reto = _context.Reto.FirstOrDefault(x => x.Nombre == nombreReto);
+            List<Reto> retos = new List<Reto>();
+
+            var carreraCategorias = _context.DeportistaReto.
+                    Where(x => x.Usuariodeportista == UsuarioDeportista).
+                    Include(x => x.Reto).ToList();
             // se debe retornar el avance que tiene el deportista
             // el objetivo del reto
             // también los días faltantes
+            foreach (var carrera in carreraCategorias)
+            {
+                Console.WriteLine(carrera.Reto.Kmtotales);
+                retos.Add(carrera.Reto);
+            }
+            return retos;
         }
 
         public List<Reto> verRetosAdministrados(string usuarioDeportista)
         {
             return _context.Reto.Where(x => x.Admindeportista == usuarioDeportista).ToList();
+        }
+
+        /**         
+        * Save the changes made to the database
+        */
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
         }
     }
 }

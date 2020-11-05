@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using StravaTEC.Database;
+using StraviaTECApi.Models;
+using EFConsole.DataAccess.Repositories;
 
 namespace StraviaTECApi
 {
@@ -34,7 +29,7 @@ namespace StraviaTECApi
                 });
 
             services.AddEntityFrameworkNpgsql().AddDbContext<StraviaContext>(opt =>
-            opt.UseNpgsql(Configuration.GetConnectionString("StravaTECConnection")));
+            opt.UseNpgsql(Configuration.GetConnectionString("StraviaTECConnection")));
 
             // Customize our CORS policy
             services.AddCors(o => o.AddPolicy(
@@ -44,6 +39,17 @@ namespace StraviaTECApi
                            .AllowAnyMethod()
                            .AllowAnyHeader();
                 }));
+
+
+            // se inyectan las dependencias
+            services.AddScoped<CarreraRepo>();
+            services.AddScoped<CategoriaRepo>();
+            services.AddScoped<DeportistaRepo>();
+            services.AddScoped<GrupoRepo>();
+            services.AddScoped<InscripcionRepo>();
+            services.AddScoped<PatrocinadorRepo>();
+            services.AddScoped<RetoRepo>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

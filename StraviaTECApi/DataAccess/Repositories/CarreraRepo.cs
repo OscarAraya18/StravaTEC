@@ -1,6 +1,6 @@
-﻿using EFConsole.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +8,12 @@ using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
-    class CarreraRepo
+    public class CarreraRepo
     {
-        private readonly StravaContext _context;
+        private readonly StraviaContext _context;
 
         // se inyecta el DB Context 
-        public CarreraRepo(StravaContext context)
+        public CarreraRepo(StraviaContext context)
         {
             _context = context;
         }
@@ -93,9 +93,15 @@ namespace EFConsole.DataAccess.Repositories
             }
         }
 
-        public void verMisCarreras(string usuarioDeportista)
+        public List<Carrera> verMisCarreras(string usuarioDeportista)
         {
-            var carreras = _context.Carrera.Where(x => x.Admindeportista == usuarioDeportista).ToList();
+            return _context.Carrera.Where(x => x.Admindeportista == usuarioDeportista).ToList();
+            // se retorna la lista
+        }
+
+        public List<Carrera> verTodas()
+        {
+            return _context.Carrera.ToList();
             // se retorna la lista
         }
 
@@ -113,6 +119,14 @@ namespace EFConsole.DataAccess.Repositories
                 patrocinadores.Add(p.NombrepatrocinadorNavigation);
             }
             // se retorna la lista
+        }
+
+        /**         
+         * Save the changes made to the database
+         */
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
         }
     }
 }

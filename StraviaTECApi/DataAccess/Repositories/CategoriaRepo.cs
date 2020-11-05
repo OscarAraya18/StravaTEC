@@ -1,4 +1,4 @@
-﻿using EFConsole.Models;
+﻿using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +6,12 @@ using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
-    class CategoriaRepo
+    public class CategoriaRepo
     {
-        private readonly StravaContext _context;
+        private readonly StraviaContext _context;
 
         // se inyecta el DB Context 
-        public CategoriaRepo(StravaContext context)
+        public CategoriaRepo(StraviaContext context)
         {
             _context = context;
         }
@@ -20,5 +20,6 @@ namespace EFConsole.DataAccess.Repositories
         {
             return _context.Categoria.ToList();
         }
+
     }
 }
