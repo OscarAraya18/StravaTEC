@@ -1,6 +1,7 @@
 ﻿using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using StraviaTECApi.Models;
+using System.Collections.Generic;
 
 namespace StraviaTECApi.Controllers
 {

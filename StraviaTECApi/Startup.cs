@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
 using EFConsole.DataAccess.Repositories;
+using Newtonsoft.Json;
 
 namespace StraviaTECApi
 {
@@ -27,6 +28,9 @@ namespace StraviaTECApi
                 s => {
                     s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
+            
+            services.AddMvc().AddNewtonsoftJson(options => 
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddEntityFrameworkNpgsql().AddDbContext<StraviaContext>(opt =>
             opt.UseNpgsql(Configuration.GetConnectionString("StraviaTECConnection")));

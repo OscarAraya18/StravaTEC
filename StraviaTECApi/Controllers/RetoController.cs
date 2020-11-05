@@ -74,7 +74,7 @@ namespace StraviaTECApi.Controllers
         {
             _repository.Delete(nombre);
             _repository.SaveChanges();
-            return Ok("Carrera eliminado correctamente");
+            return Ok("Carrera eliminado correctamente");   
         }
     }
 }
