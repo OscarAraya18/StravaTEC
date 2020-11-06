@@ -3,7 +3,7 @@
 © 2020 STRAVATEC
 --------------------------------------------------------------------
 Nombre   : StravaTEC
-Version: 3.0
+Version: 4.0
 --------------------------------------------------------------------
 */
 
@@ -12,13 +12,13 @@ CREATE TABLE DEPORTISTA
 (
 	Usuario				VARCHAR(20)		NOT NULL	UNIQUE,
 	ClaveAcceso			VARCHAR(20)		NOT NULL,
-	FechaNacimiento 	DATE			NOT NULL,
-	Nombre				VARCHAR(20)     NOT NULL,
-	Apellido1			VARCHAR(20)     NOT NULL,
-	Apellido2			VARCHAR(20)		NOT NULL,
+	FechaNacimiento 	DATE,
+	Nombre				VARCHAR(20),
+	Apellido1			VARCHAR(20),
+	Apellido2			VARCHAR(20),
 	NombreCategoria		VARCHAR(20),
-	Nacionalidad    	VARCHAR(25)     NOT NULL,
-	Foto				BYTEA			NOT NULL,
+	Nacionalidad    	VARCHAR(25),
+	Foto				BYTEA,
 	PRIMARY KEY  		(Usuario)
 );
 
@@ -26,11 +26,11 @@ CREATE TABLE CARRERA
 (
 	Nombre				VARCHAR(30)		NOT NULL  UNIQUE,
 	AdminDeportista		VARCHAR(20)		NOT NULL,
-	Fecha				DATE			NOT NULL,
-	Recorrido			BYTEA			NOT NULL,
-	Costo				INT				NOT NULL,
-	TipoActividad		VARCHAR(30)     NOT NULL,
-	Privacidad          BOOL			NOT NULL,
+	Fecha				DATE,
+	Recorrido			BYTEA,
+	Costo				INT,
+	TipoActividad		VARCHAR(30),
+	Privacidad          BOOL,
 	PRIMARY KEY			(Nombre, AdminDeportista) 
 );
 
@@ -38,12 +38,11 @@ CREATE TABLE RETO
 (
 	Nombre					VARCHAR(20)		NOT NULL    UNIQUE,
 	AdminDeportista			VARCHAR(20)		NOT NULL,
-	FondoAltitud       		VARCHAR(7)		NOT NULL,
-	TipoActividad			VARCHAR(20)     NOT NULL,
-	PeriodoDisponibilidad	DATE			NOT NULL,
-	Privacidad				BOOL			NOT NULL,
-	KmAcumulados 			FLOAT8,
-	KmTotales				FLOAT8			NOT NULL,
+	FondoAltitud       		VARCHAR(7),
+	TipoActividad			VARCHAR(20),
+	PeriodoDisponibilidad	DATE,
+	Privacidad				BOOL,
+	KmTotales				FLOAT8,
 	Descripcion				VARCHAR(150),
 	PRIMARY KEY 			(Nombre, AdminDeportista)
 );
@@ -51,18 +50,18 @@ CREATE TABLE RETO
 CREATE TABLE PATROCINADOR
 (
 	NombreComercial			VARCHAR(30)		NOT NULL,
-	Logo					BYTEA,
-	NombreRepresentante		VARCHAR(100)    NOT NULL,
-	NumeroTelRepresentante	VARCHAR(15)		NOT NULL,
+	Logo					VARCHAR(200),
+	NombreRepresentante		VARCHAR(100),
+	NumeroTelRepresentante	VARCHAR(15),
 	PRIMARY KEY 			(NombreComercial)
 );
 
 CREATE TABLE INSCRIPCION
 (
-	Id					SERIAL				NOT NULL	UNIQUE,
-	UsuarioDeportista	VARCHAR(20)			NOT NULL,
-	Estado				VARCHAR(10)			NOT NULL,
-	ReciboPago			BYTEA				NOT NULL,
+	Id					SERIAL				NOT NULL,
+	UsuarioDeportista	VARCHAR(20),
+	Estado				VARCHAR(10),
+	ReciboPago			BYTEA,
 	PRIMARY KEY 		(Id, UsuarioDeportista)
 );
 
@@ -76,11 +75,11 @@ CREATE TABLE CATEGORIA
 
 CREATE TABLE ACTIVIDAD
 (
-	UsuarioDeportista	VARCHAR(20)			NOT NULL		UNIQUE,
-	FechaHora			TIMESTAMP			NOT NULL,
-	Duracion			VARCHAR(10)			NOT NULL,
-	Kilometraje			FLOAT8				NOT NULL,
-	TipoActividad		VARCHAR(20)		  	NOT NULL,
+	UsuarioDeportista	VARCHAR(20)			NOT NULL,
+	FechaHora			TIMESTAMP,
+	Duracion			VARCHAR(10),
+	Kilometraje			FLOAT8,
+	TipoActividad		VARCHAR(20),
 	RecorridoGPX		BYTEA,				
 	PRIMARY KEY			(UsuarioDeportista, FechaHora)
 );
@@ -89,7 +88,7 @@ CREATE TABLE ACTIVIDAD
 CREATE TABLE GRUPO
 (
 	Nombre				VARCHAR(30)		NOT NULL   UNIQUE,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
+	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY         (Nombre, AdminDeportista)
 );
 
@@ -103,85 +102,88 @@ CREATE TABLE AMIGO_DEPORTISTA
 
 CREATE TABLE GRUPO_DEPORTISTA
 (
-	UsuarioDeportista   VARCHAR(20)  	NOT NULL,	
-	NombreGrupo			VARCHAR(30)		NOT NULL	UNIQUE,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
+	UsuarioDeportista   VARCHAR(20),	
+	NombreGrupo			VARCHAR(30),
+	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY			(UsuarioDeportista, NombreGrupo, AdminDeportista)
 );
 
 CREATE TABLE GRUPO_CARRERA
 (
-	NombreCarrera   	VARCHAR(30)  	NOT NULL,	
-	NombreGrupo			VARCHAR(30)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
-	PRIMARY KEY			(NombreCarrera, NombreGrupo, AdminDeportista)
+	NombreCarrera   	VARCHAR(30),
+	AdminCarrera		VARCHAR(20),
+	AdminGrupo			VARCHAR(20),
+	NombreGrupo			VARCHAR(30),
+	PRIMARY KEY			(NombreCarrera, AdminCarrera, AdminGrupo, NombreGrupo)
 );
 
 CREATE TABLE GRUPO_RETO
 (
-	NombreReto  		VARCHAR(20)  	NOT NULL,	
-	NombreGrupo			VARCHAR(30)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
-	PRIMARY KEY		(NombreReto, NombreGrupo, AdminDeportista)
+	NombreReto  		VARCHAR(20),
+	AdminReto			VARCHAR(20),
+	AdminGrupo			VARCHAR(20),
+	NombreGrupo			VARCHAR(30),
+	PRIMARY KEY		(NombreReto, AdminReto, AdminGrupo, NombreGrupo)
 );
 
 
 CREATE TABLE INSCRIPCION_CARRERA
 (
-	IdInscripcion  			INT  			NOT NULL,
-	DeportistaInscripcion	VARCHAR(20)		NOT NULL,
-	NombreCarrera			VARCHAR(30)		NOT NULL,
+	IdInscripcion  			INT,
+	DeportistaInscripcion	VARCHAR(20),
+	NombreCarrera			VARCHAR(30),
 	PRIMARY KEY		(IdInscripcion, NombreCarrera, DeportistaInscripcion)
 );
 
 
 CREATE TABLE CARRERA_PATROCINADOR
 (
-	NombrePatrocinador	VARCHAR(30)		NOT NULL,	
-	NombreCarrera		VARCHAR(30)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
+	NombrePatrocinador	VARCHAR(30),	
+	NombreCarrera		VARCHAR(30),
+	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY		(NombrePatrocinador, NombreCarrera, AdminDeportista)
 );
 
 CREATE TABLE CARRERA_CATEGORIA
 (
-	NombreCategoria		VARCHAR(20)		NOT NULL,	
-	NombreCarrera		VARCHAR(30)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
+	NombreCategoria		VARCHAR(20),	
+	NombreCarrera		VARCHAR(30),
+	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY		(NombreCategoria, NombreCarrera, AdminDeportista)
 );
 
 CREATE TABLE RETO_PATROCINADOR
 (
-	NombrePatrocinador	VARCHAR(30)		NOT NULL,	
-	NombreReto			VARCHAR(20)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
+	NombrePatrocinador	VARCHAR(30),	
+	NombreReto			VARCHAR(20),
+	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY		(NombrePatrocinador, NombreReto, AdminDeportista)
 );
 
 CREATE TABLE CARRERA_CUENTABANCARIA
 (
-	NombreCarrera	VARCHAR(30)		NOT NULL,
-	AdminDeportista	VARCHAR(20)		NOT NULL,
-	CuentaBancaria	VARCHAR(50)		NOT NULL,
-	PRIMARY KEY		(NombreCarrera, AdminDeportista)
+	NombreCarrera	VARCHAR(30),
+	AdminDeportista	VARCHAR(20),
+	CuentaBancaria	VARCHAR(50),
+	PRIMARY KEY		(NombreCarrera, AdminDeportista, CuentaBancaria)
 );
 
 CREATE TABLE DEPORTISTA_CARRERA
 (
-	UsuarioDeportista	VARCHAR(20)		NOT NULL,
-	NombreCarrera		VARCHAR(30)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
-	Completada			BOOL 			NOT NULL,
+	UsuarioDeportista	VARCHAR(20),
+	NombreCarrera		VARCHAR(30),
+	AdminDeportista		VARCHAR(20),
+	Completada			BOOL,
 	PRIMARY KEY 		(UsuarioDeportista, NombreCarrera, AdminDeportista)
 );
 
 CREATE TABLE DEPORTISTA_RETO
 (
-	UsuarioDeportista	VARCHAR(20)		NOT NULL,
-	NombreReto			VARCHAR(20)		NOT NULL,
-	AdminDeportista		VARCHAR(20)		NOT NULL,
-	Completado			BOOL 			NOT NULL,
+	UsuarioDeportista	VARCHAR(20),
+	NombreReto			VARCHAR(20),
+	AdminDeportista		VARCHAR(20),
+	Completado			BOOL,
+	KmAcumulados 		FLOAT8,
 	PRIMARY KEY 		(UsuarioDeportista, NombreReto, AdminDeportista)
 );
 
@@ -222,13 +224,13 @@ ADD FOREIGN KEY (NombreGrupo, AdminDeportista) REFERENCES GRUPO(Nombre, AdminDep
 
 -- GRUPO CARRERA
 ALTER TABLE GRUPO_CARRERA
-ADD FOREIGN KEY (NombreGrupo) REFERENCES GRUPO(Nombre),
-ADD FOREIGN KEY (NombreCarrera, AdminDeportista) REFERENCES CARRERA(Nombre, AdminDeportista);
+ADD FOREIGN KEY (NombreGrupo, AdminGrupo) REFERENCES GRUPO(Nombre, AdminDeportista),
+ADD FOREIGN KEY (NombreCarrera, AdminCarrera) REFERENCES CARRERA(Nombre, AdminDeportista);
 
 -- GRUPO RETO
 ALTER TABLE GRUPO_RETO
-ADD FOREIGN KEY (NombreGrupo) REFERENCES GRUPO(Nombre),
-ADD FOREIGN KEY (NombreReto, AdminDeportista) REFERENCES RETO(Nombre, AdminDeportista);
+ADD FOREIGN KEY (NombreGrupo, AdminGrupo) REFERENCES GRUPO(Nombre, AdminDeportista),
+ADD FOREIGN KEY (NombreReto, AdminReto) REFERENCES RETO(Nombre, AdminDeportista);
 
 -- CARRERA CATEGORIA
 ALTER TABLE CARRERA_CATEGORIA
