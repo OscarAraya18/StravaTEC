@@ -25,10 +25,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-//color de fondo global, en el ion content
-ion-content{
-    --background: #918f8f;
-}
+/* Importar los estilos del framework Leaflet */
+@import "~leaflet/dist/leaflet.css";
+
+
 
 //estilos para las alertas
 .my-custom-class .alert-wrapper {

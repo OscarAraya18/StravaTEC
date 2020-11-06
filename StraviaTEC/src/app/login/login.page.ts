@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import {Usuario } from '../modelos/usuario';
 import { AlertController } from '@ionic/angular';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
   constructor(public alertController: AlertController) { }
 
-  ngOnInit() {
+  ngOnInit() { 
   }
   //modelo de usuario login
   public usuarioL = new Usuario('', '');
@@ -38,8 +38,9 @@ export class LoginPage implements OnInit {
    */
   submit(){
     //Nota:esto es una prueba de alerta
-    this.presentAlert();
-    
+    //this.presentAlert();
+  
   }
+
 
 }

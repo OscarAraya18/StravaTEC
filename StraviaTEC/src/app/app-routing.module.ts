@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'actividad',
+    redirectTo: 'carrera',
     pathMatch: 'full'
   },
   {
@@ -21,8 +21,12 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'actividad',
-    loadChildren: () => import('./actividad/actividad.module').then( m => m.ActividadPageModule)
+    path: 'reto',
+    loadChildren: () => import('./actividades/reto/reto.module').then( m => m.RetoPageModule)
+  },
+  {
+    path: 'carrera',
+    loadChildren: () => import('./actividades/carrera/carrera.module').then( m => m.CarreraPageModule)
   },
 ];
 

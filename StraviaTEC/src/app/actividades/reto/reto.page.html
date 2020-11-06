@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title size="large">Nombre del reto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content> 
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button color="light" (click)="reset()">
+      <ion-icon name="arrow-undo"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-grid>
+    <div>      
+      <div #map class="map"></div>
+    </div> 
+  </ion-grid>
+  
+    <ion-grid class="controls">
+      <ion-row>
+        <ion-col size="6" class="ion-text-center">
+          <ion-label>Distancia</ion-label>
+        </ion-col>
+        <ion-col size="6" class="ion-text-center">
+          <ion-label>Duración</ion-label>
+        </ion-col>
+      </ion-row> 
+  
+      <ion-row>
+        <ion-col size="6" class="ion-text-center">
+          <ion-input value="{{distance}}" readonly></ion-input>
+        </ion-col>
+        <ion-col size="6" class="ion-text-center">
+          <ion-input type="number" placeholder="Ingrese la duración"></ion-input>
+        </ion-col>
+      </ion-row>  
+  
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-button color="warning">Registrar</ion-button>
+        </ion-col>
+      </ion-row> 
+  
+    </ion-grid>  
+</ion-content>
