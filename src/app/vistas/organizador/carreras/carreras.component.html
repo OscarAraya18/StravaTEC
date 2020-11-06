@@ -1,0 +1,118 @@
+<button type="button" class="btn button1" (click)="agregar()"  *ngIf="!formVisibility && !form2Visibility && !elimina">
+	<img class="img"  src="assets/add.svg">
+	Agregar carrera
+</button>
+<div  class="container-fluid" >
+	<div class="wrapper" *ngIf="formVisibility || form2Visibility " >
+		<h2 class="name">Datos de la carrera</h2>
+		<form 
+              (ngSubmit)="submit(nombre.value,fecha.value,costo.value,cuentas.value,actividad.value,vis.value)"
+              #f="ngForm">
+
+	
+		<p>
+			Nombre: <input type="text" #nombre  class="inputred"  name="nombre" ngModel required/>
+			Fecha:<input #fecha type="date" ngModel  name="fecha" class="inputred"  required />
+		
+  Tipo de actividad:
+			<select #actividad class="inputred"  ngModel  name="actividad" required>
+					<option *ngFor="let actividad of actividades" [value]='actividad' > {{actividad}}</option>
+			</select></p><p>
+<div class="column">
+	Visibilidad:  
+					<input #vis type="radio" id="vis" name="vis" value="Privada" (change)="radio2($event)"/> Privada
+					<input #vis type="radio" id="vis" (change)="radio($event)" name="vis" value="Publica" /> Publica
+			
+</div>
+<div *ngIf="visi" >
+	
+	Grupos autorizados: 
+	<div class="row">
+ <p *ngFor="let grupo of grupos" ><input type="checkbox" (change)="onCheckboxChangegroup(grupo,$event)" ngModel  name="grupo" [value]='grupo' class="inputred"  required /> {{grupo}}</p>
+</div>
+</div>
+		
+		
+
+
+  Costo: <input class="inputred" type="number" ngModel  #costo required name="costo" /> 
+ 
+	Recorrido( Archivo .gpx):  <input type="file" (change)="onFileChanged($event)" class="custom-file-upload"
+           id="file"
+            name="file" class="inputred" ngModel required />
+<p> Cuentas Bancarias: <textarea  #cuentas name="cuentas" class="inputred" ngModel required > </textarea></p>
+<p> Categorías: </p>
+<div class="row">
+ <p *ngFor="let categoria of categorias" ><input type="checkbox" (change)="onCheckboxChange(categoria,$event)" ngModel  name="categoria" [value]='categoria' class="inputred"  required /> {{categoria}}</p></div>
+ <p> Patrocinadores: </p>
+ <div class="row">
+
+ <p *ngFor="let patrocinador of patrocinadores" ><input (change)="onCheckboxChange2(patrocinador,$event)" type="checkbox" ngModel  name="patrocinador" [value]='patrocinador' class="inputred"  required /> {{patrocinador}}</p></div>
+
+
+
+<div class= "cont"  *ngIf="formVisibility">
+	<button type="button" class="btn but" (click)="formVisibility = false">
+	Cancelar
+	</button>
+	<button type="button" class="btn but"
+	 mat-button
+	  type="submit"
+   [disabled]="f.invalid"
+                  >
+	Agregar carrera
+	</button>
+
+
+</div>
+
+<div class= "cont"  *ngIf="form2Visibility">
+	<button type="button" class="btn  but" (click)="form2Visibility = false">
+	Cancelar
+	</button>
+	<button type="button" class="btn but"
+	 mat-button
+	
+   [disabled]="f.invalid"
+   (click)="modifica(nombre.value,fecha.value,costo.value,cuentas.value,actividad.value,visibilidad.value)"
+                  >
+	Modificar Carrera
+	</button>
+
+
+</div>
+</form>
+
+		
+	</div>
+
+
+</div>
+<div class="row name" *ngIf="!formVisibility && !form2Visibility ">
+	<mat-card class="example-card " *ngFor="let carrera of carreras" >
+		<div >
+  <mat-card-header >
+    <mat-card-title  >
+    	<h4>{{carrera.nombre}}</h4></mat-card-title>
+    <mat-card-subtitle>{{carrera.fecha}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p> Actividad: {{carrera.tipoActividad}} <br> {{carrera.visibilidad}} </p>
+     <p> Costo: {{carrera.costo}} </p>
+     <p> Cuentas Bancarias: {{carrera.cuentasBancarias}} </p>
+     <p> Categorías: {{carrera.categorias}} </p>
+      <p> Patrocinadores: {{carrera.patrocinadores}} </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="button" class="btn  but" (click)="actualiza()" >
+	Modificar
+	</button>
+    <button type="button" class="btn  but" (click)="eliminar(carrera.nombre)" >
+	Eliminar
+	</button>
+  </mat-card-actions>
+  </div>
+    
+</mat-card>
+
+</div>
