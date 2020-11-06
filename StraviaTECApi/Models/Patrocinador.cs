@@ -12,7 +12,7 @@ namespace StraviaTECApi.Models
         }
 
         public string Nombrecomercial { get; set; }
-        public byte[] Logo { get; set; }
+        public string Logo { get; set; }
         public string Nombrerepresentante { get; set; }
         public string Numerotelrepresentante { get; set; }
 

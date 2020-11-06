@@ -53,10 +53,6 @@ namespace StraviaTECApi.Models
 
                 entity.ToTable("actividad");
 
-                entity.HasIndex(e => e.Usuariodeportista)
-                    .HasName("actividad_usuariodeportista_key")
-                    .IsUnique();
-
                 entity.Property(e => e.Usuariodeportista)
                     .HasColumnName("usuariodeportista")
                     .HasMaxLength(20);
@@ -64,7 +60,6 @@ namespace StraviaTECApi.Models
                 entity.Property(e => e.Fechahora).HasColumnName("fechahora");
 
                 entity.Property(e => e.Duracion)
-                    .IsRequired()
                     .HasColumnName("duracion")
                     .HasMaxLength(10);
 
@@ -73,13 +68,12 @@ namespace StraviaTECApi.Models
                 entity.Property(e => e.Recorridogpx).HasColumnName("recorridogpx");
 
                 entity.Property(e => e.Tipoactividad)
-                    .IsRequired()
                     .HasColumnName("tipoactividad")
                     .HasMaxLength(20);
 
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
-                    .WithOne(p => p.Actividad)
-                    .HasForeignKey<Actividad>(d => d.Usuariodeportista)
+                    .WithMany(p => p.Actividad)
+                    .HasForeignKey(d => d.Usuariodeportista)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("actividad_usuariodeportista_fkey");
             });
@@ -142,7 +136,6 @@ namespace StraviaTECApi.Models
                 entity.Property(e => e.Recorrido).HasColumnName("recorrido");
 
                 entity.Property(e => e.Tipoactividad)
-                    .IsRequired()
                     .HasColumnName("tipoactividad")
                     .HasMaxLength(30);
 
@@ -187,7 +180,7 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<CarreraCuentabancaria>(entity =>
             {
-                entity.HasKey(e => new { e.Nombrecarrera, e.Admindeportista })
+                entity.HasKey(e => new { e.Nombrecarrera, e.Admindeportista, e.Cuentabancaria })
                     .HasName("carrera_cuentabancaria_pkey");
 
                 entity.ToTable("carrera_cuentabancaria");
@@ -201,13 +194,12 @@ namespace StraviaTECApi.Models
                     .HasMaxLength(20);
 
                 entity.Property(e => e.Cuentabancaria)
-                    .IsRequired()
                     .HasColumnName("cuentabancaria")
                     .HasMaxLength(50);
 
                 entity.HasOne(d => d.Carrera)
-                    .WithOne(p => p.CarreraCuentabancaria)
-                    .HasForeignKey<CarreraCuentabancaria>(d => new { d.Nombrecarrera, d.Admindeportista })
+                    .WithMany(p => p.CarreraCuentabancaria)
+                    .HasForeignKey(d => new { d.Nombrecarrera, d.Admindeportista })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("carrera_cuentabancaria_nombrecarrera_admindeportista_fkey");
             });
@@ -272,12 +264,10 @@ namespace StraviaTECApi.Models
                     .HasMaxLength(20);
 
                 entity.Property(e => e.Apellido1)
-                    .IsRequired()
                     .HasColumnName("apellido1")
                     .HasMaxLength(20);
 
                 entity.Property(e => e.Apellido2)
-                    .IsRequired()
                     .HasColumnName("apellido2")
                     .HasMaxLength(20);
 
@@ -293,12 +283,10 @@ namespace StraviaTECApi.Models
                 entity.Property(e => e.Foto).HasColumnName("foto");
 
                 entity.Property(e => e.Nacionalidad)
-                    .IsRequired()
                     .HasColumnName("nacionalidad")
                     .HasMaxLength(25);
 
                 entity.Property(e => e.Nombre)
-                    .IsRequired()
                     .HasColumnName("nombre")
                     .HasMaxLength(20);
 
@@ -367,6 +355,8 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Completado).HasColumnName("completado");
 
+                entity.Property(e => e.Kmacumulados).HasColumnName("kmacumulados");
+
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.DeportistaReto)
                     .HasForeignKey(d => d.Usuariodeportista)
@@ -408,7 +398,7 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<GrupoCarrera>(entity =>
             {
-                entity.HasKey(e => new { e.Nombrecarrera, e.Nombregrupo, e.Admindeportista })
+                entity.HasKey(e => new { e.Nombrecarrera, e.Admincarrera, e.Admingrupo, e.Nombregrupo })
                     .HasName("grupo_carrera_pkey");
 
                 entity.ToTable("grupo_carrera");
@@ -417,26 +407,29 @@ namespace StraviaTECApi.Models
                     .HasColumnName("nombrecarrera")
                     .HasMaxLength(30);
 
+                entity.Property(e => e.Admincarrera)
+                    .HasColumnName("admincarrera")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Admingrupo)
+                    .HasColumnName("admingrupo")
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.Nombregrupo)
                     .HasColumnName("nombregrupo")
                     .HasMaxLength(30);
 
-                entity.Property(e => e.Admindeportista)
-                    .HasColumnName("admindeportista")
-                    .HasMaxLength(20);
-
-                entity.HasOne(d => d.NombregrupoNavigation)
-                    .WithMany(p => p.GrupoCarrera)
-                    .HasPrincipalKey(p => p.Nombre)
-                    .HasForeignKey(d => d.Nombregrupo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("grupo_carrera_nombregrupo_fkey");
-
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.GrupoCarrera)
-                    .HasForeignKey(d => new { d.Nombrecarrera, d.Admindeportista })
+                    .HasForeignKey(d => new { d.Nombrecarrera, d.Admincarrera })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("grupo_carrera_nombrecarrera_admindeportista_fkey");
+                    .HasConstraintName("grupo_carrera_nombrecarrera_admincarrera_fkey");
+
+                entity.HasOne(d => d.Grupo)
+                    .WithMany(p => p.GrupoCarrera)
+                    .HasForeignKey(d => new { d.Nombregrupo, d.Admingrupo })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("grupo_carrera_nombregrupo_admingrupo_fkey");
             });
 
             modelBuilder.Entity<GrupoDeportista>(entity =>
@@ -445,10 +438,6 @@ namespace StraviaTECApi.Models
                     .HasName("grupo_deportista_pkey");
 
                 entity.ToTable("grupo_deportista");
-
-                entity.HasIndex(e => e.Nombregrupo)
-                    .HasName("grupo_deportista_nombregrupo_key")
-                    .IsUnique();
 
                 entity.Property(e => e.Usuariodeportista)
                     .HasColumnName("usuariodeportista")
@@ -477,7 +466,7 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<GrupoReto>(entity =>
             {
-                entity.HasKey(e => new { e.Nombrereto, e.Nombregrupo, e.Admindeportista })
+                entity.HasKey(e => new { e.Nombrereto, e.Adminreto, e.Admingrupo, e.Nombregrupo })
                     .HasName("grupo_reto_pkey");
 
                 entity.ToTable("grupo_reto");
@@ -486,26 +475,29 @@ namespace StraviaTECApi.Models
                     .HasColumnName("nombrereto")
                     .HasMaxLength(20);
 
+                entity.Property(e => e.Adminreto)
+                    .HasColumnName("adminreto")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Admingrupo)
+                    .HasColumnName("admingrupo")
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.Nombregrupo)
                     .HasColumnName("nombregrupo")
                     .HasMaxLength(30);
 
-                entity.Property(e => e.Admindeportista)
-                    .HasColumnName("admindeportista")
-                    .HasMaxLength(20);
-
-                entity.HasOne(d => d.NombregrupoNavigation)
+                entity.HasOne(d => d.Grupo)
                     .WithMany(p => p.GrupoReto)
-                    .HasPrincipalKey(p => p.Nombre)
-                    .HasForeignKey(d => d.Nombregrupo)
+                    .HasForeignKey(d => new { d.Nombregrupo, d.Admingrupo })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("grupo_reto_nombregrupo_fkey");
+                    .HasConstraintName("grupo_reto_nombregrupo_admingrupo_fkey");
 
                 entity.HasOne(d => d.Reto)
                     .WithMany(p => p.GrupoReto)
-                    .HasForeignKey(d => new { d.Nombrereto, d.Admindeportista })
+                    .HasForeignKey(d => new { d.Nombrereto, d.Adminreto })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("grupo_reto_nombrereto_admindeportista_fkey");
+                    .HasConstraintName("grupo_reto_nombrereto_adminreto_fkey");
             });
 
             modelBuilder.Entity<Inscripcion>(entity =>
@@ -514,10 +506,6 @@ namespace StraviaTECApi.Models
                     .HasName("inscripcion_pkey");
 
                 entity.ToTable("inscripcion");
-
-                entity.HasIndex(e => e.Id)
-                    .HasName("inscripcion_id_key")
-                    .IsUnique();
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -528,7 +516,6 @@ namespace StraviaTECApi.Models
                     .HasMaxLength(20);
 
                 entity.Property(e => e.Estado)
-                    .IsRequired()
                     .HasColumnName("estado")
                     .HasMaxLength(10);
 
@@ -583,15 +570,15 @@ namespace StraviaTECApi.Models
                     .HasColumnName("nombrecomercial")
                     .HasMaxLength(30);
 
-                entity.Property(e => e.Logo).HasColumnName("logo");
+                entity.Property(e => e.Logo)
+                    .HasColumnName("logo")
+                    .HasMaxLength(200);
 
                 entity.Property(e => e.Nombrerepresentante)
-                    .IsRequired()
                     .HasColumnName("nombrerepresentante")
                     .HasMaxLength(100);
 
                 entity.Property(e => e.Numerotelrepresentante)
-                    .IsRequired()
                     .HasColumnName("numerotelrepresentante")
                     .HasMaxLength(15);
             });
@@ -620,11 +607,8 @@ namespace StraviaTECApi.Models
                     .HasMaxLength(150);
 
                 entity.Property(e => e.Fondoaltitud)
-                    .IsRequired()
                     .HasColumnName("fondoaltitud")
                     .HasMaxLength(7);
-
-                entity.Property(e => e.Kmacumulados).HasColumnName("kmacumulados");
 
                 entity.Property(e => e.Kmtotales).HasColumnName("kmtotales");
 
@@ -635,7 +619,6 @@ namespace StraviaTECApi.Models
                 entity.Property(e => e.Privacidad).HasColumnName("privacidad");
 
                 entity.Property(e => e.Tipoactividad)
-                    .IsRequired()
                     .HasColumnName("tipoactividad")
                     .HasMaxLength(20);
 

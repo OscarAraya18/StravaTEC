@@ -3,7 +3,6 @@ using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
@@ -73,13 +72,20 @@ namespace EFConsole.DataAccess.Repositories
 
             var verCarreras = _context.GrupoCarrera.
                     Where(x => x.Nombregrupo == nombreGrupo).
-                    Include(x => x.Carrera).ToList();
+                    Include(x => x.Carrera).
+                    Where(x => x.Carrera.Privacidad == true).ToList();
 
+            var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false);
 
             foreach (var carrera in verCarreras)
             {
                 carreras.Add(carrera.Carrera);
                 Console.WriteLine(carrera.Carrera.Nombre);
+            }
+
+            foreach(var carrera in carrerasPublicas)
+            {
+                carreras.Add(carrera);
             }
             return carreras;
             // se debe retornar el resultado

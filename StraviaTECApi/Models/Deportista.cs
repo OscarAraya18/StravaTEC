@@ -7,6 +7,7 @@ namespace StraviaTECApi.Models
     {
         public Deportista()
         {
+            Actividad = new HashSet<Actividad>();
             AmigoDeportistaAmigo = new HashSet<AmigoDeportista>();
             AmigoDeportistaUsuariodeportistaNavigation = new HashSet<AmigoDeportista>();
             Carrera = new HashSet<Carrera>();
@@ -20,7 +21,7 @@ namespace StraviaTECApi.Models
 
         public string Usuario { get; set; }
         public string Claveacceso { get; set; }
-        public DateTime Fechanacimiento { get; set; }
+        public DateTime? Fechanacimiento { get; set; }
         public string Nombre { get; set; }
         public string Apellido1 { get; set; }
         public string Apellido2 { get; set; }
@@ -29,7 +30,7 @@ namespace StraviaTECApi.Models
         public byte[] Foto { get; set; }
 
         public virtual Categoria NombrecategoriaNavigation { get; set; }
-        public virtual Actividad Actividad { get; set; }
+        public virtual ICollection<Actividad> Actividad { get; set; }
         public virtual ICollection<AmigoDeportista> AmigoDeportistaAmigo { get; set; }
         public virtual ICollection<AmigoDeportista> AmigoDeportistaUsuariodeportistaNavigation { get; set; }
         public virtual ICollection<Carrera> Carrera { get; set; }

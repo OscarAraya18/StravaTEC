@@ -3,9 +3,6 @@ using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 
 namespace EFConsole.DataAccess.Repositories
 {
@@ -80,7 +77,11 @@ namespace EFConsole.DataAccess.Repositories
                 Console.Write(amigo.Amigo.Apellido1 + " ");
                 Console.Write(amigo.Amigo.Apellido2 + " ");
                 Console.WriteLine();
-                actividades.Add(amigo.Amigo.Actividad);
+                foreach(var actividad in amigo.Amigo.Actividad)
+                {
+                    actividades.Add(actividad);
+                }
+                
             }
             return actividades;
         }
