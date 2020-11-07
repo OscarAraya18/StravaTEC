@@ -58,16 +58,15 @@ namespace EFConsole.DataAccess.Repositories
         {
             List<Reto> retos = new List<Reto>();
 
-            var carreraCategorias = _context.DeportistaReto.
+            var deportistaRetos = _context.DeportistaReto.
                     Where(x => x.Usuariodeportista == UsuarioDeportista).
                     Include(x => x.Reto).ToList();
             // se debe retornar el avance que tiene el deportista
             // el objetivo del reto
             // también los días faltantes
-            foreach (var carrera in carreraCategorias)
+            foreach (var reto in deportistaRetos)
             {
-                Console.WriteLine(carrera.Reto.Kmtotales);
-                retos.Add(carrera.Reto);
+                retos.Add(reto.Reto);
             }
             return retos;
         }

@@ -73,14 +73,15 @@ namespace EFConsole.DataAccess.Repositories
             var verCarreras = _context.GrupoCarrera.
                     Where(x => x.Nombregrupo == nombreGrupo).
                     Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraCuentabancaria).
                     Where(x => x.Carrera.Privacidad == true).ToList();
 
-            var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false);
+            var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false).
+                                    Include(x => x.CarreraCuentabancaria).ToList();
 
             foreach (var carrera in verCarreras)
             {
                 carreras.Add(carrera.Carrera);
-                Console.WriteLine(carrera.Carrera.Nombre);
             }
 
             foreach(var carrera in carrerasPublicas)
@@ -95,10 +96,38 @@ namespace EFConsole.DataAccess.Repositories
         {
             return _context.Grupo.Where(x => x.Admindeportista == usuarioDeportista).ToList();
         }
-
-        public List<Grupo> verTodos()
+        public List<Grupo> verMisGruposAsociados(string usuarioDeportista)
         {
-            return _context.Grupo.ToList();
+            List<Grupo> grupos = new List<Grupo>();
+
+            var gruposDeportista = _context.GrupoDeportista.
+                Where(x => x.Usuariodeportista == usuarioDeportista).
+                Include(x => x.Grupo).ToList();
+
+            foreach(var grupo in gruposDeportista)
+            {
+                grupos.Add(grupo.Grupo);
+            }
+
+            return grupos;
+        }
+
+
+        public List<Grupo> verTodosNoAsociados(string nombreUsuario)
+        {
+            var gruposAsociados = verMisGruposAsociados(nombreUsuario);
+
+            var gruposTotales = _context.Grupo.ToList();
+
+            List<Grupo> gruposNoAsociados = new List<Grupo>();
+
+            foreach(var grupo in gruposTotales)
+            {
+                if (!gruposAsociados.Contains(grupo))
+                    gruposNoAsociados.Add(grupo);
+            }
+
+            return gruposNoAsociados;
         }
 
         /**         

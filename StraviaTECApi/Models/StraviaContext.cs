@@ -35,7 +35,7 @@ namespace StraviaTECApi.Models
         public virtual DbSet<Reto> Reto { get; set; }
         public virtual DbSet<RetoPatrocinador> RetoPatrocinador { get; set; }
 
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
@@ -502,40 +502,38 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<Inscripcion>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Usuariodeportista })
+                entity.HasKey(e => new { e.Estado, e.Usuariodeportista })
                     .HasName("inscripcion_pkey");
 
                 entity.ToTable("inscripcion");
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.Estado)
+                    .HasColumnName("estado")
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Usuariodeportista)
                     .HasColumnName("usuariodeportista")
                     .HasMaxLength(20);
-
-                entity.Property(e => e.Estado)
-                    .HasColumnName("estado")
-                    .HasMaxLength(10);
 
                 entity.Property(e => e.Recibopago).HasColumnName("recibopago");
 
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.Inscripcion)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("inscripcion_usuariodeportista_fkey");
             });
 
             modelBuilder.Entity<InscripcionCarrera>(entity =>
             {
-                entity.HasKey(e => new { e.Idinscripcion, e.Nombrecarrera, e.Deportistainscripcion })
+                entity.HasKey(e => new { e.Estadoinscripcion, e.Nombrecarrera, e.Deportistainscripcion })
                     .HasName("inscripcion_carrera_pkey");
 
                 entity.ToTable("inscripcion_carrera");
 
-                entity.Property(e => e.Idinscripcion).HasColumnName("idinscripcion");
+                entity.Property(e => e.Estadoinscripcion)
+                    .HasColumnName("estadoinscripcion")
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
@@ -554,9 +552,9 @@ namespace StraviaTECApi.Models
 
                 entity.HasOne(d => d.Inscripcion)
                     .WithMany(p => p.InscripcionCarrera)
-                    .HasForeignKey(d => new { d.Idinscripcion, d.Deportistainscripcion })
+                    .HasForeignKey(d => new { d.Estadoinscripcion, d.Deportistainscripcion })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("inscripcion_carrera_idinscripcion_deportistainscripcion_fkey");
+                    .HasConstraintName("inscripcion_carrera_estadoinscripcion_deportistainscripcio_fkey");
             });
 
             modelBuilder.Entity<Patrocinador>(entity =>

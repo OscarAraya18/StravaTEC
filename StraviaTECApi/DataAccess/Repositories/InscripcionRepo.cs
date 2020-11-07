@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EFConsole.DataAccess.Repositories
@@ -22,19 +23,32 @@ namespace EFConsole.DataAccess.Repositories
         * ------------------------------
         */
 
-        public void Create(Inscripcion inscripcion, string nombreCarrera)
+        public bool Create(Inscripcion inscripcion, string nombreCarrera)
         {
             if (inscripcion == null)
                 throw new ArgumentNullException(nameof(inscripcion));
 
             _context.Inscripcion.Add(inscripcion);
 
-            var inscripcionCarrera = new InscripcionCarrera();
-            inscripcionCarrera.Deportistainscripcion = inscripcion.Usuariodeportista;
-            inscripcionCarrera.Idinscripcion = inscripcion.Id;
-            inscripcionCarrera.Nombrecarrera = nombreCarrera;
+            var deportista = _context.Deportista.Where(x => x.Usuario == inscripcion.Usuariodeportista).FirstOrDefault();
+            var carrera = _context.Carrera.Where(x => x.Nombre == nombreCarrera).
+                            Include(x => x.CarreraCategoria).FirstOrDefault();
 
-            _context.Add(inscripcionCarrera);
+            foreach (var categoria in carrera.CarreraCategoria)
+            {
+                if (categoria.Nombrecategoria == deportista.Nombrecategoria)
+                {
+                    var inscripcionCarrera = new InscripcionCarrera();
+                    inscripcionCarrera.Deportistainscripcion = inscripcion.Usuariodeportista;
+                    inscripcionCarrera.Estadoinscripcion = inscripcion.Estado;
+                    inscripcionCarrera.Nombrecarrera = nombreCarrera;
+
+                    _context.Add(inscripcionCarrera);
+                    return true;
+                }
+            }
+
+            return false;
 
         }
 
@@ -48,26 +62,55 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void aceptarInscripcion(int id)
+        public void aceptarInscripcion(Inscripcion inscripcion)
         {
             var inscripcionCarrera = _context.InscripcionCarrera.
-                   Where(x => x.Idinscripcion == id).
-                   Include(x => x.NombrecarreraNavigation).
-                   Include(x => x.Inscripcion).
-                   ThenInclude(x => x.UsuariodeportistaNavigation).ToList();
+                   Where(x => x.Estadoinscripcion == inscripcion.Estado
+                   && x.Deportistainscripcion == inscripcion.Usuariodeportista).
+                   Include(x => x.NombrecarreraNavigation).ToList();
 
             var deportistaCarrera = new DeportistaCarrera();
-            var inscripcion = inscripcionCarrera[0].Inscripcion;
             var carrera = inscripcionCarrera[0].NombrecarreraNavigation;
 
             deportistaCarrera.Admindeportista = carrera.Admindeportista;
             deportistaCarrera.Nombrecarrera = carrera.Nombre;
-            deportistaCarrera.Usuariodeportista = inscripcion.UsuariodeportistaNavigation.Usuario;
+            deportistaCarrera.Usuariodeportista = inscripcion.Usuariodeportista;
             deportistaCarrera.Completada = false;
 
-            inscripcion.Estado = "Aceptado";
-            _context.Entry(inscripcion).State = EntityState.Modified;
+            var inscripcionAceptada = new Inscripcion
+            {
+                Usuariodeportista = inscripcion.Usuariodeportista,
+                Estado = "Aceptado",
+                Recibopago = inscripcion.Recibopago
+            };
+
+            _context.Remove(inscripcionCarrera[0]);
+            _context.Remove(inscripcion);
+            _context.Add(inscripcionAceptada);
             _context.Add(deportistaCarrera);
+
+        }
+
+        public List<Inscripcion> verInscripcionesEspera(string usuarioDeportista)
+        {
+            return _context.Inscripcion.Where(x => x.Usuariodeportista == usuarioDeportista
+                                              && x.Estado.Equals("En espera")).ToList();
+        }
+
+        public List<Inscripcion> verInscripcionesEsperaCarrera(string nombreCarrera)
+        {
+            List<Inscripcion> inscripciones = new List<Inscripcion>();
+
+            var inscripcionCarrera = _context.InscripcionCarrera.Where(x => x.Nombrecarrera == nombreCarrera
+                                              && x.Inscripcion.Estado.Equals("En espera")).
+                                                Include(x => x.Inscripcion).ToList();
+
+            foreach (var inscripcion in inscripcionCarrera)
+            {
+                inscripciones.Add(inscripcion.Inscripcion);
+            }
+
+            return inscripciones;
         }
 
         /**         
@@ -75,7 +118,15 @@ namespace EFConsole.DataAccess.Repositories
          */
         public bool SaveChanges()
         {
-            return (_context.SaveChanges() >= 0);
+            try
+            {
+                return (_context.SaveChanges() >= 0);
+            }
+            catch
+            {
+                return false;
+            }
         }
+
     }
 }

@@ -10,7 +10,6 @@ namespace StraviaTECApi.Models
             InscripcionCarrera = new HashSet<InscripcionCarrera>();
         }
 
-        public int Id { get; set; }
         public string Usuariodeportista { get; set; }
         public string Estado { get; set; }
         public byte[] Recibopago { get; set; }

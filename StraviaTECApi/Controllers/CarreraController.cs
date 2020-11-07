@@ -30,7 +30,7 @@ namespace StraviaTECApi.Controllers
 
 
         [HttpGet]
-        [Route("api/carrera/miscarreras")]
+        [Route("api/carrera/admin/miscarreras")]
         public IActionResult getCarrera([FromQuery] string usuario)
         {
             var resultado = _repository.verMisCarreras(usuario);
@@ -44,7 +44,7 @@ namespace StraviaTECApi.Controllers
 
 
         [HttpPost]
-        [Route("api/carrera/new")]
+        [Route("api/carrera/admin/new")]
         public IActionResult nuevaCarrera([FromBody] Carrera carrera)
         {
             if (ModelState.IsValid)
@@ -58,7 +58,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpPut]
-        [Route("api/carrera/edit")]
+        [Route("api/carrera/admin/edit")]
         public IActionResult actualizarCarrera([FromBody] Carrera carrera, [FromQuery] string usuarioAdmin)
         {
             if (carrera.Admindeportista != usuarioAdmin)
@@ -72,7 +72,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpDelete]
-        [Route("api/carrera/delete")]
+        [Route("api/carrera/admin/delete")]
         public IActionResult eliminarCarrera([FromQuery] string nombre)
         {
             _repository.Delete(nombre);

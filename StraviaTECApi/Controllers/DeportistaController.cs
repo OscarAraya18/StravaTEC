@@ -41,6 +41,33 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
+        [Route("api/deportista/noAmigos")]
+        public IActionResult getDeportistasNoAmigos([FromQuery] string usuario)
+        {
+            var resultado = _repository.mostrarTodosDeportistasNoAmigos(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/deportista/amigos")]
+        public IActionResult getDeportistasAmigos([FromQuery] string usuario)
+        {
+            var resultado = _repository.verAmigosAsociados(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+
+        [HttpGet]
         [Route("api/deportista/carreras")]
         public IActionResult getCarrerasInscritas([FromQuery] string usuario)
         {
@@ -65,6 +92,18 @@ namespace StraviaTECApi.Controllers
             }
 
             return BadRequest(ModelState);
+        }
+
+        [HttpPost]
+        [Route("api/deportista/login")]
+        public IActionResult verificarLogin([FromBody] Login login)
+        {
+            var resultado = _repository.verificarLogin(login);
+
+            if (resultado == false)
+                return BadRequest("Usuario o contraseña incorrectos");
+            
+            return Ok("Inicio de sesión exitoso");
         }
 
         [HttpPost]

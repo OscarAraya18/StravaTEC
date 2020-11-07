@@ -61,6 +61,17 @@ namespace EFConsole.DataAccess.Repositories
             return _context.Deportista.FirstOrDefault(x => x.Usuario == usuario);
         }
 
+        public bool verificarLogin(Login login)
+        {
+            var deportista = _context.Deportista.Where(x => x.Usuario == login.Usuario
+                              && x.Claveacceso == login.ClaveAcceso).ToList();
+
+            if (deportista.Count == 1)
+                return true;
+
+            return false;
+        }
+
         public List<Actividad> verActividadesAmigos(string usuario)
         {
             List<Actividad> actividades = new List<Actividad>();
@@ -126,10 +137,39 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(deportistaCarrera);
         }
 
-        public void mostrarTodosDeportistasNoAmigos(string usuarioDeportista)
+        public List<Deportista> verAmigosAsociados(string usuarioDeportista)
         {
-            // se deben mostrar todos los deportistas
-            // que no sean amigos de ese usuario
+            List<Deportista> amigos = new List<Deportista>();
+
+            var amigoDeportista = _context.AmigoDeportista.
+                   Where(x => x.Usuariodeportista == usuarioDeportista).
+                   Include(x => x.Amigo).ToList();
+
+            foreach(var amigo in amigoDeportista)
+            {
+                amigos.Add(amigo.Amigo);
+            }
+
+            return amigos;
+        }
+
+        public List<Deportista> mostrarTodosDeportistasNoAmigos(string usuarioDeportista)
+        {
+            // se deben acceder todos los deportistas amigos
+            var amigos = verAmigosAsociados(usuarioDeportista);
+
+            // se acceden a todos los deportistas
+            var deportistasTotales = _context.Deportista.Where(x => x.Usuario != usuarioDeportista).ToList();
+
+            List<Deportista> deportistasNoAmigos = new List<Deportista>();
+
+            foreach (var deportista in deportistasTotales)
+            {
+                if (!amigos.Contains(deportista))
+                    deportistasNoAmigos.Add(deportista);
+            }
+
+            return deportistasNoAmigos;
         }
 
         /**         

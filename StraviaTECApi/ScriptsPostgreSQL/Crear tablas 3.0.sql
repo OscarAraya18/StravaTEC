@@ -58,11 +58,10 @@ CREATE TABLE PATROCINADOR
 
 CREATE TABLE INSCRIPCION
 (
-	Id					SERIAL				NOT NULL,
 	UsuarioDeportista	VARCHAR(20),
 	Estado				VARCHAR(10),
 	ReciboPago			BYTEA,
-	PRIMARY KEY 		(Id, UsuarioDeportista)
+	PRIMARY KEY 		(Estado, UsuarioDeportista)
 );
 
 CREATE TABLE CATEGORIA
@@ -129,10 +128,10 @@ CREATE TABLE GRUPO_RETO
 
 CREATE TABLE INSCRIPCION_CARRERA
 (
-	IdInscripcion  			INT,
+	EstadoInscripcion  		VARCHAR(10),
 	DeportistaInscripcion	VARCHAR(20),
 	NombreCarrera			VARCHAR(30),
-	PRIMARY KEY		(IdInscripcion, NombreCarrera, DeportistaInscripcion)
+	PRIMARY KEY		(EstadoInscripcion, NombreCarrera, DeportistaInscripcion)
 );
 
 
@@ -249,7 +248,7 @@ ADD FOREIGN KEY (NombreReto, AdminDeportista) REFERENCES RETO(Nombre, AdminDepor
 
 -- INSCRIPCION CARRERA
 ALTER TABLE INSCRIPCION_CARRERA
-ADD FOREIGN KEY (IdInscripcion, DeportistaInscripcion) REFERENCES INSCRIPCION(Id, UsuarioDeportista),
+ADD FOREIGN KEY (EstadoInscripcion, DeportistaInscripcion) REFERENCES INSCRIPCION(Estado, UsuarioDeportista),
 ADD FOREIGN KEY (NombreCarrera) REFERENCES CARRERA(Nombre);
 
 -- AMIGO DEPORTISTA

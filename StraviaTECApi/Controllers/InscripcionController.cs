@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EFConsole.DataAccess.Repositories;
-using Microsoft.AspNetCore.Http;
+﻿using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using StraviaTECApi.Models;
 
 namespace StraviaTECApi.Controllers
@@ -21,29 +15,66 @@ namespace StraviaTECApi.Controllers
             _repository = repo;
         }
 
+        [HttpGet]
+        [Route("api/inscripcion/enespera")]
+        public IActionResult verEnEspera([FromQuery] string usuario)
+        {
+            var resultado = _repository.verInscripcionesEspera(usuario);
+
+            if(resultado == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(resultado);
+
+        }
+
+        [HttpGet]
+        [Route("api/inscripcion/carrera/enespera")]
+        public IActionResult verCarreraEnEspera([FromQuery] string nombreCarrera)
+        {
+            var resultado = _repository.verInscripcionesEsperaCarrera(nombreCarrera);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(resultado);
+
+        }
+
         [HttpPost]
         [Route("api/inscripcion/new")]
         public IActionResult nuevaInscripcion([FromBody] Inscripcion inscripcion, [FromQuery] string nombreCarrera)
         {
             if (ModelState.IsValid)
             {
-                _repository.Create(inscripcion, nombreCarrera);
-                _repository.SaveChanges();
-                return Ok("Inscripcion creada correctamente");
+                var resultado =_repository.Create(inscripcion, nombreCarrera);
+                if (resultado)
+                {
+                    if(_repository.SaveChanges())
+                        return Ok("Inscripcion creada correctamente");
+                    return BadRequest("Ya hay una inscripcion para esa carrera en espera");
+                }
+                BadRequest("Revisar la categoría del deportista");
             }
 
             return BadRequest(ModelState);
 
         }
 
+        [HttpPost]
         [Route("api/inscripcion/accept")]
-        public IActionResult nuevaInscripcion([FromQuery] int id)
+        public IActionResult nuevaInscripcion([FromBody] Inscripcion inscripcion)
         {
             if (ModelState.IsValid)
             {
-                _repository.aceptarInscripcion(id);
-                _repository.SaveChanges();
-                return Ok("Inscripcion aceptada correctamente");
+                _repository.aceptarInscripcion(inscripcion);
+                if (_repository.SaveChanges())
+                    return Ok("Inscripcion aceptada correctamente");
+                return BadRequest("Ha ocurrido un error");
             }
 
             return BadRequest(ModelState);

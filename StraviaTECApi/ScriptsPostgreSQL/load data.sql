@@ -23,16 +23,16 @@ INSERT INTO public.categoria(
 -- SE AGREGAN LOS DEPORTISTAS
 INSERT INTO public.deportista(
 	usuario, claveacceso, fechanacimiento, nombre, apellido1, apellido2, nombrecategoria, nacionalidad, foto)
-	VALUES ('sam.astua', 'password', '2000-09-15', 'Saymon', 'Astúa', 'Madrigal', 'Sub-23', 'Costarricense', NULL),
-		   ('kevintrox', 'password', '2000-12-21', 'Kevin', 'Acevedo', 'Rodríguez', 'Sub-23', 'Costarricense', NULL),
-		   ('etesech', 'password', '1993-12-03', 'Sech', 'Morales', 'Williams', 'Open', 'Panameño', NULL),
-		   ('elpepe', 'password', '1964-01-24', 'Pepe', 'Ramírez', 'González', 'Master C', 'Mexicano', NULL),
-		   ('crespo', 'password', '1994-05-19', 'José', 'Crespo', 'Cepeda', 'Open', 'Español', NULL),
-		   ('ironman', 'password', '1965-04-04', 'Robert', 'Downey', 'Jr', 'Master C', 'Estadounidense', NULL),
-		   ('ozuna', 'password', '1974-06-10', 'Juan', 'Ozuna', 'Rosado', 'Master B', 'Puertorriqueño', NULL),
-		   ('cj', 'password', '1978-07-11', 'Carl', 'Johnson', 'Rodríguez', 'Master B', 'Canadiense', NULL),
-		   ('auronplay', 'password', '1988-11-05', 'Raúl', 'ÁLvarez', 'Genes', 'Master A', 'Español', NULL),
-		   ('cr7', 'password', '1985-02-05', 'Cristiano', 'Dos Santos', 'Aveiro', 'Master A', 'Portugués', NULL);
+	VALUES ('sam.astua', 'password', '2000-09-15', 'Saymon', 'Astúa', 'Madrigal', 'Sub-23', 'Costa Rica', NULL),
+		   ('kevintrox', 'password', '2000-12-21', 'Kevin', 'Acevedo', 'Rodríguez', 'Sub-23', 'Costa Rica', NULL),
+		   ('etesech', 'password', '1993-12-03', 'Sech', 'Morales', 'Williams', 'Open', 'Panamá', NULL),
+		   ('elpepe', 'password', '1964-01-24', 'Pepe', 'Ramírez', 'González', 'Master C', 'México', NULL),
+		   ('crespo', 'password', '1994-05-19', 'José', 'Crespo', 'Cepeda', 'Open', 'España', NULL),
+		   ('ironman', 'password', '1965-04-04', 'Robert', 'Downey', 'Jr', 'Master C', 'Estados Unidos', NULL),
+		   ('ozuna', 'password', '1974-06-10', 'Juan', 'Ozuna', 'Rosado', 'Master B', 'Puerto Rico', NULL),
+		   ('cj', 'password', '1978-07-11', 'Carl', 'Johnson', 'Rodríguez', 'Master B', 'Canadá', NULL),
+		   ('auronplay', 'password', '1988-11-05', 'Raúl', 'Álvarez', 'Genes', 'Master A', 'España', NULL),
+		   ('cr7', 'password', '1985-02-05', 'Cristiano', 'Dos Santos', 'Aveiro', 'Master A', 'Portugal', NULL);
 		   
 
 -- SE AGREGAN LOS PATROCINADORES DE LA CARRERA		   
@@ -107,19 +107,19 @@ INSERT INTO public.carrera_categoria(
 		   
 -- SE AGREGAN INSCRIPCIONES A LAS CARRERAS
 INSERT INTO public.inscripcion(
-	id, usuariodeportista, estado, recibopago)
-	VALUES (1, 'auronplay', 'En espera', NULL),
-		   (2, 'elpepe', 'En espera', NULL),
-		   (3, 'crespo', 'En espera', NULL),
-		   (4, 'cj', 'En espera', NULL);
+	usuariodeportista, estado, recibopago)
+	VALUES ('auronplay', 'En espera', NULL),
+		   ('elpepe', 'En espera', NULL),
+		   ('crespo', 'En espera', NULL),
+		   ('cj', 'En espera', NULL);
 
 -- SE ASOCIAN LAS INSCRIPCIONES A UNA CARRERA
 INSERT INTO public.inscripcion_carrera(
-	idinscripcion, deportistainscripcion, nombrecarrera)
-	VALUES (1, 'auronplay', 'Endurance 2020'),
-		   (2, 'elpepe', 'Endurance 2020'),
-		   (3, 'crespo', 'The Best'),
-		   (4, 'cj', 'The Best');
+	EstadoInscripcion, deportistainscripcion, nombrecarrera)
+	VALUES ('En espera', 'auronplay', 'Endurance 2020'),
+		   ('En espera', 'elpepe', 'Endurance 2020'),
+		   ('En espera', 'crespo', 'The Best'),
+		   ('En espera', 'cj', 'The Best');
 
 
 -- SE CREAN LOS RETOS

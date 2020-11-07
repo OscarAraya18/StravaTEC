@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
 using System;
 using System.Collections.Generic;
@@ -99,7 +100,7 @@ namespace EFConsole.DataAccess.Repositories
 
         public List<Carrera> verTodas()
         {
-            return _context.Carrera.ToList();
+            return _context.Carrera.Include(x => x.CarreraCuentabancaria).ToList();
             // se retorna la lista
         }
 

@@ -20,10 +20,10 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/grupo")]
-        public IActionResult getGrupos()
+        [Route("api/grupos")]
+        public IActionResult getGruposNoAsociados([FromQuery] string usuario)
         {
-            var resultado = _repository.verTodos();
+            var resultado = _repository.verTodosNoAsociados(usuario);
 
             if (resultado == null)
             {
@@ -33,8 +33,8 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/grupo/carrers")]
-        public IActionResult getCarreras([FromBody] string nombreGrupo)
+        [Route("api/grupo/carreras")]
+        public IActionResult getCarreras([FromQuery] string nombreGrupo)
         {
             var resultado = _repository.accederCarreras(nombreGrupo);
 
@@ -58,6 +58,19 @@ namespace StraviaTECApi.Controllers
             }
             return Ok(resultado);
         }
+        [HttpGet]
+        [Route("api/grupo/user/grupos")]
+        public IActionResult getGruposAsociados([FromQuery] string usuario)
+        {
+            var resultado = _repository.verMisGruposAsociados(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
 
 
         [HttpPost]
