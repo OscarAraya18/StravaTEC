@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ViewChild, ElementRef } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-
+import 'xml-writer';
 
 declare var google: any;
 
@@ -39,6 +39,8 @@ export class RetoPage implements OnInit {
   //Salida y Entrada
   markerCount = 0;
 
+  //me dice cuantos marcadores me quedan
+  availableMarkers = 10;
   //Servicios para direcciones
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -58,7 +60,15 @@ export class RetoPage implements OnInit {
     //Este método se ejecuta cada vez que se abra esta página
     ionViewDidEnter(){
       this.showMap();
+
+      //this.writeGPX();
     }
+    get(){
+      for(let i = 0; i < this.waypoints.length; i++){
+        console.log(this.waypoints[i].lat().toString());
+      }
+    }
+
   
     //Este método despliega el mapa en pantalla
     showMap(){
@@ -66,7 +76,7 @@ export class RetoPage implements OnInit {
       this.geolocation.getCurrentPosition().then((resp) => {
         this.latitude = resp.coords.latitude;
         this.longitude = resp.coords.longitude;
-      
+        
        const centerPos = {
         lat: this.latitude,
         lng: this.longitude
@@ -80,7 +90,7 @@ export class RetoPage implements OnInit {
      }
      this.map = new google.maps.Map(this.mapRef.nativeElement, options);
 
-  
+     
      this.directionsDisplay.setMap(this.map);
      this.map.addListener("click", (e) => {
        this.placeMarker(e.latLng, this.map);
@@ -116,19 +126,20 @@ export class RetoPage implements OnInit {
         let mapMarker = new google.maps.Marker({
           position: latLng,
           title: this.markerTitle[this.markerCount],
-          label: this.markerCount.toString(),
+          
           map: map,
         });
         this.mapMarkers.push(mapMarker);
-        this.waypoints.push(mapMarker.position);
+        this.waypoints.push(mapMarker.getPosition());
         
         this.markerCount++;
+        this.availableMarkers--;
       }
       if(this.markerCount > 1){
         this.clearMarkers();
         this.calculateAndDisplayRoute(this.directionsService, this.directionsDisplay);
         this.calculateDistance(this.distanceMatrixService);
-        console.log(this.waypoints);
+        
       }
     }
     // Deletes all markers in the array by removing references to them.
@@ -171,7 +182,7 @@ export class RetoPage implements OnInit {
         {
           origin: this.mapMarkers[0].position,
           destination: this.mapMarkers[this.markerCount-1].position,
-          travelMode: google.maps.DirectionsTravelMode.DRIVING
+          travelMode: google.maps.DirectionsTravelMode.WALKING
         },
         (response, status) => {
           if (status === "OK") {
@@ -187,7 +198,7 @@ export class RetoPage implements OnInit {
     distanceMatrixService.getDistanceMatrix({
       origins: [this.mapMarkers[0].position],
       destinations: [this.mapMarkers[this.markerCount-1].position],
-      travelMode: google.maps.TravelMode.DRIVING ,
+      travelMode: google.maps.TravelMode.WALKING ,
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false
@@ -207,9 +218,44 @@ export class RetoPage implements OnInit {
     this.directionsDisplay.setMap(null);
     this.waypoints = [];
     this.markerCount = 0;
+    this.availableMarkers = 10;
     this.distance = '0 km';
     this.mapMarkers = [];
+    this.directionsDisplay = new google.maps.DirectionsRenderer();
     this.directionsDisplay.setMap(this.map);
+  }
+  
+  writeGPX(){
+    var XMLWriter = require('xml-writer');
+    var xw = new XMLWriter(true);
+    xw.startDocument();
+
+    xw.startElement('gpx').writeAttribute('creator', 'Kevin Acevedo Rodríguez');
+
+    xw.startElement('metadata','').writeElement('time','2020-10-16T18:47:01Z');
+    xw.endElement();
+
+    xw.startElement('trk')
+    xw.writeElement('name', 'Los relevos del diablo');
+    xw.writeElement('type', '1');
+
+    xw.startElement('trkseg', '');
+
+    //Se colocan los puntos de la ruta
+    for(let i = 0; i < this.waypoints.length ; i++){
+      xw.startElement('trkpt', '');
+      xw.writeAttribute('lat', this.waypoints[i].lat().toString());
+      xw.writeAttribute('lon', this.waypoints[i].lng().toString());
+      xw.writeElement('ele', '1446.6');
+      xw.writeElement('time', '020-10-16T18:47:01Z')
+      xw.endElement();
+    }
+
+    xw.endElement();
+
+    xw.endDocument();
+ 
+    console.log(xw.toString());
   }
 
 }

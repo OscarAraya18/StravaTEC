@@ -58,7 +58,7 @@ export class CarreraPage implements OnInit {
          center: centerPos,
          zoom: 8,
          disableDefaultUI: true,
-         mapTypeId: google.maps.MapTypeId.ROADMAP
+         mapTypeId: 'hybrid',
        }
        this.map = new google.maps.Map(this.mapRef.nativeElement, options);
   

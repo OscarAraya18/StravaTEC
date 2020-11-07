@@ -12,15 +12,19 @@
 <ion-content> 
 
   <ion-fab vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button color="light" (click)="reset()">
+    <ion-fab-button color="tertiary" (click)="reset()">
       <ion-icon name="arrow-undo"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-grid>
-    <div>      
+  <ion-fab vertical="top" horizontal="start" slot="fixed">
+    <ion-fab-button color="tertiary">
+      <ion-label class="available-markers-label">{{ availableMarkers }}</ion-label>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-grid> 
       <div #map class="map"></div>
-    </div> 
   </ion-grid>
   
     <ion-grid class="controls">
@@ -44,7 +48,7 @@
   
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button color="warning">Registrar</ion-button>
+          <ion-button color="warning" (click)="writeGPX()">Registrar</ion-button>
         </ion-col>
       </ion-row> 
   

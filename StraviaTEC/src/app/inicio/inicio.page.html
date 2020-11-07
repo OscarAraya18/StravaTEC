@@ -1,0 +1,102 @@
+<ion-content>
+  <ion-slides pager="true" [options]="slideOpts">
+
+    <ion-slide>
+      <ion-content>
+  
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let producto of [1,2,3,4,5,6,7]">
+      
+              <ion-card class="ion-margin" (click)="retoClick()">
+                <ion-card-header class="k-header">
+                    <ion-row>
+                      <ion-col size="8" class="ion-text-center">
+                        Nombre del reto
+                      </ion-col>
+                      <ion-col size="4" class="ion-text-end">
+                        10 h
+                      </ion-col>
+                    </ion-row>
+        
+                </ion-card-header>
+                <ion-card-content class="k-description">
+                  <p><strong>Se deben recorrer 5 km en un tiempo record de 55 minutos desde la calle de la paz</strong></p>
+                </ion-card-content> 
+                <ion-footer>
+                  <ion-row class="k-subtitles">
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>actividad</ion-label>
+                    </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>faltantes</ion-label>
+                    </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>modalidad</ion-label>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="k-values">
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>running</ion-label>
+                    </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>12 km</ion-label>
+                    </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>fondo</ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-footer>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-content>
+  
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let producto of [1,2,3,4,5,6,7]">
+      
+              <ion-card class="ion-margin" (click)="carreraClick()">
+                <ion-card-header class="k-header">
+                    <ion-row>
+                      <ion-col size="12" class="ion-text-center">
+                        Nombre de la carrera
+                      </ion-col>
+                    </ion-row>
+        
+                </ion-card-header>
+                <ion-grid class="map-wrapper" >  
+                  <ion-row #map class="map"></ion-row>
+                </ion-grid>
+                <ion-footer>
+                  <ion-row class="k-subtitles">
+                    <ion-col size="8" class="ion-text-start">
+                       fecha
+                    </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                       actividad
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="k-values">
+                    <ion-col size="8" class="ion-text-start">
+                      <ion-label>20-12-2000</ion-label>
+                    </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-label>running</ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-footer>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ion-slide>
+  
+  </ion-slides>
+</ion-content>
