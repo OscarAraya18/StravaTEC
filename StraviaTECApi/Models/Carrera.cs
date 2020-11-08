@@ -17,8 +17,8 @@ namespace StraviaTECApi.Models
 
         public string Nombre { get; set; }
         public string Admindeportista { get; set; }
-        public DateTime? Fecha { get; set; }
-        public byte[] Recorrido { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Recorrido { get; set; }
         public int? Costo { get; set; }
         public string Tipoactividad { get; set; }
         public bool? Privacidad { get; set; }

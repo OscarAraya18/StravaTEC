@@ -35,7 +35,7 @@ namespace StraviaTECApi.Models
         public virtual DbSet<Reto> Reto { get; set; }
         public virtual DbSet<RetoPatrocinador> RetoPatrocinador { get; set; }
 
-       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
@@ -61,11 +61,13 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Duracion)
                     .HasColumnName("duracion")
-                    .HasMaxLength(10);
+                    .HasColumnType("time without time zone");
 
                 entity.Property(e => e.Kilometraje).HasColumnName("kilometraje");
 
-                entity.Property(e => e.Recorridogpx).HasColumnName("recorridogpx");
+                entity.Property(e => e.Recorridogpx)
+                    .HasColumnName("recorridogpx")
+                    .HasColumnType("xml");
 
                 entity.Property(e => e.Tipoactividad)
                     .HasColumnName("tipoactividad")
@@ -133,7 +135,9 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Privacidad).HasColumnName("privacidad");
 
-                entity.Property(e => e.Recorrido).HasColumnName("recorrido");
+                entity.Property(e => e.Recorrido)
+                    .HasColumnName("recorrido")
+                    .HasColumnType("xml");
 
                 entity.Property(e => e.Tipoactividad)
                     .HasColumnName("tipoactividad")
@@ -520,7 +524,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.Inscripcion)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("inscripcion_usuariodeportista_fkey");
             });
 

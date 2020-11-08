@@ -84,10 +84,7 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach (var amigo in amigoDeportista)
             {
-                Console.Write(amigo.Amigo.Nombre + " ");
-                Console.Write(amigo.Amigo.Apellido1 + " ");
-                Console.Write(amigo.Amigo.Apellido2 + " ");
-                Console.WriteLine();
+
                 foreach(var actividad in amigo.Amigo.Actividad)
                 {
                     actividades.Add(actividad);
@@ -106,23 +103,40 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(amigoDeportista);
         }
 
-        public List<Carrera> verCarrerasInscritas(string UsuarioDeportista)
+        public List<Carrera> verCarrerasInscritas(string usuarioDeportista)
         {
             List<Carrera> carreras = new List<Carrera>();
 
             var carrerasInscritas = _context.DeportistaCarrera.
-                    Where(x => x.Usuariodeportista == UsuarioDeportista).
+                    Where(x => x.Usuariodeportista == usuarioDeportista && x.Completada == false).
                     Include(x => x.Carrera).ToList();
 
             foreach (var carrera in carrerasInscritas)
             {
-                Console.WriteLine(carrera.Carrera.Nombre);
-                carreras.Add(carrera.Carrera);
+                if ((carrera.Carrera.Fecha - DateTime.Now).TotalDays >= 0)
+                {
+                    carreras.Add(carrera.Carrera);
+                }
+                
             }
             // se debe retornar el resultado
             return carreras;
         }
+        public List<Reto> verRetosIncompletos(string usuarioDeportista)
+        {
+            List<Reto> retos = new List<Reto>();
 
+            var deportistaReto = _context.DeportistaReto.Where(x => x.Usuariodeportista == usuarioDeportista && x.Completado == false).
+                Include(x => x.Reto).ToList();
+
+            foreach (var reto in deportistaReto)
+            {
+                if ((reto.Reto.Periododisponibilidad - DateTime.Now).TotalDays >= 0)
+                    retos.Add(reto.Reto);
+            }
+
+            return retos;
+        }
         // creo que no es necesaria
         public void agregarCarreraDeportista(string UsuarioDeportista, Carrera carrera)
         {
@@ -172,6 +186,50 @@ namespace EFConsole.DataAccess.Repositories
             return deportistasNoAmigos;
         }
 
+        public bool registrarActividadReto(Actividad actividad, string usuarioDeportista, string nombreReto, string adminReto)
+        {
+            var deportistaReto = _context.DeportistaReto.Where(x => x.Usuariodeportista == usuarioDeportista
+            && x.Nombrereto == nombreReto && x.Admindeportista == adminReto && x.Completado == false).
+            Include(x => x.Reto).FirstOrDefault();
+
+            if (deportistaReto == null)
+                return false;
+
+            _context.Add(actividad);
+
+            if((actividad.Kilometraje + deportistaReto.Kmacumulados) >= deportistaReto.Reto.Kmtotales)
+            {
+                deportistaReto.Kmacumulados += actividad.Kilometraje;
+                deportistaReto.Completado = true;
+                _context.Update(deportistaReto);
+                return true;
+            }
+            else
+            {
+                deportistaReto.Kmacumulados += actividad.Kilometraje;
+                _context.Update(deportistaReto);
+                return true;
+            }
+
+        }
+
+        public bool registrarActividadCarrera(Actividad actividad, string usuarioDeportista, string nombreCarrera, string adminCarrera)
+        {
+            var deportistaCarrera = _context.DeportistaCarrera.Where(x => x.Usuariodeportista == usuarioDeportista
+            && x.Nombrecarrera == nombreCarrera && x.Admindeportista == adminCarrera).Include(x => x.Carrera).FirstOrDefault();
+
+            if (deportistaCarrera == null)
+                return false;
+
+            if (deportistaCarrera.Carrera.Tipoactividad != actividad.Tipoactividad)
+                return false;
+
+            deportistaCarrera.Completada = true;
+            _context.Update(deportistaCarrera);
+            _context.Add(actividad);
+            return true;
+
+        }
         /**         
          * Save the changes made to the database
          */

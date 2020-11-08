@@ -27,7 +27,7 @@ CREATE TABLE CARRERA
 	Nombre				VARCHAR(30)		NOT NULL  UNIQUE,
 	AdminDeportista		VARCHAR(20)		NOT NULL,
 	Fecha				DATE,
-	Recorrido			BYTEA,
+	Recorrido			XML,
 	Costo				INT,
 	TipoActividad		VARCHAR(30),
 	Privacidad          BOOL,
@@ -76,10 +76,10 @@ CREATE TABLE ACTIVIDAD
 (
 	UsuarioDeportista	VARCHAR(20)			NOT NULL,
 	FechaHora			TIMESTAMP,
-	Duracion			VARCHAR(10),
+	Duracion			TIME WITHOUT TIME ZONE,
 	Kilometraje			FLOAT8,
 	TipoActividad		VARCHAR(20),
-	RecorridoGPX		BYTEA,				
+	RecorridoGPX		XML,				
 	PRIMARY KEY			(UsuarioDeportista, FechaHora)
 );
 

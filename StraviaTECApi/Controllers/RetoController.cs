@@ -15,10 +15,23 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/reto/misretos")]
+        [Route("api/reto/admin/misretos")]
         public IActionResult getReto([FromQuery] string usuario)
         {
             var resultado = _repository.verRetosAdministrados(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/reto/user/retosNoInscritos")]
+        public IActionResult getRetosNoIscritos([FromQuery] string usuario)
+        {
+            var resultado = _repository.verRetosNoInscritos(usuario);
 
             if (resultado == null)
             {
@@ -32,6 +45,19 @@ namespace StraviaTECApi.Controllers
         public IActionResult getEstadoRetos([FromQuery] string usuario)
         {
             var resultado = _repository.verEstadoRetos(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/reto/user/incompletos")]
+        public IActionResult getRetos([FromQuery] string usuario)
+        {
+            var resultado = _repository.verRetosIncompletos(usuario);
 
             if (resultado == null)
             {
@@ -54,6 +80,16 @@ namespace StraviaTECApi.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpPost]
+        [Route("api/reto/deportista/inscribirse")]
+        public IActionResult inscribirReto([FromBody] Reto reto, [FromQuery] string usuario)
+        {
+            _repository.inscribirReto(reto, usuario);
+            _repository.SaveChanges();
+
+            return Ok("Inscripción realizada correctamente");
+        }
+
         [HttpPut]
         [Route("api/reto/edit")]
         public IActionResult actualizarReto([FromBody] Reto reto, [FromQuery] string usuarioAdmin)
@@ -70,7 +106,7 @@ namespace StraviaTECApi.Controllers
 
         [HttpDelete]
         [Route("api/reto/delete")]
-        public IActionResult eliminarCarrera([FromQuery] string nombre)
+        public IActionResult eliminarReto([FromQuery] string nombre)
         {
             _repository.Delete(nombre);
             _repository.SaveChanges();

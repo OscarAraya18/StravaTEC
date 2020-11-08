@@ -80,6 +80,19 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet]
+        [Route("api/deportista/retos")]
+        public IActionResult getRetosIncompletos([FromQuery] string usuario)
+        {
+            var resultado = _repository.verRetosIncompletos(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
         [HttpPost]
         [Route("api/deportista/new")]
         public IActionResult nuevoDeportista([FromBody] Deportista deportista)
@@ -108,13 +121,38 @@ namespace StraviaTECApi.Controllers
 
         [HttpPost]
         [Route("api/deportista/amigo/new")]
-        public IActionResult seguirDeportista([FromBody] string amigo, [FromQuery] string usuario)
+        public IActionResult seguirDeportista([FromQuery] string amigo, [FromQuery] string usuario)
         {
             _repository.seguirDeportista(usuario, amigo);
             _repository.SaveChanges();
             return Ok("Amigo agregado correctamente");
         }
 
+        [HttpPost]
+        [Route("api/deportista/registrar/actividadReto")]
+        public IActionResult registrarActividadReto([FromBody] Actividad actividad, [FromQuery] string usuario,
+            [FromQuery] string nombreReto, [FromQuery] string adminReto)
+        {
+            var resultado = _repository.registrarActividadReto(actividad, usuario, nombreReto, adminReto);
+            _repository.SaveChanges();
+
+            if (resultado)
+                return Ok("Actividad registrada correctamente");
+            return BadRequest("Ha ocurrido un error");
+        }
+
+        [HttpPost]
+        [Route("api/deportista/registrar/actividadCarrera")]
+        public IActionResult registrarActividadCarrera([FromBody] Actividad actividad, [FromQuery] string usuario,
+            [FromQuery] string nombreCarrera, [FromQuery] string adminCarrera)
+        {
+            var resultado = _repository.registrarActividadCarrera(actividad, usuario, nombreCarrera, adminCarrera);
+            _repository.SaveChanges();
+
+            if (resultado)
+                return Ok("Actividad registrada correctamente");
+            return BadRequest("Ha ocurrido un error");
+        }
 
 
         [HttpPut]

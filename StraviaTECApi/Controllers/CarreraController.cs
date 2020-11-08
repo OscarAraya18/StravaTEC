@@ -16,15 +16,16 @@ namespace StraviaTECApi.Controllers
 
 
         [HttpGet]
-        [Route("api/carrera")]
-        public IActionResult getCarreras()
+        [Route("api/carrera/user/verNoInscritas")]
+        public IActionResult getCarrerasNoInscritas([FromQuery] string usuario)
         {
-            var resultado = _repository.verTodas();
+            var resultado = _repository.verCarrerasNoInscritas(usuario);
 
             if (resultado == null)
             {
                 return BadRequest();
             }
+
             return Ok(resultado);
         }
 

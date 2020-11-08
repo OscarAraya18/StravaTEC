@@ -16,7 +16,7 @@ namespace StraviaTECApi.Models
         public string Admindeportista { get; set; }
         public string Fondoaltitud { get; set; }
         public string Tipoactividad { get; set; }
-        public DateTime? Periododisponibilidad { get; set; }
+        public DateTime Periododisponibilidad { get; set; }
         public bool? Privacidad { get; set; }
         public double? Kmtotales { get; set; }
         public string Descripcion { get; set; }

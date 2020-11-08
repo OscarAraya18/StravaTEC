@@ -71,11 +71,72 @@ namespace EFConsole.DataAccess.Repositories
             return retos;
         }
 
+        public List<Reto> verRetosIncompletos(string UsuarioDeportista)
+        {
+            List<Reto> retos = new List<Reto>();
+
+            var deportistaRetos = _context.DeportistaReto.
+                    Where(x => x.Usuariodeportista == UsuarioDeportista && x.Completado == false).
+                    Include(x => x.Reto).ToList();
+            // se debe retornar el avance que tiene el deportista
+            // el objetivo del reto
+            // también los días faltantes
+            foreach (var reto in deportistaRetos)
+            {
+                retos.Add(reto.Reto);
+            }
+            return retos;
+        }
         public List<Reto> verRetosAdministrados(string usuarioDeportista)
         {
             return _context.Reto.Where(x => x.Admindeportista == usuarioDeportista).ToList();
         }
 
+        public void inscribirReto(Reto reto, string usuarioDeportista)
+        {
+            var deportistaReto = new DeportistaReto();
+
+            deportistaReto.Admindeportista = reto.Admindeportista;
+            deportistaReto.Completado = false;
+            deportistaReto.Kmacumulados = 0;
+            deportistaReto.Usuariodeportista = usuarioDeportista;
+            deportistaReto.Nombrereto = reto.Nombre;
+
+            _context.Add(deportistaReto);
+        }
+
+        public List<Reto> verRetosNoInscritos(string usuarioDeportista)
+        {
+            var retosInscritos = verRetosInscritos(usuarioDeportista);
+
+            var retosTotales = _context.Reto.ToList();
+
+            List<Reto> retosNoInscritos = new List<Reto>();
+
+            foreach(var reto in retosTotales)
+            {
+                if (!retosInscritos.Contains(reto))
+                    retosNoInscritos.Add(reto);
+            }
+
+            return retosNoInscritos;
+        }
+
+        public List<Reto> verRetosInscritos(string usuarioDeportista)
+        {
+            List<Reto> retos = new List<Reto>();
+
+            var deportistaReto = _context.DeportistaReto.Where(x => x.Usuariodeportista == usuarioDeportista).
+                Include(x => x.Reto).ToList();
+
+            foreach (var reto in deportistaReto)
+            {
+                
+               retos.Add(reto.Reto);
+            }
+
+            return retos;
+        }
         /**         
         * Save the changes made to the database
         */

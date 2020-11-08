@@ -98,11 +98,42 @@ namespace EFConsole.DataAccess.Repositories
             // se retorna la lista
         }
 
-        public List<Carrera> verTodas()
+        public List<Carrera> verCarrerasInscritas(string usuarioDeportista)
         {
-            return _context.Carrera.Include(x => x.CarreraCuentabancaria).ToList();
-            // se retorna la lista
+            List<Carrera> carreras = new List<Carrera>();
+
+            var carrerasInscritas = _context.DeportistaCarrera.
+                    Where(x => x.Usuariodeportista == usuarioDeportista).
+                    Include(x => x.Carrera).ToList();
+
+            foreach (var carrera in carrerasInscritas)
+            {
+                
+                carreras.Add(carrera.Carrera);
+                
+
+            }
+            // se debe retornar el resultado
+            return carreras;
         }
+
+        public List<Carrera> verCarrerasNoInscritas(string usuarioDeportista)
+        {
+            var carrerasInscritas = verCarrerasInscritas(usuarioDeportista);
+
+            var carrerasTotales = _context.Carrera.ToList();
+
+            List<Carrera> carrerasNoInscritas = new List<Carrera>();
+
+            foreach (var carrera in carrerasTotales)
+            {
+                if (!carrerasInscritas.Contains(carrera))
+                    carrerasNoInscritas.Add(carrera);
+            }
+
+            return carrerasNoInscritas;
+        }
+
 
         public void verPatrocinadores(string nombreCarrera)
         {
