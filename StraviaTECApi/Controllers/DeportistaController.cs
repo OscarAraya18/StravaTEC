@@ -128,7 +128,7 @@ namespace StraviaTECApi.Controllers
             return Ok("Amigo agregado correctamente");
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("api/deportista/registrar/actividadReto")]
         public IActionResult registrarActividadReto([FromBody] Actividad actividad, [FromQuery] string usuario,
             [FromQuery] string nombreReto, [FromQuery] string adminReto)
@@ -139,9 +139,22 @@ namespace StraviaTECApi.Controllers
             if (resultado)
                 return Ok("Actividad registrada correctamente");
             return BadRequest("Ha ocurrido un error");
-        }
+        }*/
 
         [HttpPost]
+        [Route("api/deportista/registrar/actividades")]
+        public IActionResult registrarActividades([FromBody] List<Actividad> actividades, [FromQuery] string usuario)
+        {
+            var resultado = _repository.registrarActividades(actividades, usuario);
+
+            _repository.SaveChanges();
+
+            if (resultado)
+                return Ok("Actividades registradas correctamente");
+            return BadRequest("Ha ocurrido un error");
+        }
+
+        /*[HttpPost]
         [Route("api/deportista/registrar/actividadCarrera")]
         public IActionResult registrarActividadCarrera([FromBody] Actividad actividad, [FromQuery] string usuario,
             [FromQuery] string nombreCarrera, [FromQuery] string adminCarrera)
@@ -152,8 +165,7 @@ namespace StraviaTECApi.Controllers
             if (resultado)
                 return Ok("Actividad registrada correctamente");
             return BadRequest("Ha ocurrido un error");
-        }
-
+        }*/
 
         [HttpPut]
         [Route("api/deportista/edit")]

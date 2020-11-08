@@ -113,7 +113,7 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach (var carrera in carrerasInscritas)
             {
-                if ((carrera.Carrera.Fecha - DateTime.Now).TotalDays >= 0)
+                if ((int)(carrera.Carrera.Fecha - DateTime.Now).TotalDays == 0)
                 {
                     carreras.Add(carrera.Carrera);
                 }
@@ -186,10 +186,10 @@ namespace EFConsole.DataAccess.Repositories
             return deportistasNoAmigos;
         }
 
-        public bool registrarActividadReto(Actividad actividad, string usuarioDeportista, string nombreReto, string adminReto)
+        private bool registrarActividadReto(Actividad actividad, string usuarioDeportista)
         {
             var deportistaReto = _context.DeportistaReto.Where(x => x.Usuariodeportista == usuarioDeportista
-            && x.Nombrereto == nombreReto && x.Admindeportista == adminReto && x.Completado == false).
+            && x.Nombrereto == actividad.Nombreretocarrera && x.Admindeportista == actividad.Adminretocarrera).
             Include(x => x.Reto).FirstOrDefault();
 
             if (deportistaReto == null)
@@ -213,10 +213,11 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public bool registrarActividadCarrera(Actividad actividad, string usuarioDeportista, string nombreCarrera, string adminCarrera)
+        private bool registrarActividadCarrera(Actividad actividad, string usuarioDeportista)
         {
             var deportistaCarrera = _context.DeportistaCarrera.Where(x => x.Usuariodeportista == usuarioDeportista
-            && x.Nombrecarrera == nombreCarrera && x.Admindeportista == adminCarrera).Include(x => x.Carrera).FirstOrDefault();
+            && x.Nombrecarrera == actividad.Nombreretocarrera && x.Admindeportista == actividad.Adminretocarrera).
+            Include(x => x.Carrera).FirstOrDefault();
 
             if (deportistaCarrera == null)
                 return false;
@@ -229,6 +230,20 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(actividad);
             return true;
 
+        }
+
+        public bool registrarActividades(List<Actividad> actividades, string usuario)
+        {
+            foreach(var actividad in actividades)
+            {
+                if(actividad.Banderilla == 0)
+                {
+                    registrarActividadCarrera(actividad, usuario);
+                }
+                registrarActividadReto(actividad, usuario);
+            }
+
+            return true;
         }
         /**         
          * Save the changes made to the database

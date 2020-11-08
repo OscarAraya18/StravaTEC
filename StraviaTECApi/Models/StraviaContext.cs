@@ -59,11 +59,21 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Fechahora).HasColumnName("fechahora");
 
+                entity.Property(e => e.Adminretocarrera)
+                    .HasColumnName("adminretocarrera")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Banderilla).HasColumnName("banderilla");
+
                 entity.Property(e => e.Duracion)
                     .HasColumnName("duracion")
                     .HasColumnType("time without time zone");
 
                 entity.Property(e => e.Kilometraje).HasColumnName("kilometraje");
+
+                entity.Property(e => e.Nombreretocarrera)
+                    .HasColumnName("nombreretocarrera")
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Recorridogpx)
                     .HasColumnName("recorridogpx")
@@ -351,7 +361,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")
-                    .HasMaxLength(20);
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -477,7 +487,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")
-                    .HasMaxLength(20);
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Adminreto)
                     .HasColumnName("adminreto")
@@ -598,7 +608,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombre)
                     .HasColumnName("nombre")
-                    .HasMaxLength(20);
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -644,7 +654,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")
-                    .HasMaxLength(20);
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
