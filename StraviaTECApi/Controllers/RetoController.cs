@@ -28,10 +28,10 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/reto/user/retosNoInscritos")]
-        public IActionResult getRetosNoIscritos([FromQuery] string usuario)
+        [Route("api/reto/user/retosDisponibles")]
+        public IActionResult getRetosDisponibles([FromQuery] string usuario)
         {
-            var resultado = _repository.verRetosNoInscritos(usuario);
+            var resultado = _repository.verRetosDisponibles(usuario);
 
             if (resultado == null)
             {

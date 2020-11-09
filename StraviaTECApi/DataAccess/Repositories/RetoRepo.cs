@@ -105,17 +105,36 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(deportistaReto);
         }
 
-        public List<Reto> verRetosNoInscritos(string usuarioDeportista)
+        public List<Reto> verRetosDisponibles(string usuarioDeportista)
         {
-            var retosInscritos = verRetosInscritos(usuarioDeportista);
-
-            var retosTotales = _context.Reto.ToList();
-
             List<Reto> retosNoInscritos = new List<Reto>();
 
-            foreach(var reto in retosTotales)
+            var retosInscritos = verRetosInscritos(usuarioDeportista);
+
+            var retosPublicos = _context.Reto.Where(x => x.Privacidad == false).ToList();
+
+            var grupos = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuarioDeportista).Include(x => x.Grupo);
+
+            var retosPrivados = _context.GrupoReto.
+                    Include(x => x.Reto).
+                    Where(x => x.Reto.Privacidad == true).ToList();
+
+            foreach (var reto in retosPrivados)
             {
-                if (!retosInscritos.Contains(reto))
+                foreach (var grupo in grupos)
+                {
+                    if (grupo.Nombregrupo.Equals(reto.Nombregrupo) && grupo.Admindeportista.Equals(reto.Admingrupo)
+                        && !retosInscritos.Contains(reto.Reto))
+                    {
+                        retosNoInscritos.Add(reto.Reto);
+                        break;
+                    }
+                }
+            }
+
+            foreach (var reto in retosPublicos)
+            {
+                if (!retosNoInscritos.Contains(reto))
                     retosNoInscritos.Add(reto);
             }
 

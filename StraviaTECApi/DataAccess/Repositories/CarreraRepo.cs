@@ -108,12 +108,10 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach (var carrera in carrerasInscritas)
             {
-                
                 carreras.Add(carrera.Carrera);
-                
-
+               
             }
-            // se debe retornar el resultado
+
             return carreras;
         }
 
@@ -134,6 +132,63 @@ namespace EFConsole.DataAccess.Repositories
             return carrerasNoInscritas;
         }
 
+        public List<Carrera> verCarrerasDisponibles(string usuario)
+        {
+            List<Carrera> carreras = new List<Carrera>();
+
+            var grupos = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuario).Include(x => x.Grupo);
+
+            var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false).Include(x => x.CarreraCuentabancaria);
+
+            var carrerasInscritas = verCarrerasInscritas(usuario);
+
+            var carrerasPrivadas = _context.GrupoCarrera.
+                    Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraCuentabancaria).
+                    Where(x => x.Carrera.Privacidad == true).ToList();
+
+            foreach(var carrera in carrerasPrivadas)
+            {
+                foreach(var grupo in grupos)
+                {
+                    if(grupo.Nombregrupo.Equals(carrera.Nombregrupo) && grupo.Admindeportista.Equals(carrera.Admingrupo)
+                        && !carrerasInscritas.Contains(carrera.Carrera))
+                    {
+                        carreras.Add(carrera.Carrera);
+                        break;
+                    }
+                }
+            }
+
+            foreach(var carrera in carrerasPublicas)
+            {
+                if (!carreras.Contains(carrera))
+                    carreras.Add(carrera);
+            }
+
+            return carreras;
+        }
+
+        public List<Carrera> accederCarreras(string nombreGrupo, string adminGrupo, string usuario)
+        {
+            List<Carrera> carreras = new List<Carrera>();
+
+            var verCarreras = _context.GrupoCarrera.
+                    Where(x => x.Nombregrupo == nombreGrupo && x.Admingrupo == adminGrupo).
+                    Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraCuentabancaria).
+                    Where(x => x.Carrera.Privacidad == true).ToList();
+
+            var carrerasInscritas = verCarrerasInscritas(usuario);
+
+            foreach (var carrera in verCarreras)
+            {
+                if (!carrerasInscritas.Contains(carrera.Carrera))
+                    carreras.Add(carrera.Carrera);
+            }
+
+            return carreras;
+        }
 
         public void verPatrocinadores(string nombreCarrera)
         {
