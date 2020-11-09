@@ -2,26 +2,108 @@
   <ion-slides pager="true" [options]="slideOpts">
 
     <ion-slide>
-      <ion-content>
   
+<ion-content>
+ 
+  <ion-segment [(ngModel)]="selectedView">
+    <ion-segment-button value="retos">
+      <ion-label>Mis retos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="carreras">
+      <ion-label>Mis carreras</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+ 
+  <div [ngSwitch]="selectedView">
+    <div *ngSwitchCase="'retos'">
+ 
+      <ion-list>
+        <ion-item button *ngFor="let dr of deportistasReto">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="8" class="ion-text-center">
+                {{ dr.NombreActividad }}
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <ion-button fill="clear" (click)="presentarAlertaSincronizacionReto(dr)">
+                  <ion-icon name="alert-circle" slot="icon-only"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="3" class="ion-text-start">
+                {{ dr.NombreReto }}
+              </ion-col>
+              <ion-col size="3" class="ion-text-center">
+                {{ dr.Distancia }} km
+              </ion-col>
+              <ion-col size="3" class="ion-text-center">
+                {{ dr.Duracion }} 
+              </ion-col>
+            </ion-row>
+
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div *ngSwitchCase="'carreras'">
+      <ion-list>
+        <ion-item *ngFor="let dc of deportistasCarrera">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="8" class="ion-text-center">
+                {{ dc.NombreActividad }}
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <ion-button fill="clear" (click)="presentarAlertaSincronizacionCarrera(dc)">
+                  <ion-icon name="alert-circle" slot="icon-only"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start">
+                {{ dc.NombreCarrera }}
+              </ion-col>
+              <ion-col size="4" class="ion-text-center">
+                {{ dc.Duracion }}
+              </ion-col>
+   
+            </ion-row>
+
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+ 
+</ion-content>
+    </ion-slide>
+
+    <ion-slide>
+      
+      <ion-content>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title size="large">Retos disponibles</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let producto of [1,2,3,4,5,6,7]">
+            <ion-col *ngFor="let reto of listaRetos">
       
-              <ion-card class="ion-margin" (click)="retoClick()">
+              <ion-card class="ion-margin" (click)="retoClick(reto.Nombre)">
                 <ion-card-header class="k-header">
-                    <ion-row>
-                      <ion-col size="8" class="ion-text-center">
-                        Nombre del reto
+                    <ion-row class="k-title">
+                      <ion-col size="12" class="ion-text-center">
+                        {{ reto.Nombre }}
                       </ion-col>
-                      <ion-col size="4" class="ion-text-end">
-                        10 h
-                      </ion-col>
+               
                     </ion-row>
         
                 </ion-card-header>
                 <ion-card-content class="k-description">
-                  <p><strong>Se deben recorrer 5 km en un tiempo record de 55 minutos desde la calle de la paz</strong></p>
+                  <p><strong>{{ reto.Descripcion }}</strong></p>
                 </ion-card-content> 
                 <ion-footer>
                   <ion-row class="k-subtitles">
@@ -29,7 +111,7 @@
                       <ion-label>actividad</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>faltantes</ion-label>
+                      <ion-label>km totales</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
                       <ion-label>modalidad</ion-label>
@@ -37,13 +119,18 @@
                   </ion-row>
                   <ion-row class="k-values">
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>running</ion-label>
+                      <ion-label>{{ reto.TipoActividad }}</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>12 km</ion-label>
+                      <ion-label>{{ reto.KmTotales }} km</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>fondo</ion-label>
+                      <ion-label>{{ reto.FondoAltitud }}</ion-label>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="k-periodo">
+                    <ion-col size="12" class="ion-text-center">
+                        Disponible hasta : {{ reto.PeriodoDisponibilidad }}
                     </ion-col>
                   </ion-row>
                 </ion-footer>
@@ -56,24 +143,27 @@
 
     <ion-slide>
       <ion-content>
-  
+        <ion-header>
+          <ion-toolbar>
+            <ion-title size="large">Carreas dispobibles</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let producto of [1,2,3,4,5,6,7]">
+            <ion-col *ngFor="let carrera of listaCarreras">
       
-              <ion-card class="ion-margin" (click)="carreraClick()">
+              <ion-card class="ion-margin" (click)="carreraClick(carrera.Nombre)">
                 <ion-card-header class="k-header">
-                    <ion-row>
+                    <ion-row class ="k-title">
                       <ion-col size="12" class="ion-text-center">
-                        Nombre de la carrera
+                        {{ carrera.Nombre }}
                       </ion-col>
                     </ion-row>
         
                 </ion-card-header>
-                <ion-grid class="map-wrapper" >  
-                  <ion-row #map class="map"></ion-row>
-                </ion-grid>
-                <ion-footer>
+                <img src="assets/imagenes/carrera-logo.png" alt="ion" width="100%" height="100px">
+                <ion-card-content>
                   <ion-row class="k-subtitles">
                     <ion-col size="8" class="ion-text-start">
                        fecha
@@ -84,13 +174,13 @@
                   </ion-row>
                   <ion-row class="k-values">
                     <ion-col size="8" class="ion-text-start">
-                      <ion-label>20-12-2000</ion-label>
+                      <ion-label>{{ carrera.Fecha }}</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>running</ion-label>
+                      <ion-label>{{ carrera.TipoActividad }}</ion-label>
                     </ion-col>
                   </ion-row>
-                </ion-footer>
+                </ion-card-content>
               </ion-card>
             </ion-col>
           </ion-row>

@@ -34,3 +34,9 @@
 .my-custom-class .alert-wrapper {
     background: #5a2525;
   }
+
+  .loading-style {
+    --background: rgb(224, 38, 38);
+    --spinner-color: rgb(168, 245, 27);
+    color: rgb(24, 5, 5);
+  }

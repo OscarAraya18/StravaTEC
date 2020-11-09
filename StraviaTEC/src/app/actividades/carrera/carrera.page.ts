@@ -1,6 +1,11 @@
-import { Component, OnInit, OnDestroy  } from '@angular/core';
+import { DatabaseService, DeportistaCarrera} from 'src/app/servicios/database.service';
+import { Component, OnInit} from '@angular/core';
 import {ViewChild, ElementRef } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 declare var google: any;
 
@@ -31,17 +36,83 @@ export class CarreraPage implements OnInit {
   xhttp = new XMLHttpRequest();
   parser = new DOMParser();
 
+  //Nombre de la carrera
+  nombreCarrera: string = '';
 
-  constructor(private geolocation: Geolocation) { }
+  duracion = {};
 
-  ngOnInit() {
-    this.showMap();
+  //Nombre de usuario actual
+  nombreUsuario: string;
 
+  constructor(private usuarioService: UsuarioService, public alertController: AlertController, public toastController: ToastController, private db: DatabaseService, private geolocation: Geolocation, private router: Router, private route: ActivatedRoute) { }
+  
+  async presentarAlertaGuardado() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Guardar nueva actividad',
+      message: 'Escriba el nombre de la actividad',
+      inputs: [
+        {
+          name: 'nombreA',
+          type: 'text',
+          placeholder: '',
+          attributes: {
+            maxlength: 30,
+          }
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Aplicar',
+          handler: (alertData) => {
+            this.addDeportistaCarrera(alertData.nombreA);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  async presentToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
   }
 
-  ionViewDidEnter() { 
-    
-   }
+  ngOnInit() {
+    this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
+    this.showMap();
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      let nombreCarrera = params.get('nombreCarrera');
+      this.nombreCarrera = nombreCarrera;
+    });
+      
+  }
+  //Este método se ejecuta cada vez que se abra esta página
+  ionViewDidEnter(){
+    this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
+    this.showMap();
+  }
+
+  addDeportistaCarrera(nombreActividad: string) {
+    let duracion = this.duracion['horas'] + ':' + this.duracion['minutos'] + ':' + this.duracion['segundos'];
+    this.db.addDeportistaCarrera(this.nombreUsuario, nombreActividad, this.nombreCarrera, duracion).then(_ => {
+      this.duracion = {};
+      this.presentToast('Actividad guardada localmente');
+      this.gotoInicio();
+    });
+  }
+ 
        //Este método despliega el mapa en pantalla
        showMap(){
 
@@ -53,10 +124,9 @@ export class CarreraPage implements OnInit {
           lat: this.latitude,
           lng: this.longitude
         };
-       //const location = new google.maps.LatLng(this.latitude, this.longitude);
        const options ={
          center: centerPos,
-         zoom: 8,
+         zoom: 15,
          disableDefaultUI: true,
          mapTypeId: 'hybrid',
        }
@@ -70,10 +140,6 @@ export class CarreraPage implements OnInit {
          }).catch((error) => {
            console.log('Error getting location', error);
          });
-
-         this.loadXmlFile("assets/routes/Morning_Ride.gpx");
-  
-        
       }
 
       loadXmlFile(path: string){
@@ -128,7 +194,7 @@ export class CarreraPage implements OnInit {
             destination: destination,
             waypoints: waypts,
             optimizeWaypoints: true,
-            travelMode: google.maps.DirectionsTravelMode.DRIVING
+            travelMode: google.maps.DirectionsTravelMode.WALKING
           },
           (response, status) => {
             if (status === "OK") {
@@ -167,9 +233,15 @@ export class CarreraPage implements OnInit {
      marker.addListener('click', () => {
        infoWindow.open(this.map, marker);
      });
-   
- 
    } 
+
+   gotoInicio(){
+    this.router.navigate(['/inicio']);
+   }
+
+   paintGPX(){
+     this.loadXmlFile("assets/routes/Morning_Ride.gpx");
+   }
 
   
 }

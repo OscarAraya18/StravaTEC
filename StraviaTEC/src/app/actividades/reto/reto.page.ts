@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {ViewChild, ElementRef } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { RetoService } from 'src/app/servicios/reto.service';
+import { ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { DatabaseService, DeportistaReto} from 'src/app/servicios/database.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 import 'xml-writer';
+import { unwatchFile } from 'fs';
 
 declare var google: any;
 
@@ -32,9 +39,6 @@ export class RetoPage implements OnInit {
   //titulos de los dos marcadores
   markerTitle = ["INICIO", "FIN"];
 
-  //letras de los marcadores
-  markerLabel = ["A", "B"];
-
   //Contador para controlar que solo hayan 2 marcadores
   //Salida y Entrada
   markerCount = 0;
@@ -47,28 +51,96 @@ export class RetoPage implements OnInit {
   distanceMatrixService = new google.maps.DistanceMatrixService();
 
   //Variable que va a almacenar la distancia entre los puntos
-  distance:any = "0 km";
+  distance:number = 0;
 
   //waypoints de la ruta dibujada
   waypoints:any  = [];
 
-  constructor(private geolocation: Geolocation) { }
+  //Nombre del reto
+  nombreReto: string = '';
+
+  //Duración de la actividad
+  duracion = {};
+
+  //El nombre de usuario actual
+  nombreUsuario: string;
+
+
+  constructor(public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,public toastController: ToastController, private geolocation: Geolocation, private router: Router, private route: ActivatedRoute, private retoService: RetoService) { }
+  
+  async presentarAlertaGuardado() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Guardar nueva actividad',
+      message: 'Escriba el nombre de la actividad',
+      inputs: [
+        {
+          name: 'nombreA',
+          type: 'text',
+          placeholder: '',
+          attributes: {
+            maxlength: 30,
+          }
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Aplicar',
+          handler: (alertData) => {
+            this.addDeportistaReto(alertData.nombreA);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async presentToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
 
   ngOnInit() {
+    this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
+    this.showMap();
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      let nombreReto = params.get('nombreReto');
+      this.nombreReto = nombreReto;
+    });
+  }
+  addDeportistaReto(nombreActividad) {
+    if(this.waypoints.length > 1){
+      let gpx = this.writeGPX();
+      let duracion = this.duracion['horas'] + ':' + this.duracion['minutos'] + ':' + this.duracion['segundos'];
+      this.db.addDeportistaReto(this.nombreUsuario, nombreActividad, this.nombreReto, this.distance, duracion, gpx).then(_ => {
+        this.presentToast('Actividad guardada localmente');
+        this.gotoInicio();
+      });
+    }
+    else{
+      this.presentToast('Se necesitan al menos dos puntos');
+    }
+
   }
 
     //Este método se ejecuta cada vez que se abra esta página
     ionViewDidEnter(){
+      this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
       this.showMap();
-
-      //this.writeGPX();
     }
-    get(){
-      for(let i = 0; i < this.waypoints.length; i++){
-        console.log(this.waypoints[i].lat().toString());
-      }
-    }
-
   
     //Este método despliega el mapa en pantalla
     showMap(){
@@ -92,7 +164,7 @@ export class RetoPage implements OnInit {
 
      
      this.directionsDisplay.setMap(this.map);
-     this.map.addListener("click", (e) => {
+     this.map.addListener("dblclick", (e) => {
        this.placeMarker(e.latLng, this.map);
      });
 
@@ -139,8 +211,11 @@ export class RetoPage implements OnInit {
         this.clearMarkers();
         this.calculateAndDisplayRoute(this.directionsService, this.directionsDisplay);
         this.calculateDistance(this.distanceMatrixService);
-        
       }
+      if(this.markerCount === 10){
+        this.presentToast('Has llegado al límite de marcadores');
+      }
+      
     }
     // Deletes all markers in the array by removing references to them.
   deleteMarkers() {
@@ -204,8 +279,8 @@ export class RetoPage implements OnInit {
       avoidTolls: false
   }, (response, status) => {
       if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
-          const distance = response.rows[0].elements[0].distance.text;
-          this.distance = distance;
+          const distance = response.rows[0].elements[0].distance.value;
+          this.distance = distance/1000;
           
       } else {
           alert("Unable to find the distance via road.");
@@ -219,7 +294,7 @@ export class RetoPage implements OnInit {
     this.waypoints = [];
     this.markerCount = 0;
     this.availableMarkers = 10;
-    this.distance = '0 km';
+    this.distance = 0;
     this.mapMarkers = [];
     this.directionsDisplay = new google.maps.DirectionsRenderer();
     this.directionsDisplay.setMap(this.map);
@@ -257,5 +332,8 @@ export class RetoPage implements OnInit {
  
     console.log(xw.toString());
   }
+  gotoInicio(){
+    this.router.navigate(['/inicio']);
+   }
 
 }

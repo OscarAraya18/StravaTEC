@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Usuario } from '../modelos/usuario';
 import { AlertController } from '@ionic/angular';
-
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  constructor(public alertController: AlertController) { }
+  constructor(private usuarioService: UsuarioService, public alertController: AlertController, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() { 
   }
@@ -37,10 +38,15 @@ export class LoginPage implements OnInit {
    * la página home. La validación se hace por medio de la api.
    */
   submit(){
-    //Nota:esto es una prueba de alerta
     //this.presentAlert();
-  
+
+    //Se guarda el nombre usuario en la variable global del servicio
+    this.usuarioService.setNombreUsuarioActual(this.usuarioL.nombreUsuario);
+    this.gotoInicio();
   }
+  gotoInicio(){
+    this.router.navigate(['/inicio']);
+   }
 
 
 }

@@ -1,6 +1,5 @@
 ion-item{
-    --background: #f50b0b;
-    --color: #fff;
+  background: #0045bd;
     border-radius: 20px;
   }
 
@@ -14,6 +13,8 @@ a{
 
 ion-input {
     text-align: center;
+    background: #0045bd;
+    border-radius: 20px;
   }
 
 form{
@@ -26,6 +27,9 @@ h1 {
   font-size: 50px; font-weight: normal;
   line-height: 48px; margin: 0;
   top:10%;
+}
+ion-content {
+  --background: url(/assets/imagenes/running_shoes.jpg) no-repeat center/cover fixed;
 }
 
 

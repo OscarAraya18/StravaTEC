@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {ViewChild, ElementRef } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-
-declare var google: any;
+import { CarreraService } from 'src/app/servicios/carrera.service';
+import { RetoService } from 'src/app/servicios/reto.service';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { DatabaseService, DeportistaCarrera, DeportistaReto } from 'src/app/servicios/database.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
+import { AlertController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-inicio',
@@ -12,26 +15,10 @@ declare var google: any;
 
 
 export class InicioPage implements OnInit {
-
-  
-  //Se le indica el elemento html correspondiente
-  @ViewChild('map', {read:ElementRef, static: false}) mapRef:ElementRef;
-
-  //Mapa que se está usando en la página
-  map: any;
-
-  directionsService = new google.maps.DirectionsService();
-  directionsDisplay;
-  distanceMatrixService = new google.maps.DistanceMatrixService();
-
   //GPX PARSER
   xhttp = new XMLHttpRequest();
   parser = new DOMParser();
   
-  //Geolocalización
-  latitude: any;
-  longitude: any;
-   
 
   //Opciones Fade del slider
   slideOpts = {
@@ -121,144 +108,125 @@ export class InicioPage implements OnInit {
       }
     }
   };
-  constructor(private geolocation: Geolocation) { }
 
-  ngOnInit() {
-    this.showMap();
-  }
-  showMap(){
+  constructor(public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private retoService: RetoService, private router: Router, private route: ActivatedRoute) { }
+  
+  //Lista de carreas local
+  listaCarreras = [];
 
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.latitude = resp.coords.latitude;
-      this.longitude = resp.coords.longitude;
-    
-     const centerPos = {
-      lat: this.latitude,
-      lng: this.longitude
-    };
-   //const location = new google.maps.LatLng(this.latitude, this.longitude);
-   const options ={
-     center: centerPos,
-     zoom: 10,
-     minZoom: 10,
-     maxZoom: 10,
-     disableDefaultUI: true,
-     mapTypeId: 'hybrid',
-     gestureHandling: "greedy",
-   }
-   this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-   
-   this.directionsDisplay = new google.maps.DirectionsRenderer({
-    suppressMarkers: true
-   });
-   this.directionsDisplay.setMap(this.map);
+  //Lista de retos local
+  listaRetos = [];
 
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });
+  //DeportistasCarrera de la base de datos empotrada
+  deportistasCarrera: DeportistaCarrera[] = [];
 
-     this.loadXmlFile("assets/routes/Morning_Ride.gpx");
+  //DeportistasReto de la base de datos empotrada
+  deportistasReto: DeportistaReto[] = [];
 
-    
-  }
-  loadXmlFile(path: string){
-    this.xhttp.onreadystatechange = () => {
-    if (this.xhttp.readyState == 4 && this.xhttp.status == 200) {
-       // Typical action to be performed when the document is ready:
-      this.getGpxRoute(this.xhttp.responseText);
-    }
-    };
-    this.xhttp.open("GET", path, true);
-    this.xhttp.send();
+  //Vista seleccionada para el primer slide
+  selectedView = 'retos';
+
+  nombreUsuario: string;
+
+  async presentLoading(mensaje) {
+    const loading = await this.loadingController.create({
+      spinner: "bubbles",
+      duration: 5000,
+      message: mensaje,
+      cssClass: 'loading-style',
+      backdropDismiss: false,
+      showBackdrop: true
+
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed with role:', role);
   }
 
-  getGpxRoute(response: string){
-    const xmlDoc = this.parser.parseFromString(response,"text/xml");
-    const track = xmlDoc.getElementsByTagName("trkpt");
-    var gpxWaypoints = [];
-    var origin: any;
-    var destination: any;
-
-    for(let i = 0; i < track.length; i++){
-        var stop = new google.maps.LatLng(track[i].getAttribute('lat'), track[i].getAttribute('lon'));
-        gpxWaypoints.push({
-        location: stop,
-        stopover: true
-      });
-      if(i === 0){
-        origin = new google.maps.LatLng(track[i].getAttribute('lat'), track[i].getAttribute('lon'));
-      }
-      if(i === track.length -1){
-        destination = new google.maps.LatLng(track[i].getAttribute('lat'), track[i].getAttribute('lon'));
-      }
-    }
-
-    this.createMarker(origin, 'START', 'A');
-    this.createMarker(destination, 'END', 'B');
-
-    var range = Math.trunc(gpxWaypoints.length / 25);
-    var newWayPoints = [];
-    for(let i = 0; i < gpxWaypoints.length; i += range+1){
-      newWayPoints.push(gpxWaypoints[i]);
-    }
-    //max waypoints = 25
-    this.calculateAndDisplayRoute(this.directionsService, this.directionsDisplay, origin, destination, newWayPoints);
-  }
-
-  calculateAndDisplayRoute(directionsService, directionsRenderer, origin, destination, waypts) {
-    directionsService.route(
-      {
-        origin: origin,
-        destination: destination,
-        waypoints: waypts,
-        optimizeWaypoints: true,
-        travelMode: google.maps.DirectionsTravelMode.DRIVING
-      },
-      (response, status) => {
-        if (status === "OK") {
-          directionsRenderer.setDirections(response);
-          var route = response.routes[0];
-        } else {
-          window.alert("Directions request failed due to " + status);
+  async presentarAlertaSincronizacionReto(actividad) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Sincronizar Reto',
+      message: 'Desea subir este reto a la base de datos ?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.db.deleteDeportistaReto(actividad.Usuario, actividad.NombreReto);
+            this.presentLoading('Subiendo');
+          }
         }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async presentarAlertaSincronizacionCarrera(actividad) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Sincronizar Carrera',
+      message: 'Desea subir esta carrera a la base de datos ?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.db.deleteDeportistaCarrera(actividad.Usuario, actividad.NombreCarrera);
+            this.presentLoading('Subiendo');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  ngOnInit() {
+    this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
+    //Recuperar los datos de la base de datos empotrada
+    this.db.getDatabaseState().subscribe(rdy => {
+      if (rdy) {
+        this.db.loadDeportistasCarrera(this.nombreUsuario);
+        this.db.loadDeportistasReto(this.nombreUsuario);
+
+        this.db.getDeportistasCarrera().subscribe(devs => {
+          this.deportistasCarrera = devs;
+        })
       }
-    );
+
+    });
+    this.db.getDeportistasReto().subscribe(dep => {
+      this.deportistasReto = dep;
+    })
+
+    //Almaceno las carreras en la variable de la página
+    this.listaCarreras = this.carreraService.getListaCarreras();
+    //Almaceno los retos en la variable de la página
+    this.listaRetos = this.retoService.getListaRetos();
+  }
+  ionViewDidEnter(){
+    this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
   }
 
-createMarker(latlng, title, label) {
-  var marker = new google.maps.Marker({
-      position: latlng,
-      map: this.map,
-      label: label
-  });
-  this.addInfoWindow(marker, title);
-}
-    /**
- * Este método agrega una ventana de información a los marcadores
- * @param marker El marcador
- */
-addInfoWindow(marker, title){
-  let infoWindowContent =
-  '<ion-text color="primary">' +
-  '<h2>' + title + '</h2>' +
-  '</ion-text>';
- 
- let infoWindow = new google.maps.InfoWindow(
-   {
-     content: infoWindowContent
- });
-
- marker.addListener('click', () => {
-   infoWindow.open(this.map, marker);
- });
-} 
-
-  retoClick(){
-    console.log("evento de click en las cartas de los retos");
+  retoClick(nombreReto: string){
+    this.router.navigate(['/reto', nombreReto]);
   }
 
-  carreraClick(){
-    console.log("evento de click en las cartas de los retos");
+  carreraClick(nombreCarrera: string){
+    this.router.navigate(['/carrera', nombreCarrera]);
   }
-
 }

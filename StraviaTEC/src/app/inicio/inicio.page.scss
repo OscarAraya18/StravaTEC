@@ -3,10 +3,10 @@ ion-slides {
   }
 
   ion-card{
-    --background: rgb(131, 131, 131);
+    --background: rgb(196, 0, 0);
     --color: rgb(0, 0, 0);
     border-radius: 10px;
-    border: 2px solid yellow;
+    border: 4px solid rgb(255, 255, 255);
     opacity: .95;
     padding: 0 20px;
     box-shadow: 0px 0px 3px #848484;
@@ -33,15 +33,17 @@ ion-slides {
     font-size: 17px;
     font-family: "Times New Roman", Times, serif; 
 }
-.map {
-    width: 100%;
-    height: 200px;
-    border: 2px solid #000000d3;
+.k-periodo{
+    background: #555837 ;
+    padding: 0 10px;
+    font-size: 17px;
     border-radius: 10px;
-
-  }
-   
-.map-wrapper {
-  position: relative;
-   
+    color:  #f8f1f6;
+}
+.k-title{
+    font-size: 25px; 
+    font-family: Raleway;
+}
+.my-custom-class {
+    --background: #e71b1b;
   }

@@ -1,6 +1,6 @@
 .map {
   width: 100%;
-  height: 400px;
+  height: 100%;
   border: 3px solid #e90a0ad3;
   border-radius: 10px;
 
@@ -8,12 +8,11 @@
  
 .map-wrapper {
 position: relative;
- 
+height: 100%;
 }
 
 ion-label{
 color: #e90a0ad3;
-font-size: 20px
 }
 ion-input{
 background: #e90a0ad3;
@@ -30,3 +29,10 @@ background: black;
   color: #f1f508d3;
   font-size: 25px
 }
+.k-subtitle{
+  font-size: 25px;
+}
+.my-custom-class {
+  --background: #f8b6b6;
+}
+
