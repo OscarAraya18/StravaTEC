@@ -66,7 +66,36 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(grupoAgregado);
         }
 
-        public List<Carrera> accederCarreras(string nombreGrupo)
+        public List<Reto> accederRetos(string nombreGrupo, string usuario)
+        {
+            List<Reto> retos = new List<Reto>();
+
+            var verRetos = _context.GrupoReto.
+                    Where(x => x.Nombregrupo == nombreGrupo).
+                    Include(x => x.Reto).
+                    Where(x => x.Reto.Privacidad == true).ToList();
+
+            var retosInscritos = verRetosInscritos(usuario);
+
+            var retosPublicos = _context.Reto.Where(x => x.Privacidad == false).ToList();
+
+            foreach (var reto in verRetos)
+            {
+                if (!retosInscritos.Contains(reto.Reto))
+                    retos.Add(reto.Reto);
+            }
+
+            foreach (var reto in retosPublicos)
+            {
+                if (!retosInscritos.Contains(reto))
+                    retos.Add(reto);
+            }
+
+            return retos;
+            // se debe retornar el resultado
+        }
+
+        public List<Carrera> accederCarreras(string nombreGrupo, string usuario)
         {
             List<Carrera> carreras = new List<Carrera>();
 
@@ -76,22 +105,64 @@ namespace EFConsole.DataAccess.Repositories
                     ThenInclude(x => x.CarreraCuentabancaria).
                     Where(x => x.Carrera.Privacidad == true).ToList();
 
+            var carrerasInscritas = verCarrerasInscritas(usuario);
+
             var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false).
                                     Include(x => x.CarreraCuentabancaria).ToList();
 
             foreach (var carrera in verCarreras)
             {
-                carreras.Add(carrera.Carrera);
+                if(!carrerasInscritas.Contains(carrera.Carrera))
+                    carreras.Add(carrera.Carrera);
             }
 
             foreach(var carrera in carrerasPublicas)
             {
-                carreras.Add(carrera);
+                if (!carrerasInscritas.Contains(carrera))
+                    carreras.Add(carrera);
             }
+
             return carreras;
             // se debe retornar el resultado
         }
 
+        public List<Carrera> verCarrerasInscritas(string usuarioDeportista)
+        {
+            List<Carrera> carreras = new List<Carrera>();
+
+            var carrerasInscritas = _context.DeportistaCarrera.
+                    Where(x => x.Usuariodeportista == usuarioDeportista).
+                    Include(x => x.Carrera).ToList();
+
+            foreach (var carrera in carrerasInscritas)
+            {
+
+                carreras.Add(carrera.Carrera);
+
+
+            }
+            // se debe retornar el resultado
+            return carreras;
+        }
+
+        public List<Reto> verRetosInscritos(string usuarioDeportista)
+        {
+            List<Reto> retos = new List<Reto>();
+
+            var retosInscritos = _context.DeportistaReto.
+                    Where(x => x.Usuariodeportista == usuarioDeportista).
+                    Include(x => x.Reto).ToList();
+
+            foreach (var reto in retosInscritos)
+            {
+
+                retos.Add(reto.Reto);
+
+
+            }
+            // se debe retornar el resultado
+            return retos;
+        }
         public List<Grupo> verMisGruposAdministrados(string usuarioDeportista)
         {
             return _context.Grupo.Where(x => x.Admindeportista == usuarioDeportista).ToList();

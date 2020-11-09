@@ -47,11 +47,12 @@ namespace StraviaTECApi.Controllers
 
         [HttpPost]
         [Route("api/inscripcion/new")]
-        public IActionResult nuevaInscripcion([FromBody] Inscripcion inscripcion, [FromQuery] string nombreCarrera)
+        public IActionResult nuevaInscripcion([FromBody] Inscripcion inscripcion, [FromQuery] string nombreCarrera,
+            [FromQuery] string adminCarrera)
         {
             if (ModelState.IsValid)
             {
-                var resultado =_repository.Create(inscripcion, nombreCarrera);
+                var resultado =_repository.Create(inscripcion, nombreCarrera, adminCarrera);
                 if (resultado)
                 {
                     if(_repository.SaveChanges())
@@ -92,7 +93,7 @@ namespace StraviaTECApi.Controllers
 
             _repository.Update(inscripcion);
             _repository.SaveChanges();
-            return Ok("Inscripcion actualizado correctamente");
+            return Ok("Inscripcion actualizada correctamente");
         }
 
     }

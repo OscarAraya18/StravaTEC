@@ -23,7 +23,7 @@ namespace EFConsole.DataAccess.Repositories
         * ------------------------------
         */
 
-        public bool Create(Inscripcion inscripcion, string nombreCarrera)
+        public bool Create(Inscripcion inscripcion, string nombreCarrera, string adminCarrera)
         {
             if (inscripcion == null)
                 throw new ArgumentNullException(nameof(inscripcion));
@@ -31,7 +31,7 @@ namespace EFConsole.DataAccess.Repositories
             _context.Inscripcion.Add(inscripcion);
 
             var deportista = _context.Deportista.Where(x => x.Usuario == inscripcion.Usuariodeportista).FirstOrDefault();
-            var carrera = _context.Carrera.Where(x => x.Nombre == nombreCarrera).
+            var carrera = _context.Carrera.Where(x => x.Nombre == nombreCarrera && x.Admindeportista == adminCarrera).
                             Include(x => x.CarreraCategoria).FirstOrDefault();
 
             foreach (var categoria in carrera.CarreraCategoria)

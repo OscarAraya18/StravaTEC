@@ -1,7 +1,6 @@
 ﻿using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using StraviaTECApi.Models;
-using System.Collections.Generic;
 
 namespace StraviaTECApi.Controllers
 {
@@ -16,7 +15,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/deportista")]
+        [Route("api/user/getDeportista")]
         public IActionResult getDeportista([FromQuery] string usuario)
         {
             var resultado = _repository.obtenerPorUsuario(usuario);
@@ -29,7 +28,20 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/deportista/amigos/actividades")]
+        [Route("api/user/buscar/nombre")]
+        public IActionResult getDeportistaPorNombre([FromQuery] string nombre)
+        {
+            var resultado = _repository.obtenerPorNombre(nombre);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/user/amigos/actividades")]
         public IActionResult getActividadesAmigos([FromQuery] string usuario)
         {
             var resultado = _repository.verActividadesAmigos(usuario);
@@ -41,7 +53,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/deportista/noAmigos")]
+        [Route("api/user/noAmigos")]
         public IActionResult getDeportistasNoAmigos([FromQuery] string usuario)
         {
             var resultado = _repository.mostrarTodosDeportistasNoAmigos(usuario);
@@ -54,7 +66,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/deportista/amigos")]
+        [Route("api/user/amigos")]
         public IActionResult getDeportistasAmigos([FromQuery] string usuario)
         {
             var resultado = _repository.verAmigosAsociados(usuario);
@@ -68,7 +80,7 @@ namespace StraviaTECApi.Controllers
 
 
         [HttpGet]
-        [Route("api/deportista/carreras")]
+        [Route("api/user/carreras")]
         public IActionResult getCarrerasInscritas([FromQuery] string usuario)
         {
             var resultado = _repository.verCarrerasInscritas(usuario);
@@ -81,7 +93,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/deportista/retos")]
+        [Route("api/user/retos")]
         public IActionResult getRetosIncompletos([FromQuery] string usuario)
         {
             var resultado = _repository.verRetosIncompletos(usuario);
@@ -94,7 +106,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/deportista/new")]
+        [Route("api/user/new")]
         public IActionResult nuevoDeportista([FromBody] Deportista deportista)
         {
             if (ModelState.IsValid)
@@ -108,7 +120,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/deportista/login")]
+        [Route("api/user/login")]
         public IActionResult verificarLogin([FromBody] Login login)
         {
             var resultado = _repository.verificarLogin(login);
@@ -120,7 +132,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/deportista/amigo/new")]
+        [Route("api/user/amigo/new")]
         public IActionResult seguirDeportista([FromQuery] string amigo, [FromQuery] string usuario)
         {
             _repository.seguirDeportista(usuario, amigo);
@@ -128,47 +140,22 @@ namespace StraviaTECApi.Controllers
             return Ok("Amigo agregado correctamente");
         }
 
-        /*[HttpPost]
-        [Route("api/deportista/registrar/actividadReto")]
-        public IActionResult registrarActividadReto([FromBody] Actividad actividad, [FromQuery] string usuario,
-            [FromQuery] string nombreReto, [FromQuery] string adminReto)
+
+        [HttpPost]
+        [Route("api/user/registrar/actividad")]
+        public IActionResult registrarActividades([FromBody] Actividad actividad, [FromQuery] string usuario)
         {
-            var resultado = _repository.registrarActividadReto(actividad, usuario, nombreReto, adminReto);
+            var resultado = _repository.registrarActividades(actividad, usuario);
+
             _repository.SaveChanges();
 
             if (resultado)
                 return Ok("Actividad registrada correctamente");
-            return BadRequest("Ha ocurrido un error");
-        }*/
-
-        [HttpPost]
-        [Route("api/deportista/registrar/actividades")]
-        public IActionResult registrarActividades([FromBody] List<Actividad> actividades, [FromQuery] string usuario)
-        {
-            var resultado = _repository.registrarActividades(actividades, usuario);
-
-            _repository.SaveChanges();
-
-            if (resultado)
-                return Ok("Actividades registradas correctamente");
             return BadRequest("Ha ocurrido un error");
         }
 
-        /*[HttpPost]
-        [Route("api/deportista/registrar/actividadCarrera")]
-        public IActionResult registrarActividadCarrera([FromBody] Actividad actividad, [FromQuery] string usuario,
-            [FromQuery] string nombreCarrera, [FromQuery] string adminCarrera)
-        {
-            var resultado = _repository.registrarActividadCarrera(actividad, usuario, nombreCarrera, adminCarrera);
-            _repository.SaveChanges();
-
-            if (resultado)
-                return Ok("Actividad registrada correctamente");
-            return BadRequest("Ha ocurrido un error");
-        }*/
-
         [HttpPut]
-        [Route("api/deportista/edit")]
+        [Route("api/user/edit")]
         public IActionResult actualizarDeportista([FromBody] Deportista deportista, [FromQuery] string usuario)
         {
             if (deportista.Usuario != usuario)

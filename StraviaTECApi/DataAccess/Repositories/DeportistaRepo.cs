@@ -48,7 +48,7 @@ namespace EFConsole.DataAccess.Repositories
 
             if (deportista == null)
             {
-                throw new System.ArgumentNullException(nameof(deportista));
+                throw new ArgumentNullException(nameof(deportista));
             }
 
             _context.Deportista.Remove(deportista);
@@ -57,8 +57,12 @@ namespace EFConsole.DataAccess.Repositories
 
         public Deportista obtenerPorUsuario(string usuario)
         {
-            //l
             return _context.Deportista.FirstOrDefault(x => x.Usuario == usuario);
+        }
+
+        public List<Deportista> obtenerPorNombre(string nombre)
+        {
+            return _context.Deportista.Where(x => x.Nombre == nombre).ToList();
         }
 
         public bool verificarLogin(Login login)
@@ -89,8 +93,9 @@ namespace EFConsole.DataAccess.Repositories
                 {
                     actividades.Add(actividad);
                 }
-                
+                actividades = actividades.OrderBy(x => x.Kilometraje).ToList();
             }
+
             return actividades;
         }
 
@@ -232,19 +237,17 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public bool registrarActividades(List<Actividad> actividades, string usuario)
+        public bool registrarActividades(Actividad actividad, string usuario)
         {
-            foreach(var actividad in actividades)
-            {
+            
                 if(actividad.Banderilla == 0)
                 {
-                    registrarActividadCarrera(actividad, usuario);
+                    return registrarActividadCarrera(actividad, usuario);
                 }
-                registrarActividadReto(actividad, usuario);
-            }
-
-            return true;
+                return registrarActividadReto(actividad, usuario);
         }
+
+
         /**         
          * Save the changes made to the database
          */

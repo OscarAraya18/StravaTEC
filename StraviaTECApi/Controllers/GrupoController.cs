@@ -34,9 +34,22 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/grupo/carreras")]
-        public IActionResult getCarreras([FromQuery] string nombreGrupo)
+        public IActionResult getCarreras([FromQuery] string nombreGrupo, [FromQuery] string usuario)
         {
-            var resultado = _repository.accederCarreras(nombreGrupo);
+            var resultado = _repository.accederCarreras(nombreGrupo, usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/grupo/retos")]
+        public IActionResult getRetos([FromQuery] string nombreGrupo, [FromQuery] string usuario)
+        {
+            var resultado = _repository.accederRetos(nombreGrupo, usuario);
 
             if (resultado == null)
             {
@@ -116,7 +129,7 @@ namespace StraviaTECApi.Controllers
         {
             _repository.Delete(nombre);
             _repository.SaveChanges();
-            return Ok("Carrera eliminado correctamente");
+            return Ok("Grupo eliminado correctamente");
         }
     }
 }

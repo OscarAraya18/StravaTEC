@@ -92,15 +92,15 @@ namespace EFConsole.DataAccess.Repositories
             return _context.Reto.Where(x => x.Admindeportista == usuarioDeportista).ToList();
         }
 
-        public void inscribirReto(Reto reto, string usuarioDeportista)
+        public void inscribirReto(string  adminReto, string nombreReto, string usuarioDeportista)
         {
             var deportistaReto = new DeportistaReto();
 
-            deportistaReto.Admindeportista = reto.Admindeportista;
+            deportistaReto.Admindeportista = adminReto;
             deportistaReto.Completado = false;
             deportistaReto.Kmacumulados = 0;
             deportistaReto.Usuariodeportista = usuarioDeportista;
-            deportistaReto.Nombrereto = reto.Nombre;
+            deportistaReto.Nombrereto = nombreReto;
 
             _context.Add(deportistaReto);
         }

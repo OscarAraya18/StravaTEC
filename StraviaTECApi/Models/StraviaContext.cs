@@ -71,6 +71,10 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Kilometraje).HasColumnName("kilometraje");
 
+                entity.Property(e => e.Nombre)
+                    .HasColumnName("nombre")
+                    .HasMaxLength(30);
+
                 entity.Property(e => e.Nombreretocarrera)
                     .HasColumnName("nombreretocarrera")
                     .HasMaxLength(30);
@@ -86,7 +90,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.Actividad)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("actividad_usuariodeportista_fkey");
             });
 
@@ -108,13 +112,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.Amigo)
                     .WithMany(p => p.AmigoDeportistaAmigo)
                     .HasForeignKey(d => d.Amigoid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("amigo_deportista_amigoid_fkey");
 
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.AmigoDeportistaUsuariodeportistaNavigation)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("amigo_deportista_usuariodeportista_fkey");
             });
 
@@ -156,7 +160,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.AdmindeportistaNavigation)
                     .WithMany(p => p.Carrera)
                     .HasForeignKey(d => d.Admindeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carrera_admindeportista_fkey");
             });
 
@@ -182,13 +186,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.NombrecategoriaNavigation)
                     .WithMany(p => p.CarreraCategoria)
                     .HasForeignKey(d => d.Nombrecategoria)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carrera_categoria_nombrecategoria_fkey");
 
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.CarreraCategoria)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carrera_categoria_nombrecarrera_admindeportista_fkey");
             });
 
@@ -214,7 +218,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.CarreraCuentabancaria)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carrera_cuentabancaria_nombrecarrera_admindeportista_fkey");
             });
 
@@ -240,13 +244,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.NombrepatrocinadorNavigation)
                     .WithMany(p => p.CarreraPatrocinador)
                     .HasForeignKey(d => d.Nombrepatrocinador)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carrera_patrocinador_nombrepatrocinador_fkey");
 
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.CarreraPatrocinador)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carrera_patrocinador_nombrecarrera_admindeportista_fkey");
             });
 
@@ -338,13 +342,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.DeportistaCarrera)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("deportista_carrera_usuariodeportista_fkey");
 
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.DeportistaCarrera)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("deportista_carrera_nombrecarrera_admindeportista_fkey");
             });
 
@@ -374,13 +378,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.DeportistaReto)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("deportista_reto_usuariodeportista_fkey");
 
                 entity.HasOne(d => d.Reto)
                     .WithMany(p => p.DeportistaReto)
                     .HasForeignKey(d => new { d.Nombrereto, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("deportista_reto_nombrereto_admindeportista_fkey");
             });
 
@@ -406,7 +410,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.AdmindeportistaNavigation)
                     .WithMany(p => p.Grupo)
                     .HasForeignKey(d => d.Admindeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_admindeportista_fkey");
             });
 
@@ -436,13 +440,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.GrupoCarrera)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admincarrera })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_carrera_nombrecarrera_admincarrera_fkey");
 
                 entity.HasOne(d => d.Grupo)
                     .WithMany(p => p.GrupoCarrera)
                     .HasForeignKey(d => new { d.Nombregrupo, d.Admingrupo })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_carrera_nombregrupo_admingrupo_fkey");
             });
 
@@ -468,13 +472,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.GrupoDeportista)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_deportista_usuariodeportista_fkey");
 
                 entity.HasOne(d => d.Grupo)
                     .WithMany(p => p.GrupoDeportista)
                     .HasForeignKey(d => new { d.Nombregrupo, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_deportista_nombregrupo_admindeportista_fkey");
             });
 
@@ -504,13 +508,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.Grupo)
                     .WithMany(p => p.GrupoReto)
                     .HasForeignKey(d => new { d.Nombregrupo, d.Admingrupo })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_reto_nombregrupo_admingrupo_fkey");
 
                 entity.HasOne(d => d.Reto)
                     .WithMany(p => p.GrupoReto)
                     .HasForeignKey(d => new { d.Nombrereto, d.Adminreto })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("grupo_reto_nombrereto_adminreto_fkey");
             });
 
@@ -534,7 +538,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.UsuariodeportistaNavigation)
                     .WithMany(p => p.Inscripcion)
                     .HasForeignKey(d => d.Usuariodeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("inscripcion_usuariodeportista_fkey");
             });
 
@@ -561,13 +565,13 @@ namespace StraviaTECApi.Models
                     .WithMany(p => p.InscripcionCarrera)
                     .HasPrincipalKey(p => p.Nombre)
                     .HasForeignKey(d => d.Nombrecarrera)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("inscripcion_carrera_nombrecarrera_fkey");
 
                 entity.HasOne(d => d.Inscripcion)
                     .WithMany(p => p.InscripcionCarrera)
                     .HasForeignKey(d => new { d.Estadoinscripcion, d.Deportistainscripcion })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("inscripcion_carrera_estadoinscripcion_deportistainscripcio_fkey");
             });
 
@@ -637,7 +641,7 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.AdmindeportistaNavigation)
                     .WithMany(p => p.Reto)
                     .HasForeignKey(d => d.Admindeportista)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("reto_admindeportista_fkey");
             });
 
@@ -663,13 +667,13 @@ namespace StraviaTECApi.Models
                 entity.HasOne(d => d.NombrepatrocinadorNavigation)
                     .WithMany(p => p.RetoPatrocinador)
                     .HasForeignKey(d => d.Nombrepatrocinador)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("reto_patrocinador_nombrepatrocinador_fkey");
 
                 entity.HasOne(d => d.Reto)
                     .WithMany(p => p.RetoPatrocinador)
                     .HasForeignKey(d => new { d.Nombrereto, d.Admindeportista })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("reto_patrocinador_nombrereto_admindeportista_fkey");
             });
 

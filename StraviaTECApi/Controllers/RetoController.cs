@@ -81,10 +81,10 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/reto/deportista/inscribirse")]
-        public IActionResult inscribirReto([FromBody] Reto reto, [FromQuery] string usuario)
+        [Route("api/reto/user/inscribirse")]
+        public IActionResult inscribirReto([FromQuery] string adminReto, [FromQuery] string nombreReto, [FromQuery] string usuario)
         {
-            _repository.inscribirReto(reto, usuario);
+            _repository.inscribirReto(adminReto, nombreReto, usuario);
             _repository.SaveChanges();
 
             return Ok("Inscripción realizada correctamente");
