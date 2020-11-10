@@ -70,6 +70,30 @@ namespace EFConsole.DataAccess.Repositories
         {
             return _context.Grupo.ToList();
         }
+        public List<Grupo> verTodosLosGruposNoInscritos(string usuarioDeportista)
+        {
+            List<Grupo> gruposNoInscritos = new List<Grupo>();
+            
+            List<Grupo> gruposInscritos = new List<Grupo>();
+
+            var grupoDeportista = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuarioDeportista).
+                Include(x => x.Grupo).ToList();
+
+            var gruposTotales = _context.Grupo.ToList();
+
+            foreach(var grupo in grupoDeportista)
+            {
+                gruposInscritos.Add(grupo.Grupo);
+            }
+
+            foreach(var grupo in gruposTotales)
+            {
+                if (!gruposInscritos.Contains(grupo))
+                    gruposNoInscritos.Add(grupo);
+            }
+
+            return gruposNoInscritos;
+        }
 
         public List<Reto> accederRetos(string nombreGrupo, string usuario)
         {

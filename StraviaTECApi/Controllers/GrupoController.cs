@@ -98,6 +98,18 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet]
+        [Route("api/user/grupos/noInscritos")]
+        public IActionResult getGruposNoInscritos([FromQuery] string usuario)
+        {
+            var resultado = _repository.verTodosLosGruposNoInscritos(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
 
 
         [HttpPost]
