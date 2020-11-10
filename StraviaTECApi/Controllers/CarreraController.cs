@@ -43,6 +43,18 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet]
+        [Route("api/carrera/admin/verCarrera")]
+        public IActionResult getCarreraPorNombre([FromQuery] string usuario, [FromQuery] string nombreCarrera)
+        {
+            var resultado = _repository.verCarreraPorNombre(usuario, nombreCarrera);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
 
         [HttpPost]
         [Route("api/carrera/admin/new")]
@@ -52,7 +64,7 @@ namespace StraviaTECApi.Controllers
             {
                 _repository.Create(carrera);
                 _repository.SaveChanges();
-                return Ok("Carrera creado correctamente");
+                return Ok("Carrera creada correctamente");
             }
 
             return BadRequest(ModelState);
@@ -69,14 +81,14 @@ namespace StraviaTECApi.Controllers
 
             _repository.Update(carrera);
             _repository.SaveChanges();
-            return Ok("Carrera actualizado correctamente");
+            return Ok("Carrera actualizada correctamente");
         }
 
         [HttpDelete]
         [Route("api/carrera/admin/delete")]
-        public IActionResult eliminarCarrera([FromQuery] string nombre)
+        public IActionResult eliminarCarrera([FromQuery] string nombreCarrera, [FromQuery] string usuario)
         {
-            _repository.Delete(nombre);
+            _repository.Delete(nombreCarrera, usuario);
             _repository.SaveChanges();
             return Ok("Carrera eliminado correctamente");
         }

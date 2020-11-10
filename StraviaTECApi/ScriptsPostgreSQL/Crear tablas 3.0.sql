@@ -135,7 +135,8 @@ CREATE TABLE INSCRIPCION_CARRERA
 	EstadoInscripcion  		VARCHAR(10),
 	DeportistaInscripcion	VARCHAR(20),
 	NombreCarrera			VARCHAR(30),
-	PRIMARY KEY		(EstadoInscripcion, NombreCarrera, DeportistaInscripcion)
+	AdminCarrera 			VARCHAR(20),
+	PRIMARY KEY		(EstadoInscripcion, NombreCarrera, DeportistaInscripcion, AdminCarrera)
 );
 
 
@@ -259,7 +260,7 @@ ADD FOREIGN KEY (NombreReto, AdminDeportista) REFERENCES RETO(Nombre, AdminDepor
 -- INSCRIPCION CARRERA
 ALTER TABLE INSCRIPCION_CARRERA
 ADD FOREIGN KEY (EstadoInscripcion, DeportistaInscripcion) REFERENCES INSCRIPCION(Estado, UsuarioDeportista) ON DELETE CASCADE,
-ADD FOREIGN KEY (NombreCarrera) REFERENCES CARRERA(Nombre) ON DELETE CASCADE;
+ADD FOREIGN KEY (NombreCarrera, AdminCarrera) REFERENCES CARRERA(Nombre, AdminDeportista) ON DELETE CASCADE;
 
 -- AMIGO DEPORTISTA
 ALTER TABLE AMIGO_DEPORTISTA

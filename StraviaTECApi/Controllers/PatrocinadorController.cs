@@ -17,8 +17,9 @@ namespace StraviaTECApi.Controllers
         {
             _repository = repo;
         }
+
         [HttpGet]
-        [Route("api/patrocinador")]
+        [Route("api/patrocinadores")]
         public IActionResult getPatrocinadores()
         {
             var resultado = _repository.obtenerTodos();

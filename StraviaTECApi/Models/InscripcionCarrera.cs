@@ -8,8 +8,9 @@ namespace StraviaTECApi.Models
         public string Estadoinscripcion { get; set; }
         public string Deportistainscripcion { get; set; }
         public string Nombrecarrera { get; set; }
+        public string Admincarrera { get; set; }
 
+        public virtual Carrera Carrera { get; set; }
         public virtual Inscripcion Inscripcion { get; set; }
-        public virtual Carrera NombrecarreraNavigation { get; set; }
     }
 }

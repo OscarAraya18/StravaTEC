@@ -115,11 +115,11 @@ INSERT INTO public.inscripcion(
 
 -- SE ASOCIAN LAS INSCRIPCIONES A UNA CARRERA
 INSERT INTO public.inscripcion_carrera(
-	EstadoInscripcion, deportistainscripcion, nombrecarrera)
-	VALUES ('En espera', 'auronplay', 'Endurance 2020'),
-		   ('En espera', 'elpepe', 'Endurance 2020'),
-		   ('En espera', 'crespo', 'The Best'),
-		   ('En espera', 'cj', 'The Best');
+	EstadoInscripcion, deportistainscripcion, nombrecarrera, admincarrera)
+	VALUES ('En espera', 'auronplay', 'Endurance 2020','sam.astua'),
+		   ('En espera', 'elpepe', 'Endurance 2020', 'sam.astua'),
+		   ('En espera', 'crespo', 'The Best', 'cr7'),
+		   ('En espera', 'cj', 'The Best', 'cr7');
 
 
 -- SE CREAN LOS RETOS

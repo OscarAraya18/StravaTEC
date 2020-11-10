@@ -42,9 +42,9 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void Delete(string nombre)
+        public void Delete(string nombre, string admin)
         {
-            var carrera = _context.Carrera.FirstOrDefault(x => x.Nombre == nombre);
+            var carrera = _context.Carrera.FirstOrDefault(x => x.Nombre == nombre && x.Admindeportista == admin);
 
             if (carrera == null)
             {
@@ -98,6 +98,14 @@ namespace EFConsole.DataAccess.Repositories
             // se retorna la lista
         }
 
+        public Carrera verCarreraPorNombre(string adminCarrera, string nombreCarrera)
+        {
+            return _context.Carrera.Where(x => x.Admindeportista == adminCarrera && x.Nombre == nombreCarrera).
+                Include(x => x.CarreraCuentabancaria).
+                Include(x => x.CarreraPatrocinador).
+                Include(x => x.GrupoCarrera).
+                Include(x => x.CarreraCategoria).FirstOrDefault();
+        }
         public List<Carrera> verCarrerasInscritas(string usuarioDeportista)
         {
             List<Carrera> carreras = new List<Carrera>();

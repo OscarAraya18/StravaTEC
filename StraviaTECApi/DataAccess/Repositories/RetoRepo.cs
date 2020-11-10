@@ -41,9 +41,9 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void Delete(string nombre)
+        public void Delete(string nombre, string admin)
         {
-            var reto = _context.Reto.FirstOrDefault(x => x.Nombre == nombre);
+            var reto = _context.Reto.FirstOrDefault(x => x.Nombre == nombre && x.Admindeportista == admin);
 
             if (reto == null)
             {
@@ -90,6 +90,13 @@ namespace EFConsole.DataAccess.Repositories
         public List<Reto> verRetosAdministrados(string usuarioDeportista)
         {
             return _context.Reto.Where(x => x.Admindeportista == usuarioDeportista).ToList();
+        }
+
+        public Reto verRetoPorNombre(string admin, string nombreReto)
+        {
+            return _context.Reto.Where(x => x.Admindeportista == admin && x.Nombre == nombreReto).
+                Include(x => x.GrupoReto).
+                Include(x => x.RetoPatrocinador).FirstOrDefault();
         }
 
         public void inscribirReto(string  adminReto, string nombreReto, string usuarioDeportista)

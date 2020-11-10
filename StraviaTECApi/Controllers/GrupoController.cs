@@ -71,11 +71,25 @@ namespace StraviaTECApi.Controllers
             }
             return Ok(resultado);
         }
+
         [HttpGet]
         [Route("api/grupo/user/grupos")]
         public IActionResult getGruposAsociados([FromQuery] string usuario)
         {
             var resultado = _repository.verMisGruposAsociados(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/grupo/todos")]
+        public IActionResult getTodosLosGrupos([FromQuery] string usuario)
+        {
+            var resultado = _repository.verTodosLosGrupos();
 
             if (resultado == null)
             {
@@ -125,9 +139,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpDelete]
         [Route("api/grupo/delete")]
-        public IActionResult eliminarGrupo([FromQuery] string nombre)
+        public IActionResult eliminarGrupo([FromQuery] string nombreGrupo, [FromQuery] string usuario)
         {
-            _repository.Delete(nombre);
+            _repository.Delete(nombreGrupo, usuario);
             _repository.SaveChanges();
             return Ok("Grupo eliminado correctamente");
         }

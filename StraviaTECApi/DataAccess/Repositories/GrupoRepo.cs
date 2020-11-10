@@ -41,9 +41,9 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void Delete(string nombre)
+        public void Delete(string nombre, string admin)
         {
-            var grupo = _context.Grupo.FirstOrDefault(x => x.Nombre == nombre);
+            var grupo = _context.Grupo.FirstOrDefault(x => x.Nombre == nombre && x.Admindeportista == admin);
 
             if (grupo == null)
             {
@@ -64,6 +64,11 @@ namespace EFConsole.DataAccess.Repositories
             grupoAgregado.Nombregrupo = grupo.Nombre;
             grupoAgregado.Usuariodeportista = deportista.Usuario;
             _context.Add(grupoAgregado);
+        }
+
+        public List<Grupo> verTodosLosGrupos()
+        {
+            return _context.Grupo.ToList();
         }
 
         public List<Reto> accederRetos(string nombreGrupo, string usuario)

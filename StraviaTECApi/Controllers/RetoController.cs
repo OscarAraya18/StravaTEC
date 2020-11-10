@@ -28,6 +28,19 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
+        [Route("api/reto/admin/verReto")]
+        public IActionResult getRetoPorNombre([FromQuery] string usuario, [FromQuery] string nombreReto)
+        {
+            var resultado = _repository.verRetoPorNombre(usuario, nombreReto);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
         [Route("api/reto/user/retosDisponibles")]
         public IActionResult getRetosDisponibles([FromQuery] string usuario)
         {
@@ -106,9 +119,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpDelete]
         [Route("api/reto/delete")]
-        public IActionResult eliminarReto([FromQuery] string nombre)
+        public IActionResult eliminarReto([FromQuery] string nombreReto, [FromQuery] string usuario)
         {
-            _repository.Delete(nombre);
+            _repository.Delete(nombreReto, usuario);
             _repository.SaveChanges();
             return Ok("Carrera eliminado correctamente");   
         }

@@ -32,9 +32,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/inscripcion/carrera/enespera")]
-        public IActionResult verCarreraEnEspera([FromQuery] string nombreCarrera)
+        public IActionResult verCarreraEnEspera([FromQuery] string nombreCarrera, [FromQuery] string usuario)
         {
-            var resultado = _repository.verInscripcionesEsperaCarrera(nombreCarrera);
+            var resultado = _repository.verInscripcionesEsperaCarrera(nombreCarrera, usuario);
 
             if (resultado == null)
             {
