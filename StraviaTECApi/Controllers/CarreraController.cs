@@ -56,6 +56,19 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet]
+        [Route("api/carrera/user/carrerasConPosiciones")]
+        public IActionResult getCarrerasConPosiciones([FromQuery] string usuario)
+        {
+            var resultado = _repository.carrerasConPosiciones(usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
         [HttpPost]
         [Route("api/carrera/admin/new")]
         public IActionResult nuevaCarrera([FromBody] Carrera carrera)

@@ -42,6 +42,7 @@ namespace EFConsole.DataAccess.Repositories
                     inscripcionCarrera.Deportistainscripcion = inscripcion.Usuariodeportista;
                     inscripcionCarrera.Estadoinscripcion = inscripcion.Estado;
                     inscripcionCarrera.Nombrecarrera = nombreCarrera;
+                    inscripcionCarrera.Admincarrera = adminCarrera;
 
                     _context.Add(inscripcionCarrera);
                     return true;

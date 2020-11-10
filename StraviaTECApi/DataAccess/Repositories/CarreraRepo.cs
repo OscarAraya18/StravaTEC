@@ -214,6 +214,41 @@ namespace EFConsole.DataAccess.Repositories
             // se retorna la lista
         }
 
+        public List<PosicionesCarrera> carrerasConPosiciones(string usuario)
+        {
+            List<PosicionesCarrera> carrerasConPosiciones = new List<PosicionesCarrera>();
+
+            var carrerasInscritas = verCarrerasInscritas(usuario);
+
+            var actividades = _context.Actividad.ToList();
+
+            foreach(var carrera in carrerasInscritas)
+            {
+                var posicionCarrera = new PosicionesCarrera();
+
+                posicionCarrera.nombreCarrera = carrera.Nombre;
+                posicionCarrera.adminCarrera = carrera.Admindeportista;
+
+                foreach (var actividad in actividades)
+                {
+                    if(actividad.Nombreretocarrera == carrera.Nombre && actividad.Adminretocarrera == carrera.Admindeportista)
+                    {
+                        var posActividad = new PosActividad()
+                        {
+                            usuarioDeportista = actividad.Usuariodeportista,
+                            duracion = actividad.Duracion,
+                            tipoActividad = actividad.Tipoactividad
+                        };
+                        posicionCarrera.actividades.Add(posActividad);
+                    }
+                }
+                posicionCarrera.actividades = posicionCarrera.actividades.OrderBy(x => x.duracion).ToList();
+                carrerasConPosiciones.Add(posicionCarrera);
+            }
+
+            return carrerasConPosiciones;
+        }
+
         /**         
          * Save the changes made to the database
          */

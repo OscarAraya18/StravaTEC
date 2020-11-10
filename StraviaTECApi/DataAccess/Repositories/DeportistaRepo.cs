@@ -127,6 +127,7 @@ namespace EFConsole.DataAccess.Repositories
             // se debe retornar el resultado
             return carreras;
         }
+
         public List<Reto> verRetosIncompletos(string usuarioDeportista)
         {
             List<Reto> retos = new List<Reto>();
