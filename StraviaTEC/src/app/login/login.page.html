@@ -11,13 +11,13 @@
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
           <div>
             <ion-item class="ion-margin">
-              <ion-input type="text" required #nombre="ngModel" [class.is-invalid]="nombre.invalid && nombre.touched"
-               placeholder="Nombre de usuario" name="usuario"[(ngModel)]="usuarioL.nombreUsuario" >
+              <ion-input clear-input="true" type="text" required #nombre="ngModel" [class.is-invalid]="nombre.invalid && nombre.touched"
+               placeholder="Nombre de usuario" name="usuario"[(ngModel)]="usuarioL.Usuario" >
               </ion-input>
             </ion-item>
             <ion-item class="ion-margin">
-              <ion-input type="password" required #contrasena="ngModel" [class.is-invalid]="contrasena.invalid && contrasena.touched"  
-               placeholder="Contraseña" name="contra"  [(ngModel)]="usuarioL.claveAcceso"></ion-input>
+              <ion-input clear-input="true" type="password" required #contrasena="ngModel" [class.is-invalid]="contrasena.invalid && contrasena.touched"  
+               placeholder="Contraseña" name="contra"  [(ngModel)]="usuarioL.ClaveAcceso"></ion-input>
             </ion-item>
           </div>
      

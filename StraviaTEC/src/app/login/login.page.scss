@@ -1,10 +1,6 @@
-ion-item{
-  background: #0045bd;
-    border-radius: 20px;
-  }
-
 ion-button{
-    --background: #0b63fc;
+    background: #0b63fc;
+    --background-activated: #b0f000;
   }
 
 a{
@@ -13,23 +9,30 @@ a{
 
 ion-input {
     text-align: center;
-    background: #0045bd;
-    border-radius: 20px;
   }
 
 form{
   position:relative;
-  top:20%;
+  top:30%;
 }
 h1 { 
   color: #f7e012;
   font-family: 'Trocchi', serif;
   font-size: 50px; font-weight: normal;
-  line-height: 48px; margin: 0;
-  top:10%;
-}
-ion-content {
-  --background: url(/assets/imagenes/running_shoes.jpg) no-repeat center/cover fixed;
+  line-height: 48px;
+  top:40%;
 }
 
+ion-item{
+  --background: #fa0000;
+  --color: #fff;
+  --highlight-height: 2px;
+  border-radius: 20px;
+}
+
+.toast-k{
+  --background: #00f5d4;
+  --color: rgb(19, 2, 2);
+  --text-align: center;
+}
 

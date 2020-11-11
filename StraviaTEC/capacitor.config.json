@@ -1,6 +1,6 @@
 {
   "appId": "com.acevedo.app",
-  "appName": "(StraviaTEC)",
+  "appName": "StraviaTEC",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
@@ -8,6 +8,9 @@
     "SplashScreen": {
       "launchShowDuration": 0
     }
+  },
+  "server": {
+    "allowNavigation": []
   },
   "cordova": {
     "preferences": {

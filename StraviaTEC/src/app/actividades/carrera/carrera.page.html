@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header >
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="gotoInicio()">
@@ -12,7 +12,7 @@
 <ion-content> 
   <ion-fab vertical="top" horizontal="end" slot="fixed">
     <ion-fab-button color="tertiary" (click)="paintGPX()">
-      <ion-icon name="arrow-undo"></ion-icon>
+      <ion-icon name="earth"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 <ion-grid class="map-wrapper" >  
@@ -20,14 +20,14 @@
 </ion-grid> 
 </ion-content>
 
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border k-footer">
+  <form #form="ngForm" novalidate>
   <ion-grid class="controls">
     <ion-row>
       <ion-col size="12" class="ion-text-center k-subtitle">
         <ion-label>Ingrese la duración</ion-label>
       </ion-col>
     </ion-row> 
-
     <ion-row>
       <ion-col size="4" class="ion-text-center">
         <ion-label>Horas</ion-label>
@@ -42,21 +42,22 @@
 
     <ion-row>
       <ion-col size="4" class="ion-text-center">
-        <ion-input [(ngModel)]="duracion.horas" type="number"></ion-input>
+        <ion-input name="h" min="0" max="24" clear-input="true" [(ngModel)]="duracion.horas" type="number" required #hora="ngModel" [class.is-invalid]="hora.invalid"></ion-input>
       </ion-col>
       <ion-col size="4" class="ion-text-center">
-        <ion-input [(ngModel)]="duracion.minutos" type="number"></ion-input>
+        <ion-input name="m" min="0" max="60" clear-input="true" [(ngModel)]="duracion.minutos" type="number" required #minuto="ngModel" [class.is-invalid]="minuto.invalid"></ion-input>
       </ion-col>
       <ion-col size="4" class="ion-text-center">
-        <ion-input [(ngModel)]="duracion.segundos" type="number"></ion-input>
+        <ion-input name="s" min="0" max="60" clear-input="true" [(ngModel)]="duracion.segundos" type="number" required #segundo="ngModel" [class.is-invalid]="segundo.invalid"></ion-input>
       </ion-col>
-    </ion-row>  
+    </ion-row>
 
     <ion-row>
       <ion-col class="ion-text-center">
-        <ion-button (click)="presentarAlertaGuardado()" color="warning">Guardar</ion-button>
+        <ion-button expand="block" [disabled]="form.invalid" (click)="presentarAlertaGuardado()" color="primary">Guardar</ion-button>
       </ion-col>
     </ion-row> 
 
   </ion-grid> 
+</form>
 </ion-footer>

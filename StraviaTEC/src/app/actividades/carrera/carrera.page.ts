@@ -36,9 +36,18 @@ export class CarreraPage implements OnInit {
   xhttp = new XMLHttpRequest();
   parser = new DOMParser();
 
-  //Nombre de la carrera
-  nombreCarrera: string = '';
+    //Nombre del reto
+    nombreCarrera: string;
 
+    //Nombre del administrador
+    admin: string;
+  
+    //el tipo de actividad
+    tipoActividad: string;
+
+    //recorrido gpx
+    recorridoGPX: string;
+  
   duracion = {};
 
   //Nombre de usuario actual
@@ -48,7 +57,7 @@ export class CarreraPage implements OnInit {
   
   async presentarAlertaGuardado() {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
+      cssClass: 'alerta-k',
       header: 'Guardar nueva actividad',
       message: 'Escriba el nombre de la actividad',
       inputs: [
@@ -83,6 +92,7 @@ export class CarreraPage implements OnInit {
   async presentToast(mensaje: string) {
     const toast = await this.toastController.create({
       message: mensaje,
+      cssClass: 'alerta-k',
       duration: 3000,
       position: 'top'
     });
@@ -92,9 +102,10 @@ export class CarreraPage implements OnInit {
   ngOnInit() {
     this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
     this.showMap();
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      let nombreCarrera = params.get('nombreCarrera');
-      this.nombreCarrera = nombreCarrera;
+    this.route.params.forEach((urlParams) => {
+      this.nombreCarrera = urlParams['nombreCarrera'];
+      this.admin = urlParams['admin'];
+      this.tipoActividad = urlParams['tipoActividad'];
     });
       
   }
@@ -105,8 +116,10 @@ export class CarreraPage implements OnInit {
   }
 
   addDeportistaCarrera(nombreActividad: string) {
+    var fechaHora = new Date();
+    var fechaHoraString = fechaHora.toLocaleDateString();
     let duracion = this.duracion['horas'] + ':' + this.duracion['minutos'] + ':' + this.duracion['segundos'];
-    this.db.addDeportistaCarrera(this.nombreUsuario, nombreActividad, this.nombreCarrera, duracion).then(_ => {
+    this.db.addDeportistaCarrera(this.nombreUsuario, this.admin, nombreActividad, this.tipoActividad, this.nombreCarrera, duracion, this.recorridoGPX, fechaHoraString).then(_ => {
       this.duracion = {};
       this.presentToast('Actividad guardada localmente');
       this.gotoInicio();
@@ -154,6 +167,7 @@ export class CarreraPage implements OnInit {
       }
     
       getGpxRoute(response: string){
+        this.recorridoGPX = response;
         const xmlDoc = this.parser.parseFromString(response,"text/xml");
         const track = xmlDoc.getElementsByTagName("trkpt");
         var gpxWaypoints = [];

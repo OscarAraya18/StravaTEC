@@ -6,6 +6,9 @@ import { DatabaseService, DeportistaCarrera, DeportistaReto } from 'src/app/serv
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { AlertController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
+import { Carrera } from '../modelos/carrera';
+import { Reto } from '../modelos/reto';
+import { Actividad } from '../modelos/actividad';
 
 @Component({
   selector: 'app-inicio',
@@ -109,13 +112,14 @@ export class InicioPage implements OnInit {
     }
   };
 
-  constructor(public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private retoService: RetoService, private router: Router, private route: ActivatedRoute) { }
+  constructor(public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private retoService: RetoService, private router: Router, private route: ActivatedRoute) { 
+  }
   
   //Lista de carreas local
-  listaCarreras = [];
+  listaCarreras: Carrera[] = [];
 
   //Lista de retos local
-  listaRetos = [];
+  listaRetos: Reto[] = [];
 
   //DeportistasCarrera de la base de datos empotrada
   deportistasCarrera: DeportistaCarrera[] = [];
@@ -128,12 +132,13 @@ export class InicioPage implements OnInit {
 
   nombreUsuario: string;
 
+
   async presentLoading(mensaje) {
     const loading = await this.loadingController.create({
       spinner: "bubbles",
       duration: 5000,
       message: mensaje,
-      cssClass: 'loading-style',
+      cssClass: 'loading-k',
       backdropDismiss: false,
       showBackdrop: true
 
@@ -144,11 +149,11 @@ export class InicioPage implements OnInit {
     console.log('Loading dismissed with role:', role);
   }
 
-  async presentarAlertaSincronizacionReto(actividad) {
+  async presentarAlertaSincronizacionReto(d) {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
+      cssClass: 'alerta-k',
       header: 'Sincronizar Reto',
-      message: 'Desea subir este reto a la base de datos ?',
+      backdropDismiss: false,
       buttons: [
         {
           text: 'Cancelar',
@@ -160,8 +165,15 @@ export class InicioPage implements OnInit {
         }, {
           text: 'Aceptar',
           handler: () => {
-            this.db.deleteDeportistaReto(actividad.Usuario, actividad.NombreReto);
-            this.presentLoading('Subiendo');
+            this.presentLoading('Procesando');
+            var fechaHora = new Date();
+            var fechaHoraString = fechaHora.toLocaleDateString();
+            console.log(fechaHoraString);
+            //Enviar los datos en post
+            //var paquete = new Actividad(d.Usuario, d.NombreActividad, fechaHoraString, d.Duracion, d.Distancia, d.TipoActividad, d.RecorridoGPX, d.NombreReto, d.AminDeportista, 1);
+            this.db.deleteDeportistaReto(d.Usuario, d.NombreReto);
+            
+            
           }
         }
       ]
@@ -170,11 +182,11 @@ export class InicioPage implements OnInit {
     await alert.present();
   }
 
-  async presentarAlertaSincronizacionCarrera(actividad) {
+  async presentarAlertaSincronizacionCarrera(d) {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
+      cssClass: 'alerta-k',
       header: 'Sincronizar Carrera',
-      message: 'Desea subir esta carrera a la base de datos ?',
+      backdropDismiss: false,
       buttons: [
         {
           text: 'Cancelar',
@@ -186,8 +198,14 @@ export class InicioPage implements OnInit {
         }, {
           text: 'Aceptar',
           handler: () => {
-            this.db.deleteDeportistaCarrera(actividad.Usuario, actividad.NombreCarrera);
-            this.presentLoading('Subiendo');
+            this.presentLoading('Procesando');
+            var fechaHora = new Date();
+            var fechaHoraString = fechaHora.toLocaleDateString();
+            console.log(fechaHoraString);
+            //Enviar los datos en post
+            //var paquete = new Actividad(d.Usuario, d.NombreActividad, fechaHoraString, d.Duracion, 1, d.TipoActividad, d.RecorridoGPX, d.NombreCarrera, d.AminDeportista, 2);
+            
+            this.db.deleteDeportistaCarrera(d.Usuario, d.NombreCarrera);
           }
         }
       ]
@@ -213,6 +231,8 @@ export class InicioPage implements OnInit {
       this.deportistasReto = dep;
     })
 
+    //this.getCarreras();
+    //this.getRetos()
     //Almaceno las carreras en la variable de la página
     this.listaCarreras = this.carreraService.getListaCarreras();
     //Almaceno los retos en la variable de la página
@@ -222,11 +242,11 @@ export class InicioPage implements OnInit {
     this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
   }
 
-  retoClick(nombreReto: string){
-    this.router.navigate(['/reto', nombreReto]);
+  retoClick(nombreReto: string, admin: string, tipoActividad: string){
+    this.router.navigate(['/reto', nombreReto, admin, tipoActividad]);
   }
 
-  carreraClick(nombreCarrera: string){
-    this.router.navigate(['/carrera', nombreCarrera]);
+  carreraClick(nombreCarrera: string, admin: string, tipoActividad: string){
+    this.router.navigate(['/carrera', nombreCarrera, admin, tipoActividad]);
   }
 }

@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="k-header">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="gotoInicio()">
@@ -28,7 +28,8 @@
   </ion-grid>
 </ion-content>
 
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border k-footer">
+  <form #form="ngForm" novalidate>
   <ion-grid class="controls">
     <ion-row class="k-subtitle">
       <ion-col size="12" class="ion-text-center">
@@ -36,7 +37,7 @@
       </ion-col>
     </ion-row> 
     <ion-row>
-      <ion-col size="12" class="ion-text-center">
+      <ion-col size="12" class="ion-text-center k-value">
         {{ distance }} km
       </ion-col>
     </ion-row>   
@@ -53,20 +54,21 @@
     </ion-row> 
     <ion-row>
       <ion-col size="4" class="ion-text-center">
-        <ion-input [(ngModel)]="duracion.horas" type="number"></ion-input>
+        <ion-input name="h" min="0" max="24" clear-input="true" [(ngModel)]="duracion.horas" type="number" required #hora="ngModel" [class.is-invalid]="hora.invalid"></ion-input>
       </ion-col>
       <ion-col size="4" class="ion-text-center">
-        <ion-input [(ngModel)]="duracion.minutos" type="number"></ion-input>
+        <ion-input name="m" min="0" max="60" clear-input="true" [(ngModel)]="duracion.minutos" type="number" required #minuto="ngModel" [class.is-invalid]="minuto.invalid"></ion-input>
       </ion-col>
       <ion-col size="4" class="ion-text-center">
-        <ion-input [(ngModel)]="duracion.segundos" type="number"></ion-input>
+        <ion-input name="s" min="0" max="60" clear-input="true" [(ngModel)]="duracion.segundos" type="number" required #segundo="ngModel" [class.is-invalid]="segundo.invalid"></ion-input>
       </ion-col>
     </ion-row>  
     <ion-row>
       <ion-col class="ion-text-center">
-        <ion-button color="warning" (click)="presentarAlertaGuardado()()">Guardar</ion-button>
+        <ion-button expand="block" color="primary" [disabled]="form.invalid" (click)="presentarAlertaGuardado()()">Guardar</ion-button>
       </ion-col>
     </ion-row> 
 
   </ion-grid> 
+</form>
 </ion-footer>

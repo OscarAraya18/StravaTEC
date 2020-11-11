@@ -1,5 +1,7 @@
 ion-slides {
     height: 100%;
+    --bullet-background: #0ce27ece;
+    --bullet-background-active: #d4e20cce;
   }
 
   ion-card{
@@ -10,12 +12,19 @@ ion-slides {
     opacity: .95;
     padding: 0 20px;
     box-shadow: 0px 0px 3px #848484;
+    height: 300px;
+}
+ion-segment-button{
+    --background-checked: #ada5a5;
+    --color: #6101fc;
 }
 
-.k-header{
+
+.k-header2{
     color: #050101;
     font-size: 20px;
     font-family: Raleway;
+    text-shadow: 1px 1px rgb(0, 26, 255);
 }
 
 .k-description{
@@ -30,20 +39,40 @@ ion-slides {
 }
 .k-values{
     color: #f8f1f6;
-    font-size: 17px;
+    font-size: 15px;
     font-family: "Times New Roman", Times, serif; 
 }
 .k-periodo{
     background: #555837 ;
-    padding: 0 10px;
     font-size: 17px;
     border-radius: 10px;
     color:  #f8f1f6;
+
 }
 .k-title{
     font-size: 25px; 
     font-family: Raleway;
 }
-.my-custom-class {
-    --background: #e71b1b;
-  }
+.mis-items{
+    background: #ada5a5 ;
+}
+
+.dep-titulo{
+    color: #a8eaec;
+    font-size: 20px;
+    font-family: Times, serif;
+}
+.dep-subtitulo{
+    font-size: 15px;
+    font-family: Times, serif;
+}
+.dep-valor{
+    color: #abe706;
+    font-size: 15px;
+    font-family: Times, serif;
+}
+.alerta-k{
+    background: #979b67;
+}
+
+

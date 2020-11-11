@@ -7,18 +7,25 @@ import { Platform } from '@ionic/angular';
 
 export interface DeportistaCarrera{
   Usuario: string,
+  AdminDeportista: string,
   NombreActividad: string,
+  TipoActividad: string,
   NombreCarrera: string,
-  Duracion: string
+  Duracion: string,
+  RecorridoGPX: string,
+  FechaHora: string
 }
 
 export interface DeportistaReto{
   Usuario: string,
+  AdminDeportista: string,
   NombreActividad: string,
+  TipoActividad: string,
   NombreReto: string,
   Distancia: number,
   Duracion: string,
-  RecorridoGPX: string
+  RecorridoGPX: string,
+  FechaHora: string
 }
 
 @Injectable({
@@ -34,7 +41,7 @@ export class DatabaseService {
    constructor(private plt: Platform, private sqlitePorter: SQLitePorter, private sqlite: SQLite, private http: HttpClient) {
     this.plt.ready().then(() => {
       this.sqlite.create({
-        name: 'straviaMobileFinal.db',
+        name: 'straviaTECDB.db',
         location: 'default'
       })
       .then((db: SQLiteObject) => {
@@ -76,9 +83,13 @@ export class DatabaseService {
  
           dc.push({ 
             Usuario: data.rows.item(i).Usuario,
+            AdminDeportista: data.rows.item(i).AdminDeportista,
             NombreActividad: data.rows.item(i).NombreActividad,
+            TipoActividad: data.rows.item(i).TipoActividad,
             NombreCarrera: data.rows.item(i).NombreCarrera, 
-            Duracion: data.rows.item(i).Duracion
+            Duracion: data.rows.item(i).Duracion,
+            RecorridoGPX: data.rows.item(i).RecorridoGPX,
+            FechaHora: data.rows.item(i).FechaHora
            });
         }
       }
@@ -95,11 +106,14 @@ export class DatabaseService {
  
           dr.push({ 
             Usuario: data.rows.item(i).Usuario,
+            AdminDeportista: data.rows.item(i).AdminDeportista,
             NombreActividad: data.rows.item(i).NombreActividad,
+            TipoActividad: data.rows.item(i).TipoActividad,
             NombreReto: data.rows.item(i).NombreReto, 
             Distancia: data.rows.item(i).Distancia, 
             Duracion: data.rows.item(i).Duracion,
-            RecorridoGPX: data.rows.item(i).RecorridoGPX
+            RecorridoGPX: data.rows.item(i).RecorridoGPX,
+            FechaHora: data.rows.item(i).FechaHora
            });
         }
       }
@@ -107,16 +121,16 @@ export class DatabaseService {
     });
   }
 
-  addDeportistaCarrera(Usuario, NombreActividad, NombreCarrera, Duracion) {
-    let data = [Usuario, NombreActividad, NombreCarrera, Duracion];
-    return this.database.executeSql('INSERT INTO DEPORTISTA_CARRERA (Usuario, NombreActividad, NombreCarrera, Duracion) VALUES (?, ?, ?, ?)', data).then(data => {
+  addDeportistaCarrera(Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreCarrera, Duracion, RecorridoGPX, FechaHora) {
+    let data = [Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreCarrera, Duracion, RecorridoGPX, FechaHora];
+    return this.database.executeSql('INSERT INTO DEPORTISTA_CARRERA (Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreCarrera, Duracion, RecorridoGPX, FechaHora) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', data).then(data => {
       this.loadDeportistasCarrera(Usuario);
     });
   }
 
-  addDeportistaReto(Usuario, NombreActividad, NombreReto, Distancia, Duracion, RecorridoGPX) {
-    let data = [Usuario, NombreActividad, NombreReto, Distancia, Duracion, RecorridoGPX];
-    return this.database.executeSql('INSERT INTO DEPORTISTA_RETO (Usuario, NombreActividad, NombreReto, Distancia, Duracion, RecorridoGPX) VALUES (?, ?, ?, ?, ?, ?)', data).then(data => {
+  addDeportistaReto(Usuario, AdminDeportista, NombreActividad, TipoActividad,  NombreReto, Distancia, Duracion, RecorridoGPX, FechaHora) {
+    let data = [Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreReto, Distancia, Duracion, RecorridoGPX, FechaHora];
+    return this.database.executeSql('INSERT INTO DEPORTISTA_RETO (Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreReto, Distancia, Duracion, RecorridoGPX, FechaHora) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', data).then(data => {
       this.loadDeportistasReto(Usuario);
     });
   }

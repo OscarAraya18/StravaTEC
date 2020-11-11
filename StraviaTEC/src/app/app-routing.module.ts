@@ -21,11 +21,11 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'reto/:nombreReto',
+    path: 'reto/:nombreReto/:admin/:tipoActividad',
     loadChildren: () => import('./actividades/reto/reto.module').then( m => m.RetoPageModule)
   },
   {
-    path: 'carrera/:nombreCarrera',
+    path: 'carrera/:nombreCarrera/:admin/:tipoActividad',
     loadChildren: () => import('./actividades/carrera/carrera.module').then( m => m.CarreraPageModule)
   },
   {

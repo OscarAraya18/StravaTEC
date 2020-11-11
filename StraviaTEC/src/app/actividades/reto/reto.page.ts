@@ -57,7 +57,13 @@ export class RetoPage implements OnInit {
   waypoints:any  = [];
 
   //Nombre del reto
-  nombreReto: string = '';
+  nombreReto: string;
+
+  //Nombre del administrador
+  admin: string;
+
+  //el tipo de actividad
+  tipoActividad: string;
 
   //Duración de la actividad
   duracion = {};
@@ -69,43 +75,50 @@ export class RetoPage implements OnInit {
   constructor(public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,public toastController: ToastController, private geolocation: Geolocation, private router: Router, private route: ActivatedRoute, private retoService: RetoService) { }
   
   async presentarAlertaGuardado() {
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Guardar nueva actividad',
-      message: 'Escriba el nombre de la actividad',
-      inputs: [
-        {
-          name: 'nombreA',
-          type: 'text',
-          placeholder: '',
-          attributes: {
-            maxlength: 30,
+    if(this.waypoints.length > 1){
+      const alert = await this.alertController.create({
+        cssClass: 'alerta-k',
+        header: 'Guardar nueva actividad',
+        message: 'Escriba el nombre de la actividad',
+        inputs: [
+          {
+            name: 'nombreA',
+            type: 'text',
+            placeholder: '',
+            attributes: {
+              maxlength: 30,
+            }
           }
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              console.log('Confirm Cancel');
+            }
+          }, {
+            text: 'Aplicar',
+            handler: (alertData) => {
+              this.addDeportistaReto(alertData.nombreA);
+            }
           }
-        }, {
-          text: 'Aplicar',
-          handler: (alertData) => {
-            this.addDeportistaReto(alertData.nombreA);
-          }
-        }
-      ]
-    });
-
-    await alert.present();
+        ]
+      });
+  
+      await alert.present();
+    }
+    else{
+      this.presentToast('No se ha seleccionado el recorrido');
+    }
+   
   }
 
   async presentToast(mensaje: string) {
     const toast = await this.toastController.create({
       message: mensaje,
+      cssClass: 'alerta-k',
       duration: 3000,
       position: 'top'
     });
@@ -116,16 +129,19 @@ export class RetoPage implements OnInit {
   ngOnInit() {
     this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
     this.showMap();
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      let nombreReto = params.get('nombreReto');
-      this.nombreReto = nombreReto;
+    this.route.params.forEach((urlParams) => {
+      this.nombreReto = urlParams['nombreReto'];
+      this.admin = urlParams['admin'];
+      this.tipoActividad = urlParams['tipoActividad'];
     });
   }
   addDeportistaReto(nombreActividad) {
     if(this.waypoints.length > 1){
       let gpx = this.writeGPX();
+      var fechaHora = new Date();
+      var fechaHoraString = fechaHora.toLocaleDateString();
       let duracion = this.duracion['horas'] + ':' + this.duracion['minutos'] + ':' + this.duracion['segundos'];
-      this.db.addDeportistaReto(this.nombreUsuario, nombreActividad, this.nombreReto, this.distance, duracion, gpx).then(_ => {
+      this.db.addDeportistaReto(this.nombreUsuario, this.admin, nombreActividad, this.tipoActividad, this.nombreReto, this.distance, duracion, gpx, fechaHoraString).then(_ => {
         this.presentToast('Actividad guardada localmente');
         this.gotoInicio();
       });
@@ -331,6 +347,7 @@ export class RetoPage implements OnInit {
     xw.endDocument();
  
     console.log(xw.toString());
+    return xw.toString();
   }
   gotoInicio(){
     this.router.navigate(['/inicio']);
