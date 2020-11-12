@@ -143,9 +143,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpPost]
         [Route("api/user/registrar/actividad")]
-        public IActionResult registrarActividades([FromBody] Actividad actividad, [FromQuery] string usuario)
+        public IActionResult registrarActividades([FromBody] Actividad actividad)
         {
-            var resultado = _repository.registrarActividades(actividad, usuario);
+            var resultado = _repository.registrarActividades(actividad);
 
             _repository.SaveChanges();
 

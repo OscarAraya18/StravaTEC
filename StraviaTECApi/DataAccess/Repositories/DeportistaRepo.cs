@@ -238,15 +238,15 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public bool registrarActividades(Actividad actividad, string usuario)
+        public bool registrarActividades(Actividad actividad)
         {
 
             if (actividad.Banderilla == 0)
             {
-                return registrarActividadCarrera(actividad, usuario);
+                return registrarActividadCarrera(actividad, actividad.Usuariodeportista);
             }
             else if (actividad.Banderilla == 1)
-                return registrarActividadReto(actividad, usuario);
+                return registrarActividadReto(actividad, actividad.Usuariodeportista);
             else
             {
                 _context.Add(actividad);
