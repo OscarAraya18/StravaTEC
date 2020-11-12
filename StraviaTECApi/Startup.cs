@@ -67,7 +67,7 @@ namespace StraviaTECApi
             // Apply CORS Policy to every request
             app.UseCors("CORS_POLICY");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

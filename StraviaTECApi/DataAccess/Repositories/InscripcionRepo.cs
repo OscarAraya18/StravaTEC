@@ -65,27 +65,17 @@ namespace EFConsole.DataAccess.Repositories
 
         public void aceptarInscripcion(Inscripcion inscripcion)
         {
-            var inscripcionCarrera = _context.InscripcionCarrera.
-                   Where(x => x.Estadoinscripcion == inscripcion.Estado
-                   && x.Deportistainscripcion == inscripcion.Usuariodeportista).FirstOrDefault();
-
+            
             var deportistaCarrera = new DeportistaCarrera();
 
-            deportistaCarrera.Admindeportista = inscripcionCarrera.Admincarrera;
-            deportistaCarrera.Nombrecarrera = inscripcionCarrera.Nombrecarrera;
+            deportistaCarrera.Admindeportista = inscripcion.Admincarrera;
+            deportistaCarrera.Nombrecarrera = inscripcion.Nombrecarrera;
             deportistaCarrera.Usuariodeportista = inscripcion.Usuariodeportista;
             deportistaCarrera.Completada = false;
 
-            var inscripcionAceptada = new Inscripcion
-            {
-                Usuariodeportista = inscripcion.Usuariodeportista,
-                Estado = "Aceptado",
-                Recibopago = inscripcion.Recibopago
-            };
+            inscripcion.Estado = "Aceptado";
 
-            _context.Remove(inscripcionCarrera);
-            _context.Remove(inscripcion);
-            _context.Add(inscripcionAceptada);
+            _context.Update(inscripcion);
             _context.Add(deportistaCarrera);
 
         }
@@ -98,18 +88,8 @@ namespace EFConsole.DataAccess.Repositories
 
         public List<Inscripcion> verInscripcionesEsperaCarrera(string nombreCarrera, string admin)
         {
-            List<Inscripcion> inscripciones = new List<Inscripcion>();
-
-            var inscripcionCarrera = _context.InscripcionCarrera.Where(x => x.Nombrecarrera == nombreCarrera
-                                              && x.Inscripcion.Estado.Equals("En espera") && x.Admincarrera == admin).
-                                                Include(x => x.Inscripcion).ToList();
-
-            foreach (var inscripcion in inscripcionCarrera)
-            {
-                inscripciones.Add(inscripcion.Inscripcion);
-            }
-
-            return inscripciones;
+            return _context.Inscripcion.Where(x => x.Nombrecarrera == nombreCarrera
+                                              && x.Estado.Equals("En espera") && x.Admincarrera == admin).ToList();
         }
 
         /**         

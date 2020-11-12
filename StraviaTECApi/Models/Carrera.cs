@@ -12,7 +12,7 @@ namespace StraviaTECApi.Models
             CarreraPatrocinador = new HashSet<CarreraPatrocinador>();
             DeportistaCarrera = new HashSet<DeportistaCarrera>();
             GrupoCarrera = new HashSet<GrupoCarrera>();
-            InscripcionCarrera = new HashSet<InscripcionCarrera>();
+            Inscripcion = new HashSet<Inscripcion>();
         }
 
         public string Nombre { get; set; }
@@ -29,6 +29,6 @@ namespace StraviaTECApi.Models
         public virtual ICollection<CarreraPatrocinador> CarreraPatrocinador { get; set; }
         public virtual ICollection<DeportistaCarrera> DeportistaCarrera { get; set; }
         public virtual ICollection<GrupoCarrera> GrupoCarrera { get; set; }
-        public virtual ICollection<InscripcionCarrera> InscripcionCarrera { get; set; }
+        public virtual ICollection<Inscripcion> Inscripcion { get; set; }
     }
 }

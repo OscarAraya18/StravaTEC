@@ -61,7 +61,9 @@ CREATE TABLE INSCRIPCION
 	UsuarioDeportista	VARCHAR(20),
 	Estado				VARCHAR(10),
 	ReciboPago			BYTEA,
-	PRIMARY KEY 		(Estado, UsuarioDeportista)
+	NombreCarrera		VARCHAR(30),
+	AdminCarrera 		VARCHAR(20),
+	PRIMARY KEY 		(UsuarioDeportista, NombreCarrera, AdminCarrera)
 );
 
 CREATE TABLE CATEGORIA
@@ -130,16 +132,6 @@ CREATE TABLE GRUPO_RETO
 );
 
 
-CREATE TABLE INSCRIPCION_CARRERA
-(
-	EstadoInscripcion  		VARCHAR(10),
-	DeportistaInscripcion	VARCHAR(20),
-	NombreCarrera			VARCHAR(30),
-	AdminCarrera 			VARCHAR(20),
-	PRIMARY KEY		(EstadoInscripcion, NombreCarrera, DeportistaInscripcion, AdminCarrera)
-);
-
-
 CREATE TABLE CARRERA_PATROCINADOR
 (
 	NombrePatrocinador	VARCHAR(30),	
@@ -199,7 +191,8 @@ ADD FOREIGN KEY (AdminDeportista) REFERENCES DEPORTISTA(Usuario) ON DELETE CASCA
 
 -- INSCRIPCION
 ALTER TABLE INSCRIPCION
-ADD FOREIGN KEY (UsuarioDeportista) REFERENCES DEPORTISTA(Usuario) ON DELETE CASCADE;
+ADD FOREIGN KEY (UsuarioDeportista) REFERENCES DEPORTISTA(Usuario) ON DELETE CASCADE,
+ADD FOREIGN KEY (NombreCarrera, AdminCarrera) REFERENCES CARRERA(Nombre, AdminDeportista) ON DELETE CASCADE;
 
 -- ACTIVIDAD
 ALTER TABLE ACTIVIDAD
@@ -256,11 +249,6 @@ ADD FOREIGN KEY (NombreCarrera, AdminDeportista) REFERENCES CARRERA(Nombre, Admi
 ALTER TABLE RETO_PATROCINADOR
 ADD FOREIGN KEY (NombrePatrocinador) REFERENCES PATROCINADOR(NombreComercial) ON DELETE CASCADE,
 ADD FOREIGN KEY (NombreReto, AdminDeportista) REFERENCES RETO(Nombre, AdminDeportista) ON DELETE CASCADE;
-
--- INSCRIPCION CARRERA
-ALTER TABLE INSCRIPCION_CARRERA
-ADD FOREIGN KEY (EstadoInscripcion, DeportistaInscripcion) REFERENCES INSCRIPCION(Estado, UsuarioDeportista) ON DELETE CASCADE,
-ADD FOREIGN KEY (NombreCarrera, AdminCarrera) REFERENCES CARRERA(Nombre, AdminDeportista) ON DELETE CASCADE;
 
 -- AMIGO DEPORTISTA
 ALTER TABLE AMIGO_DEPORTISTA

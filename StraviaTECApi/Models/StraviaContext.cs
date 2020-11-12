@@ -30,19 +30,18 @@ namespace StraviaTECApi.Models
         public virtual DbSet<GrupoDeportista> GrupoDeportista { get; set; }
         public virtual DbSet<GrupoReto> GrupoReto { get; set; }
         public virtual DbSet<Inscripcion> Inscripcion { get; set; }
-        public virtual DbSet<InscripcionCarrera> InscripcionCarrera { get; set; }
         public virtual DbSet<Patrocinador> Patrocinador { get; set; }
         public virtual DbSet<Reto> Reto { get; set; }
         public virtual DbSet<RetoPatrocinador> RetoPatrocinador { get; set; }
 
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseNpgsql("Server=localhost;Database=StraviaDB;User Id=StraviaTECAdmin;Password=password;Port=5432");
             }
-        }*/
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -501,18 +500,26 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<Inscripcion>(entity =>
             {
-                entity.HasKey(e => new { e.Estado, e.Usuariodeportista })
+                entity.HasKey(e => new { e.Usuariodeportista, e.Nombrecarrera, e.Admincarrera })
                     .HasName("inscripcion_pkey");
 
                 entity.ToTable("inscripcion");
 
-                entity.Property(e => e.Estado)
-                    .HasColumnName("estado")
-                    .HasMaxLength(10);
-
                 entity.Property(e => e.Usuariodeportista)
                     .HasColumnName("usuariodeportista")
                     .HasMaxLength(20);
+
+                entity.Property(e => e.Nombrecarrera)
+                    .HasColumnName("nombrecarrera")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Admincarrera)
+                    .HasColumnName("admincarrera")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Estado)
+                    .HasColumnName("estado")
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Recibopago).HasColumnName("recibopago");
 
@@ -520,40 +527,11 @@ namespace StraviaTECApi.Models
                     .WithMany(p => p.Inscripcion)
                     .HasForeignKey(d => d.Usuariodeportista)
                     .HasConstraintName("inscripcion_usuariodeportista_fkey");
-            });
-
-            modelBuilder.Entity<InscripcionCarrera>(entity =>
-            {
-                entity.HasKey(e => new { e.Estadoinscripcion, e.Nombrecarrera, e.Deportistainscripcion, e.Admincarrera })
-                    .HasName("inscripcion_carrera_pkey");
-
-                entity.ToTable("inscripcion_carrera");
-
-                entity.Property(e => e.Estadoinscripcion)
-                    .HasColumnName("estadoinscripcion")
-                    .HasMaxLength(10);
-
-                entity.Property(e => e.Nombrecarrera)
-                    .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.Deportistainscripcion)
-                    .HasColumnName("deportistainscripcion")
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.Admincarrera)
-                    .HasColumnName("admincarrera")
-                    .HasMaxLength(20);
-
-                entity.HasOne(d => d.Inscripcion)
-                    .WithMany(p => p.InscripcionCarrera)
-                    .HasForeignKey(d => new { d.Estadoinscripcion, d.Deportistainscripcion })
-                    .HasConstraintName("inscripcion_carrera_estadoinscripcion_deportistainscripcio_fkey");
 
                 entity.HasOne(d => d.Carrera)
-                    .WithMany(p => p.InscripcionCarrera)
+                    .WithMany(p => p.Inscripcion)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admincarrera })
-                    .HasConstraintName("inscripcion_carrera_nombrecarrera_admincarrera_fkey");
+                    .HasConstraintName("inscripcion_nombrecarrera_admincarrera_fkey");
             });
 
             modelBuilder.Entity<Patrocinador>(entity =>

@@ -25,6 +25,8 @@ INSERT INTO public.deportista(
 	usuario, claveacceso, fechanacimiento, nombre, apellido1, apellido2, nombrecategoria, nacionalidad, foto)
 	VALUES ('sam.astua', 'password', '2000-09-15', 'Saymon', 'Astúa', 'Madrigal', 'Sub-23', 'Costa Rica', NULL),
 		   ('kevintrox', 'password', '2000-12-21', 'Kevin', 'Acevedo', 'Rodríguez', 'Sub-23', 'Costa Rica', NULL),
+		   ('malumababy', 'password', '2006-04-16', 'Maluma', 'Londoño', 'Arias', 'Junior', 'Colombia', NULL),
+		   ('jbalvin', 'password', '2007-11-25', 'José', 'Osorio', 'Balvín', 'Junior', 'Colombia', NULL),
 		   ('etesech', 'password', '1993-12-03', 'Sech', 'Morales', 'Williams', 'Open', 'Panamá', NULL),
 		   ('elpepe', 'password', '1964-01-24', 'Pepe', 'Ramírez', 'González', 'Master C', 'México', NULL),
 		   ('crespo', 'password', '1994-05-19', 'José', 'Crespo', 'Cepeda', 'Open', 'España', NULL),
@@ -107,19 +109,22 @@ INSERT INTO public.carrera_categoria(
 		   
 -- SE AGREGAN INSCRIPCIONES A LAS CARRERAS
 INSERT INTO public.inscripcion(
-	usuariodeportista, estado, recibopago)
-	VALUES ('auronplay', 'En espera', NULL),
-		   ('elpepe', 'En espera', NULL),
-		   ('crespo', 'En espera', NULL),
-		   ('cj', 'En espera', NULL);
-
--- SE ASOCIAN LAS INSCRIPCIONES A UNA CARRERA
-INSERT INTO public.inscripcion_carrera(
-	EstadoInscripcion, deportistainscripcion, nombrecarrera, admincarrera)
-	VALUES ('En espera', 'auronplay', 'Endurance 2020','sam.astua'),
-		   ('En espera', 'elpepe', 'Endurance 2020', 'sam.astua'),
-		   ('En espera', 'crespo', 'The Best', 'cr7'),
-		   ('En espera', 'cj', 'The Best', 'cr7');
+	usuariodeportista, estado, recibopago, nombrecarrera, admincarrera)
+	VALUES ('auronplay', 'Aceptado', NULL, 'Endurance 2020','sam.astua'), --Endurance 2020 
+		   ('sam.astua', 'Aceptado', NULL, 'Endurance 2020','sam.astua'),
+		   ('kevintrox', 'Aceptado', NULL, 'Endurance 2020','sam.astua'),
+		   ('malumababy', 'Aceptado', NULL, 'Endurance 2020','sam.astua'),
+		   ('jbalvin', 'Aceptado', NULL, 'Endurance 2020','sam.astua'),
+		   ('cr7', 'Aceptado', NULL, 'Endurance 2020','sam.astua'),
+		   ('elpepe', 'En espera', NULL, 'Endurance 2020', 'sam.astua'),
+		   ('crespo', 'En espera', NULL,'The Best', 'cr7'), -- The Best
+		   ('cj', 'En espera', NULL, 'The Best', 'cr7'),
+		   ('etesech', 'Aceptado', NULL, 'The Best', 'cr7'),
+		   ('ironman', 'Aceptado', NULL, 'The Best', 'cr7'),
+		   ('sam.astua', 'Aceptado', NULL, 'The Best', 'cr7'),
+		   ('kevintrox', 'Aceptado', NULL, 'The Best', 'cr7'),
+		   ('ozuna', 'Aceptado', NULL, 'The Best', 'cr7'),
+		   ('elpepe', 'Aceptado', NULL, 'The Best', 'cr7');
 
 
 -- SE CREAN LOS RETOS
@@ -162,6 +167,31 @@ INSERT INTO public.amigo_deportista(
 		   ('kevintrox', 'ironman'),
 		   ('crespo', 'cr7'),
 		   ('crespo', 'cj');
-	
-	
+
+
+-- SE AGREGAN DEPORTISTAS A LAS CARRERAS (completan las carreras)
+INSERT INTO public.deportista_carrera(
+	usuariodeportista, nombrecarrera, admindeportista, completada)
+	VALUES ('sam.astua', 'Endurance 2020', 'sam.astua', true),
+		   ('kevintrox', 'Endurance 2020', 'sam.astua', true),
+		   ('malumababy', 'Endurance 2020', 'sam.astua', true),
+		   ('jbalvin', 'Endurance 2020', 'sam.astua', true),
+		   ('auronplay', 'Endurance 2020', 'sam.astua', true),
+		   ('cr7', 'Endurance 2020', 'sam.astua', true);
+
+-- COMPLETACIÓN DE CARRERAS
+INSERT INTO public.actividad(
+	usuariodeportista, fechahora, nombre, duracion, kilometraje, tipoactividad, recorridogpx, nombreretocarrera, adminretocarrera, banderilla)
+	VALUES ('sam.astua', '2020/11/11 15:30', 'Carrera 1', '2:30:55', 40, 'Ciclismo', NULL, 'Endurance 2020', 'sam.astua', 0), --Endurance 2020
+		   ('kevintrox', '2020/11/11 15:30', 'Carrera 1', '2:37:21', 40, 'Ciclismo', NULL, 'Endurance 2020', 'sam.astua', 0),
+		   ('malumababy', '2020/11/11 15:30', 'Carrera 1', '2:50:35', 40, 'Ciclismo', NULL, 'Endurance 2020', 'sam.astua', 0),
+		   ('jbalvin', '2020/11/11 15:30', 'Carrera 1', '2:55:30', 40, 'Ciclismo', NULL, 'Endurance 2020', 'sam.astua', 0),
+		   ('auronplay', '2020/11/11 15:30', 'Carrera 1', '2:10:14', 40, 'Ciclismo', NULL, 'Endurance 2020', 'sam.astua', 0),
+		   ('cr7', '2020/11/11 15:30', 'Carrera 1', '1:50:34', 40, 'Ciclismo', NULL, 'Endurance 2020', 'sam.astua', 0),
+		   ('etesech', '2020/12/11 10:10', 'Carrera 2', '2:50:14', 20, 'Correr', NULL, 'The Best', 'cr7', 0), -- The Best
+		   ('ironman', '2020/12/11 10:10', 'Carrera 2', '2:10:44', 20, 'Correr', NULL, 'The Best', 'cr7', 0),
+		   ('sam.astua', '2020/12/11 10:10', 'Carrera 2', '2:20:05', 20, 'Correr', NULL, 'The Best', 'cr7', 0),
+		   ('kevintrox', '2020/12/11 10:10', 'Carrera 2', '2:19:30', 20, 'Correr', NULL, 'The Best', 'cr7', 0),
+		   ('ozuna', '2020/12/11 10:10', 'Carrera 2', '2:12:15', 20, 'Correr', NULL, 'The Best', 'cr7', 0),
+		   ('elpepe', '2020/12/11 10:10', 'Carrera 2', '2:30:09', 20, 'Correr', NULL, 'The Best', 'cr7', 0);
 	
