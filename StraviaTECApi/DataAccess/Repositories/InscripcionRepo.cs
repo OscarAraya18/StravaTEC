@@ -63,6 +63,15 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
+        public void Delete(Inscripcion inscripcion)
+        {
+            if (inscripcion == null)
+                throw new System.ArgumentNullException(nameof(inscripcion));
+
+            _context.Inscripcion.Remove(inscripcion);
+
+        }
+
         public void aceptarInscripcion(Inscripcion inscripcion)
         {
             

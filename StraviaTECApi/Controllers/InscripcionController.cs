@@ -96,5 +96,14 @@ namespace StraviaTECApi.Controllers
             return Ok("Inscripcion actualizada correctamente");
         }
 
+        [HttpDelete]
+        [Route("api/inscripcion/delete")]
+        public IActionResult actualizarInscripcion([FromBody] Inscripcion inscripcion)
+        {
+            _repository.Delete(inscripcion);
+            _repository.SaveChanges();
+            return Ok("Inscripción eliminada correctamente");
+        }
+
     }
 }
