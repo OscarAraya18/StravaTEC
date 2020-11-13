@@ -1,23 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import {ViewChild, ElementRef } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DatabaseService} from 'src/app/servicios/database.service';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
-import { DatabaseService, DeportistaReto} from 'src/app/servicios/database.service';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
+
+
 import 'xml-writer';
 
 declare var google: any;
 
-
 @Component({
-  selector: 'app-reto',
-  templateUrl: './reto.page.html',
-  styleUrls: ['./reto.page.scss'],
+  selector: 'app-actividad-libre',
+  templateUrl: './actividad-libre.page.html',
+  styleUrls: ['./actividad-libre.page.scss'],
 })
-export class RetoPage implements OnInit {
-
+export class ActividadLibrePage implements OnInit {
   //Mapa que se está usando en la página
   map: any;
 
@@ -54,13 +53,7 @@ export class RetoPage implements OnInit {
   //waypoints de la ruta dibujada
   waypoints:any  = [];
 
-  //Nombre del reto
-  nombreReto: string;
-
-  //Nombre del administrador
-  admin: string;
-
-  //el tipo de actividad
+  //Selección del tipo de actividad
   tipoActividad: string;
 
   //Duración de la actividad
@@ -71,7 +64,7 @@ export class RetoPage implements OnInit {
 
 
   constructor(public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,public toastController: ToastController, private geolocation: Geolocation, private router: Router, private route: ActivatedRoute) { }
-  
+
   async presentarAlertaGuardado() {
     if(this.waypoints.length > 1){
       const alert = await this.alertController.create({
@@ -99,7 +92,8 @@ export class RetoPage implements OnInit {
           }, {
             text: 'Aplicar',
             handler: (alertData) => {
-              this.addDeportistaReto(alertData.nombreA);
+              console.log(this.tipoActividad);
+              this.addDeportistaActividadLibre(alertData.nombreA);
             }
           }
         ]
@@ -127,13 +121,9 @@ export class RetoPage implements OnInit {
   ngOnInit() {
     this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
     this.showMap();
-    this.route.params.forEach((urlParams) => {
-      this.nombreReto = urlParams['nombreReto'];
-      this.admin = urlParams['admin'];
-      this.tipoActividad = urlParams['tipoActividad'];
-    });
   }
-  addDeportistaReto(nombreActividad) {
+
+  addDeportistaActividadLibre(nombreActividad) {
     if(this.waypoints.length > 1){
       let gpx = this.writeGPX();
       var date = new Date();
@@ -141,7 +131,7 @@ export class RetoPage implements OnInit {
       var hora = date.getHours() +':' + date.getMinutes() + ':' + date.getSeconds();
       var fechaHoraString = fecha + ' ' + hora;
       let duracion = this.duracion['horas'] + ':' + this.duracion['minutos'] + ':' + this.duracion['segundos'];
-      this.db.addDeportistaReto(this.nombreUsuario, this.admin, nombreActividad, this.tipoActividad, this.nombreReto, this.distance, duracion, gpx, fechaHoraString).then(_ => {
+      this.db.addDeportistaActividadLibre(this.nombreUsuario, nombreActividad, this.tipoActividad, fechaHoraString, duracion, this.distance, gpx).then(_ => {
         this.presentToast('Actividad guardada localmente');
         this.gotoInicio();
       });
@@ -151,16 +141,14 @@ export class RetoPage implements OnInit {
     }
 
   }
-
-    //Este método se ejecuta cada vez que se abra esta página
-    ionViewDidEnter(){
+     //Este método se ejecuta cada vez que se abra esta página
+     ionViewDidEnter(){
       this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
       this.showMap();
     }
-  
+
     //Este método despliega el mapa en pantalla
     showMap(){
-
       this.geolocation.getCurrentPosition().then((resp) => {
         this.latitude = resp.coords.latitude;
         this.longitude = resp.coords.longitude;
@@ -177,18 +165,13 @@ export class RetoPage implements OnInit {
        mapTypeId: google.maps.MapTypeId.ROADMAP
      }
      this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-
-     
      this.directionsDisplay.setMap(this.map);
      this.map.addListener("dblclick", (e) => {
        this.placeMarker(e.latLng, this.map);
      });
-
        }).catch((error) => {
          console.log('Error getting location', error);
        });
-
-      
     }
 
     // Sets the map on all markers in the array.

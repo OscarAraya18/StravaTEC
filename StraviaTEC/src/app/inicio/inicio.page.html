@@ -1,16 +1,22 @@
 <ion-content>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="actividadLibreClick()">
+      <ion-icon name="duplicate"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <ion-slides pager="true" [options]="slideOpts">
 
     <ion-slide>
-  
 <ion-content>
- 
   <ion-segment [(ngModel)]="selectedView">
     <ion-segment-button value="retos">
-      <ion-label>Mis retos</ion-label>
+      <ion-label>Retos</ion-label>
     </ion-segment-button>
     <ion-segment-button value="carreras">
-      <ion-label>Mis carreras</ion-label>
+      <ion-label> Carreras</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="actividadesLibres">
+      <ion-label>Actividades</ion-label>
     </ion-segment-button>
   </ion-segment>
  
@@ -25,7 +31,7 @@
                 {{ dr.NombreActividad }}
               </ion-col>
               <ion-col size="2" class="ion-text-end">
-                <ion-button fill="clear" (click)="presentarAlertaSincronizacionReto(dr)">
+                <ion-button fill="clear" (click)="sincronizarReto(dr)">
                   <ion-icon name="cloud-upload" slot="icon-only"></ion-icon>
                 </ion-button>
               </ion-col>
@@ -34,8 +40,13 @@
               <ion-col size="4" class="ion-text-start dep-subtitulo">
                 Reto: 
               </ion-col>
-              <ion-col size="8" class="ion-text-start dep-valor">
+              <ion-col size="4" class="ion-text-start dep-valor">
                 {{ dr.NombreReto }}
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <ion-button fill="clear" (click)="eliminarReto(dr)">
+                  <ion-icon name="trash" slot="icon-only"></ion-icon>
+                </ion-button>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -54,6 +65,14 @@
                 {{ dr.Duracion }}
               </ion-col>
             </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start dep-subtitulo">
+                Fecha: 
+              </ion-col>
+              <ion-col size="8" class="ion-text-start dep-valor">
+                {{ dr.FechaHora }}
+              </ion-col>
+            </ion-row>
           </ion-grid>
         </ion-item>
       </ion-list>
@@ -67,7 +86,7 @@
                 {{ dc.NombreActividad }}
               </ion-col>
               <ion-col size="2" class="ion-text-end">
-                <ion-button fill="clear" (click)="presentarAlertaSincronizacionCarrera(dc)">
+                <ion-button fill="clear" (click)="sincronizarCarrera(dc)">
                   <ion-icon name="cloud-upload" slot="icon-only"></ion-icon>
                 </ion-button>
               </ion-col>
@@ -76,8 +95,13 @@
               <ion-col size="4" class="ion-text-start dep-subtitulo">
                 Carrera: 
               </ion-col>
-              <ion-col size="8" class="ion-text-start dep-valor">
+              <ion-col size="4" class="ion-text-start dep-valor">
                 {{ dc.NombreCarrera }}
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <ion-button fill="clear" (click)="eliminarCarrera(dc)">
+                  <ion-icon name="trash" slot="icon-only"></ion-icon>
+                </ion-button>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -88,10 +112,75 @@
                 {{ dc.Duracion }} 
               </ion-col>
             </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start dep-subtitulo">
+                Fecha: 
+              </ion-col>
+              <ion-col size="8" class="ion-text-start dep-valor">
+                {{ dc.FechaHora }}
+              </ion-col>
+            </ion-row>
           </ion-grid>
         </ion-item>
       </ion-list>
     </div>
+
+    <div *ngSwitchCase="'actividadesLibres'">
+      <ion-list>
+        <ion-item *ngFor="let dal of deportistasActividadLibre">
+          <ion-grid class="mis-items">
+            <ion-row>
+              <ion-col size="10" class="ion-text-start dep-titulo">
+                {{ dal.NombreActividad }}
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <ion-button fill="clear" (click)="sincronizarActividadLibre(dal)">
+                  <ion-icon name="cloud-upload" slot="icon-only"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start dep-subtitulo">
+                Distancia: 
+              </ion-col>
+              <ion-col size="4" class="ion-text-start dep-valor">
+                {{ dal.Distancia }} km
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <ion-button fill="clear" (click)="eliminarActividadLibre(dal)">
+                  <ion-icon name="trash" slot="icon-only"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start dep-subtitulo">
+                Duracion: 
+              </ion-col>
+              <ion-col size="6" class="ion-text-start dep-valor">
+                {{ dal.Duracion }} 
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start dep-subtitulo">
+                Fecha: 
+              </ion-col>
+              <ion-col size="8" class="ion-text-start dep-valor">
+                {{ dal.FechaHora }}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4" class="ion-text-start dep-subtitulo">
+                Actividad: 
+              </ion-col>
+              <ion-col size="8" class="ion-text-start dep-valor">
+                {{ dal.TipoActividad }}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </div>
+
   </div>
  
 </ion-content>
@@ -100,9 +189,14 @@
     <ion-slide>
       
       <ion-content>
-        <ion-header class="k-header">
+        <ion-header>
           <ion-toolbar>
-            <ion-title size="large">Retos disponibles</ion-title>
+            <ion-title>Retos disponibles</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="loadRetos()">
+                <ion-icon name="cloud-download" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-buttons>
           </ion-toolbar>
         </ion-header>
         
@@ -110,18 +204,18 @@
           <ion-row>
             <ion-col *ngFor="let reto of listaRetos">
       
-              <ion-card class="ion-margin" (click)="retoClick(reto.Nombre, reto.AdminDeportista, reto.TipoActividad)">
+              <ion-card class="ion-margin" (click)="retoClick(reto.nombre, reto.admindeportista, reto.tipoactividad)">
                 <ion-card-header class="k-header2">
                     <ion-row class="k-title">
                       <ion-col size="12" class="ion-text-center">
-                        {{ reto.Nombre }}
+                        {{ reto.nombre }}
                       </ion-col>
                
                     </ion-row>
         
                 </ion-card-header>
                 <ion-card-content class="k-description">
-                  <p><strong>{{ reto.Descripcion }}</strong></p>
+                  <p><strong>{{ reto.descripcion }}</strong></p>
                 </ion-card-content> 
                 <ion-footer>
                   <ion-row class="k-subtitles">
@@ -137,18 +231,18 @@
                   </ion-row>
                   <ion-row class="k-values">
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>{{ reto.TipoActividad }}</ion-label>
+                      <ion-label>{{ reto.tipoactividad }}</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>{{ reto.KmTotales }} km</ion-label>
+                      <ion-label>{{ reto.kmtotales }} km</ion-label>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
-                      <ion-label>{{ reto.FondoAltitud }}</ion-label>
+                      <ion-label>{{ reto.fondoaltitud }}</ion-label>
                     </ion-col>
                   </ion-row>
                   <ion-row class="k-periodo" no-padding>
                     <ion-col size="12" class="ion-text-center">
-                        Disponible hasta : {{ reto.PeriodoDisponibilidad }}
+                        Disponible hasta : {{ reto.periododisponibilidad }}
                     </ion-col>
                   </ion-row>
                 </ion-footer>
@@ -161,9 +255,14 @@
 
     <ion-slide>
       <ion-content>
-        <ion-header class="k-header">
+        <ion-header>
           <ion-toolbar>
-            <ion-title size="large">Carreas dispobibles</ion-title>
+            <ion-title>Carreras disponibles</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="loadCarreras()">
+                <ion-icon name="cloud-download" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-buttons>
           </ion-toolbar>
         </ion-header>
         
@@ -171,11 +270,11 @@
           <ion-row>
             <ion-col *ngFor="let carrera of listaCarreras">
       
-              <ion-card class="ion-margin" (click)="carreraClick(carrera.Nombre, carrera.AdminDeportista, carrera.TipoActividad)">
+              <ion-card class="ion-margin" (click)="carreraClick(carrera.nombre, carrera.admindeportista, carrera.tipoactividad)">
                 <ion-card-header class="k-header2">
                     <ion-row class ="k-title">
                       <ion-col size="12" class="ion-text-center">
-                        {{ carrera.Nombre }}
+                        {{ carrera.nombre }}
                       </ion-col>
                     </ion-row>
         
@@ -192,10 +291,10 @@
                   </ion-row>
                   <ion-row class="k-values">
                     <ion-col size="6" class="ion-text-center">
-                      <ion-label>{{ carrera.Fecha }}</ion-label>
+                      <ion-label>{{ carrera.fecha }}</ion-label>
                     </ion-col>
                     <ion-col size="6" class="ion-text-center">
-                      <ion-label>{{ carrera.TipoActividad }}</ion-label>
+                      <ion-label>{{ carrera.tipoactividad }}</ion-label>
                     </ion-col>
                   </ion-row>
                 </ion-card-content>

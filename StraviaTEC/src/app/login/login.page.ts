@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Usuario } from '../modelos/usuario';
-import { AlertController, ToastController } from '@ionic/angular';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { HTTP } from '@ionic-native/http/ngx';
-import { from } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -12,15 +11,19 @@ import { from } from 'rxjs';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  constructor(private http: HTTP, public toastController: ToastController, private usuarioService: UsuarioService, public alertController: AlertController, private router: Router, private route: ActivatedRoute) { }
 
-  ngOnInit() { 
-  }
   //modelo de usuario login
   public usuarioL = new Usuario('', '');
 
-  requestObject:any;
+  //Molde para tomar la dirección ip y el puerto de los imputs
+  //Duración de la actividad
+  serverConfig = {};
 
+  constructor(private loadingController: LoadingController, private http: HTTP, public toastController: ToastController, private usuarioService: UsuarioService, public alertController: AlertController, private router: Router, private route: ActivatedRoute) { }
+
+  
+  ngOnInit() { 
+  }
 
   /**
    * Método para mostrar una alerta en caso de que la contraseña sea incorrecta
@@ -35,61 +38,56 @@ export class LoginPage implements OnInit {
     toast.present();
   }
 
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Por favor espere...',
+      spinner: "bubbles",
+      cssClass: 'loading-k',
+      backdropDismiss: false,
+      showBackdrop: true
+    });
+    return await loading.present();
+  }
+
 
   /**
    * Este método recupera los datos de los campos de texto para validar el ingreso a
    * la página home. La validación se hace por medio de la api.
    */
     submit(){
-      this.postData();
-      /*
-    this.http.setDataSerializer('json');
-    let nativeCall = this.http.post('http://192.168.100.7:8085/api/user/login', this.usuarioL, 
-    {'Content-Type': 'application/json'});
+      this.presentLoading();  
+      //Se le pasan los valores de configuración al servicio
+      this.usuarioService.setNombreUsuarioActual(this.usuarioL.Usuario);
+      this.usuarioService.setIp(this.serverConfig['ip']);
+      this.usuarioService.setPuerto(this.serverConfig['puerto'].toString());
 
-    from(nativeCall).pipe().subscribe( data => {
-      console.log('native data: ', data);
-      var parsed = JSON.parse(data.data);
-    }, err => {
-      console.log('JS Call error: ', err);
-      this.presentToast('Error al iniciar sesión');
-    });
-  */
-  }
+      //Se forma la url con las configuraciones optenidas
+      
+      let url = 'https://' + this.serverConfig['ip'] + ':' + this.serverConfig['puerto'].toString() + '/api/user/login';
+    
+      //Se configura native HTTP
+      this.http.setServerTrustMode('nocheck');
+      this.http.setDataSerializer('json');
+      this.http.post(url,
+      this.usuarioL, {'Content-Type': 'application/json'}).then(
+       data => {
+         console.log(data.data);
+         this.loadingController.dismiss();
+         this.usuarioL.Usuario = '';
+         this.usuarioL.ClaveAcceso = '';
+         this.gotoInicio();
+      
+       })
+     .catch(err => {
+       console.log(err);
+       this.loadingController.dismiss();
+       this.presentToast('Nombre de usuario o contraseña es incorrecto');
+     });
+     }
+  
 
   gotoInicio(){
     this.router.navigate(['/inicio']);
    }
 
-   getData(){
-    this.http.get('https://jsonplaceholder.typicode.com/comments?',
-     {'postId': 1}, 
-    {}).then(
-      data => {
-        console.log(data.data);
-      })
-    .catch(err => {
-      console.log(err);
-    });
-   }
-
-   postData(){
-     let body = {
-       'userId': 45,
-       'id':101,
-       'title':'Nogue api the monster server',
-       'body':'Ehhtoh e sechh'
-     };
-    this.http.setDataSerializer('json');
-    this.http.post('https://jsonplaceholder.typicode.com/posts',
-    body, {'Content-Type': 'application/json'}).then(
-     data => {
-       console.log(data.data);
-     })
-   .catch(err => {
-     console.log(err);
-   });
-   }
-
-
-}
+  }

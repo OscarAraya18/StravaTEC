@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CarreraService } from 'src/app/servicios/carrera.service';
-import { RetoService } from 'src/app/servicios/reto.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { DatabaseService, DeportistaCarrera, DeportistaReto } from 'src/app/servicios/database.service';
+import { DatabaseService, DeportistaActividadLibre, DeportistaCarrera, DeportistaReto } from 'src/app/servicios/database.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
-import { Carrera } from '../modelos/carrera';
-import { Reto } from '../modelos/reto';
-import { Actividad } from '../modelos/actividad';
+import { HTTP } from '@ionic-native/http/ngx';
+import { Actividad } from 'src/app/modelos/actividad';
+
 
 @Component({
   selector: 'app-inicio',
@@ -112,14 +111,14 @@ export class InicioPage implements OnInit {
     }
   };
 
-  constructor(public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private retoService: RetoService, private router: Router, private route: ActivatedRoute) { 
+  constructor(public toastController: ToastController, private http: HTTP, public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private router: Router, private route: ActivatedRoute) { 
   }
   
   //Lista de carreas local
-  listaCarreras: Carrera[] = [];
+  listaCarreras: any = [];
 
   //Lista de retos local
-  listaRetos: Reto[] = [];
+  listaRetos: any = [];
 
   //DeportistasCarrera de la base de datos empotrada
   deportistasCarrera: DeportistaCarrera[] = [];
@@ -127,92 +126,14 @@ export class InicioPage implements OnInit {
   //DeportistasReto de la base de datos empotrada
   deportistasReto: DeportistaReto[] = [];
 
+  //DeportistasActividadLibre de la base de datos empotrada
+  deportistasActividadLibre: DeportistaActividadLibre[] = [];
+
   //Vista seleccionada para el primer slide
   selectedView = 'retos';
 
   nombreUsuario: string;
 
-
-  async presentLoading(mensaje) {
-    const loading = await this.loadingController.create({
-      spinner: "bubbles",
-      duration: 5000,
-      message: mensaje,
-      cssClass: 'loading-k',
-      backdropDismiss: false,
-      showBackdrop: true
-
-    });
-    await loading.present();
-
-    const { role, data } = await loading.onDidDismiss();
-    console.log('Loading dismissed with role:', role);
-  }
-
-  async presentarAlertaSincronizacionReto(d) {
-    const alert = await this.alertController.create({
-      cssClass: 'alerta-k',
-      header: 'Sincronizar Reto',
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: 'Aceptar',
-          handler: () => {
-            this.presentLoading('Procesando');
-            var fechaHora = new Date();
-            var fechaHoraString = fechaHora.toLocaleDateString();
-            console.log(fechaHoraString);
-            //Enviar los datos en post
-            //var paquete = new Actividad(d.Usuario, d.NombreActividad, fechaHoraString, d.Duracion, d.Distancia, d.TipoActividad, d.RecorridoGPX, d.NombreReto, d.AminDeportista, 1);
-            this.db.deleteDeportistaReto(d.Usuario, d.NombreReto);
-            
-            
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  async presentarAlertaSincronizacionCarrera(d) {
-    const alert = await this.alertController.create({
-      cssClass: 'alerta-k',
-      header: 'Sincronizar Carrera',
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: 'Aceptar',
-          handler: () => {
-            this.presentLoading('Procesando');
-            var fechaHora = new Date();
-            var fechaHoraString = fechaHora.toLocaleDateString();
-            console.log(fechaHoraString);
-            //Enviar los datos en post
-            //var paquete = new Actividad(d.Usuario, d.NombreActividad, fechaHoraString, d.Duracion, 1, d.TipoActividad, d.RecorridoGPX, d.NombreCarrera, d.AminDeportista, 2);
-            
-            this.db.deleteDeportistaCarrera(d.Usuario, d.NombreCarrera);
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
   ngOnInit() {
     this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
     //Recuperar los datos de la base de datos empotrada
@@ -220,26 +141,170 @@ export class InicioPage implements OnInit {
       if (rdy) {
         this.db.loadDeportistasCarrera(this.nombreUsuario);
         this.db.loadDeportistasReto(this.nombreUsuario);
+        this.db.loadDeportistasActividadLibre(this.nombreUsuario);
 
         this.db.getDeportistasCarrera().subscribe(devs => {
           this.deportistasCarrera = devs;
+          //Guardar esta lista de carreras en la lista de carreras del servicio
+          this.carreraService.setListaCarreras(devs);
         })
       }
-
     });
+    //Se piden los 
     this.db.getDeportistasReto().subscribe(dep => {
       this.deportistasReto = dep;
-    })
+    });
 
-    //this.getCarreras();
-    //this.getRetos()
-    //Almaceno las carreras en la variable de la página
-    this.listaCarreras = this.carreraService.getListaCarreras();
-    //Almaceno los retos en la variable de la página
-    this.listaRetos = this.retoService.getListaRetos();
+    this.db.getDeportistasActividadLibre().subscribe(dep => {
+      this.deportistasActividadLibre = dep;
+    });
+
+    //cargar las listas con datos del servidor
+    this.http.setServerTrustMode('nocheck');
+    this.loadRetos();
+    this.loadCarreras();
+
+
   }
-  ionViewDidEnter(){
-    this.nombreUsuario = this.usuarioService.getNombreUsuarioActual();
+  loadRetos(){
+    let url = 'https://' + this.usuarioService.getIp() + ':' + this.usuarioService.getPuerto() + '/api/user/retos?';
+    //Se le pide la lista de retos al servidor
+    this.http.get(url,
+    {'usuario': this.nombreUsuario}, 
+    {}).then(
+     data => {
+       this.listaRetos = JSON.parse(data.data);
+     })
+    .catch(err => {
+     console.log(err);
+    });
+  }
+
+  loadCarreras(){
+    let url = 'https://' + this.usuarioService.getIp() + ':' + this.usuarioService.getPuerto() + '/api/user/carreras?';
+   //Se le pide la lista de carreas al servidor
+   this.http.get(url,
+    {'usuario': this.nombreUsuario}, 
+   {}).then(
+     data => {
+       this.listaCarreras = JSON.parse(data.data);
+     })
+   .catch(err => {
+     console.log(err);
+   });
+  }
+
+
+  async presentToast(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      position: 'top',
+      cssClass: 'toast-k'
+    });
+    toast.present();
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Sincronizando con el servidor...',
+      spinner: "bubbles",
+      cssClass: 'loading-k',
+      backdropDismiss: false,
+      showBackdrop: true
+    });
+    return await loading.present();
+  }
+
+  sincronizarReto(d){
+    this.presentLoading();
+    //Se empaqueta la actividad en un modelo de clase
+    let actividadReto = new Actividad(d.Usuario, d.NombreActividad, d.FechaHora, d.Duracion, d.Distancia, d.TipoActividad, d.RecorridoGPX, d.NombreReto, d.AdminDeportista, 1);
+    //se le envía a la api
+    this.usuarioService.setNombreUsuarioActual(d.Usuario);
+    this.http.setServerTrustMode('nocheck');
+    this.http.setDataSerializer('json');
+    let url = 'https://' + this.usuarioService.getIp() + ':' + this.usuarioService.getPuerto() + '/api/user/registrar/actividad';
+    this.http.post(url,
+    actividadReto, {'Content-Type': 'application/json'}).then(
+     data => {
+       console.log(data.data);
+       //Si la petición fue exitosa entonces se elimina la actividad de la base de datos empotrada
+       this.db.deleteDeportistaReto(d.Usuario, d.NombreReto, d.NombreActividad);
+       this.loadingController.dismiss();
+       this.presentToast('La actividad se ha sincronizado con éxito');
+     })
+   .catch(err => {
+     console.log(err);
+     this.loadingController.dismiss();
+     this.presentToast('Error al sincronizar la actividad');
+   });
+  }
+
+  sincronizarCarrera(d){
+    this.presentLoading();
+    //Se empaqueta la actividad en un modelo de clase
+    let actividadReto = new Actividad(d.Usuario, d.NombreActividad, d.FechaHora, d.Duracion, 10, d.TipoActividad, d.RecorridoGPX, d.NombreCarrera, d.AdminDeportista, 0);
+    //se le envía a la api
+    this.usuarioService.setNombreUsuarioActual(d.Usuario);
+    this.http.setServerTrustMode('nocheck');
+    this.http.setDataSerializer('json');
+    let url = 'https://' + this.usuarioService.getIp() + ':' + this.usuarioService.getPuerto() + '/api/user/registrar/actividad';
+    this.http.post(url,
+    actividadReto, {'Content-Type': 'application/json'}).then(
+     data => {
+       console.log(data.data);
+       //Si la petición fue exitosa entonces se elimina la actividad de la base de datos empotrada
+       this.db.deleteDeportistaCarrera(d.Usuario, d.NombreCarrera);
+       this.loadingController.dismiss();
+       this.presentToast('La actividad se ha sincronizado con éxito');
+     })
+   .catch(err => {
+     console.log(err);
+     this.loadingController.dismiss();
+     this.presentToast('Error al sincronizar la actividad');
+   });
+  }
+
+  
+  sincronizarActividadLibre(d){
+    this.presentLoading();
+    //Se empaqueta la actividad en un modelo de clase
+    let actividadReto = new Actividad(d.Usuario, d.NombreActividad, d.FechaHora, d.Duracion, d.Distancia, d.TipoActividad, d.RecorridoGPX, null, null, 2);
+    //se le envía a la api
+    this.usuarioService.setNombreUsuarioActual(d.Usuario);
+    this.http.setServerTrustMode('nocheck');
+    this.http.setDataSerializer('json');
+    let url = 'https://' + this.usuarioService.getIp() + ':' + this.usuarioService.getPuerto() + '/api/user/registrar/actividad';
+    this.http.post(url,
+    actividadReto, {'Content-Type': 'application/json'}).then(
+     data => {
+       console.log(data.data);
+       //Si la petición fue exitosa entonces se elimina la actividad de la base de datos empotrada
+       this.db.deleteDeportistaActividadLibre(d.Usuario, d.NombreActividad, d.FechaHora);
+       this.loadingController.dismiss();
+       this.presentToast('La actividad se ha sincronizado con éxito');
+     })
+   .catch(err => {
+     console.log(err);
+     this.loadingController.dismiss();
+     this.presentToast('Error al sincronizar la actividad');
+   });
+  }
+
+  eliminarReto(d){
+    this.db.deleteDeportistaReto(d.Usuario, d.NombreReto, d.NombreActividad);
+    this.presentToast('La actividad se ha eliminado con éxito');
+  }
+
+  eliminarCarrera(d){
+    this.db.deleteDeportistaCarrera(d.Usuario, d.NombreCarrera);
+    this.presentToast('La actividad se ha eliminado con éxito');
+  }
+
+  eliminarActividadLibre(d){
+    this.db.deleteDeportistaActividadLibre(d.Usuario, d.NombreActividad, d.FechaHora);
+    this.presentToast('La actividad se ha eliminado con éxito');
   }
 
   retoClick(nombreReto: string, admin: string, tipoActividad: string){
@@ -248,5 +313,9 @@ export class InicioPage implements OnInit {
 
   carreraClick(nombreCarrera: string, admin: string, tipoActividad: string){
     this.router.navigate(['/carrera', nombreCarrera, admin, tipoActividad]);
+  }
+
+  actividadLibreClick(){
+    this.router.navigate(['/actividad-libre']);
   }
 }

@@ -19,6 +19,14 @@
               <ion-input clear-input="true" type="password" required #contrasena="ngModel" [class.is-invalid]="contrasena.invalid && contrasena.touched"  
                placeholder="Contraseña" name="contra"  [(ngModel)]="usuarioL.ClaveAcceso"></ion-input>
             </ion-item>
+            <ion-item class="ion-margin">
+              <ion-input clear-input="true" type="text" required #ip="ngModel" [class.is-invalid]="ip.invalid && ip.touched"  
+               placeholder="Dirección ip" name="Ip"  [(ngModel)]="serverConfig.ip"></ion-input>
+            </ion-item>
+            <ion-item class="ion-margin">
+              <ion-input clear-input="true" type="number" required #puerto="ngModel" [class.is-invalid]="puerto.invalid && puerto.touched"  
+               placeholder="Puerto" name="Puerto"  [(ngModel)]="serverConfig.puerto"></ion-input>
+            </ion-item>
           </div>
      
           <div>

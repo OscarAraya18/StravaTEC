@@ -28,6 +28,16 @@ export interface DeportistaReto{
   FechaHora: string
 }
 
+export interface DeportistaActividadLibre{
+  Usuario: string,
+  NombreActividad: string,
+  TipoActividad: string,
+  FechaHora: string,
+  Duracion: string,
+  Distancia: number,
+  RecorridoGPX: string 
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +47,7 @@ export class DatabaseService {
  
   deportistasCarrera = new BehaviorSubject([]);
   deportistasReto = new BehaviorSubject([]);
+  deportistasActividadLibre = new BehaviorSubject([]);
 
    constructor(private plt: Platform, private sqlitePorter: SQLitePorter, private sqlite: SQLite, private http: HttpClient) {
     this.plt.ready().then(() => {
@@ -73,6 +84,11 @@ export class DatabaseService {
   getDeportistasReto(): Observable<DeportistaReto[]> {
     return this.deportistasReto.asObservable();
   }
+
+  getDeportistasActividadLibre(): Observable<DeportistaActividadLibre[]> {
+    return this.deportistasActividadLibre.asObservable();
+  }
+
 
   loadDeportistasCarrera(Usuario: string) {
     return this.database.executeSql('SELECT * FROM DEPORTISTA_CARRERA WHERE Usuario = ?', [Usuario]).then(data => {
@@ -121,6 +137,29 @@ export class DatabaseService {
     });
   }
 
+  loadDeportistasActividadLibre(Usuario: string) {
+    return this.database.executeSql('SELECT * FROM DEPORTISTA_ACTIVIDAD_LIBRE WHERE Usuario = ?', [Usuario]).then(data => {
+      let dr: DeportistaActividadLibre[] = [];
+ 
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+ 
+          dr.push({ 
+            Usuario: data.rows.item(i).Usuario,
+            NombreActividad: data.rows.item(i).NombreActividad,
+            TipoActividad: data.rows.item(i).TipoActividad,
+            FechaHora: data.rows.item(i).FechaHora,
+            Duracion: data.rows.item(i).Duracion,
+            Distancia: data.rows.item(i).Distancia,
+            RecorridoGPX: data.rows.item(i).RecorridoGPX,
+           
+           });
+        }
+      }
+      this.deportistasActividadLibre.next(dr);
+    });
+  }
+
   addDeportistaCarrera(Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreCarrera, Duracion, RecorridoGPX, FechaHora) {
     let data = [Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreCarrera, Duracion, RecorridoGPX, FechaHora];
     return this.database.executeSql('INSERT INTO DEPORTISTA_CARRERA (Usuario, AdminDeportista, NombreActividad, TipoActividad, NombreCarrera, Duracion, RecorridoGPX, FechaHora) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', data).then(data => {
@@ -135,15 +174,28 @@ export class DatabaseService {
     });
   }
 
+  addDeportistaActividadLibre(Usuario, NombreActividad, TipoActividad,FechaHora, Duracion, Distancia, RecorridoGPX) {
+    let data = [Usuario, NombreActividad, TipoActividad,FechaHora, Duracion, Distancia, RecorridoGPX];
+    return this.database.executeSql('INSERT INTO DEPORTISTA_ACTIVIDAD_LIBRE (Usuario, NombreActividad, TipoActividad, FechaHora, Duracion, Distancia, RecorridoGPX) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(data => {
+      this.loadDeportistasActividadLibre(Usuario);
+    });
+  }
+
   deleteDeportistaCarrera(Usuario, NombreCarrera) {
     return this.database.executeSql('DELETE FROM DEPORTISTA_CARRERA WHERE Usuario = ? AND NombreCarrera = ?', [Usuario, NombreCarrera]).then(_ => {
       this.loadDeportistasCarrera(Usuario);
     });
   }
 
-  deleteDeportistaReto(Usuario, NombreReto) {
-    return this.database.executeSql('DELETE FROM DEPORTISTA_RETO WHERE Usuario = ? AND NombreReto = ?', [Usuario, NombreReto]).then(_ => {
+  deleteDeportistaReto(Usuario, NombreReto, NombreActividad) {
+    return this.database.executeSql('DELETE FROM DEPORTISTA_RETO WHERE Usuario = ? AND NombreReto = ? AND NombreActividad = ?', [Usuario, NombreReto, NombreActividad]).then(_ => {
       this.loadDeportistasReto(Usuario);
+    });
+  }
+
+  deleteDeportistaActividadLibre(Usuario, NombreActividad, FechaHora) {
+    return this.database.executeSql('DELETE FROM DEPORTISTA_ACTIVIDAD_LIBRE WHERE Usuario = ? AND NombreActividad = ? AND FechaHora = ?', [Usuario, NombreActividad, FechaHora]).then(_ => {
+      this.loadDeportistasActividadLibre(Usuario);
     });
   }
 

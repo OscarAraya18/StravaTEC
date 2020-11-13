@@ -9,10 +9,6 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: 'home',
     redirectTo: 'home',
     pathMatch: 'full'
   },
@@ -31,6 +27,10 @@ const routes: Routes = [
   {
     path: 'inicio',
     loadChildren: () => import('./inicio/inicio.module').then( m => m.InicioPageModule)
+  },
+  {
+    path: 'actividad-libre',
+    loadChildren: () => import('./actividad-libre/actividad-libre.module').then( m => m.ActividadLibrePageModule)
   },
 ];
 

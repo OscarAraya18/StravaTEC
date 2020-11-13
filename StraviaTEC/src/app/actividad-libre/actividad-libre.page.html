@@ -5,7 +5,7 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title size="large">{{ nombreReto }}</ion-title>
+    <ion-title size="large">Actividad libre</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -62,7 +62,24 @@
       <ion-col size="4" class="ion-text-center">
         <ion-input name="s" min="0" max="60" clear-input="true" [(ngModel)]="duracion.segundos" type="number" required #segundo="ngModel" [class.is-invalid]="segundo.invalid"></ion-input>
       </ion-col>
+    </ion-row> 
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-label>Tipo de actividad</ion-label>
+      </ion-col>
     </ion-row>  
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-select [(ngModel)]="tipoActividad" name="tipoAc" value="Correr" okText="Ok" cancelText="Cancelar" required>
+          <ion-select-option value="Correr">Correr</ion-select-option>
+          <ion-select-option value="Ciclismo">Ciclismo</ion-select-option>
+          <ion-select-option value="Senderismo">Senderismo</ion-select-option>
+          <ion-select-option value="Caminata">Caminata</ion-select-option>
+          <ion-select-option value="Kayack">Kayak</ion-select-option>
+          <ion-select-option value="Kayack">Nadar</ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row> 
     <ion-row>
       <ion-col class="ion-text-center">
         <ion-button expand="block" color="primary" [disabled]="form.invalid" (click)="presentarAlertaGuardado()">Guardar</ion-button>

@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
+import { CarreraService } from 'src/app/servicios/carrera.service';
 
 declare var google: any;
 
@@ -53,7 +54,7 @@ export class CarreraPage implements OnInit {
   //Nombre de usuario actual
   nombreUsuario: string;
 
-  constructor(private usuarioService: UsuarioService, public alertController: AlertController, public toastController: ToastController, private db: DatabaseService, private geolocation: Geolocation, private router: Router, private route: ActivatedRoute) { }
+  constructor(private carreraService: CarreraService, private usuarioService: UsuarioService, public alertController: AlertController, public toastController: ToastController, private db: DatabaseService, private geolocation: Geolocation, private router: Router, private route: ActivatedRoute) { }
   
   async presentarAlertaGuardado() {
     const alert = await this.alertController.create({
@@ -116,8 +117,10 @@ export class CarreraPage implements OnInit {
   }
 
   addDeportistaCarrera(nombreActividad: string) {
-    var fechaHora = new Date();
-    var fechaHoraString = fechaHora.toLocaleDateString();
+    var date = new Date();
+    var fecha = date.getFullYear() +'-'+(date.getMonth()+1) + '-'+date.getDate();
+    var hora = date.getHours() +':' + date.getMinutes() + ':' + date.getSeconds();
+    var fechaHoraString = fecha + ' ' + hora;
     let duracion = this.duracion['horas'] + ':' + this.duracion['minutos'] + ':' + this.duracion['segundos'];
     this.db.addDeportistaCarrera(this.nombreUsuario, this.admin, nombreActividad, this.tipoActividad, this.nombreCarrera, duracion, this.recorridoGPX, fechaHoraString).then(_ => {
       this.duracion = {};
@@ -190,13 +193,17 @@ export class CarreraPage implements OnInit {
 
         this.createMarker(origin, 'START', 'A');
         this.createMarker(destination, 'END', 'B');
-
-        var range = Math.trunc(gpxWaypoints.length / 25);
         var newWayPoints = [];
-        for(let i = 0; i < gpxWaypoints.length; i += range+1){
-          newWayPoints.push(gpxWaypoints[i]);
-        }
 
+        if(gpxWaypoints.length > 25){
+          var range = Math.trunc(gpxWaypoints.length / 25);
+          for(let i = 0; i < gpxWaypoints.length; i += range+1){
+            newWayPoints.push(gpxWaypoints[i]);
+          }
+        }
+        else{
+          newWayPoints = gpxWaypoints;
+        }
         //max waypoints = 25
         this.calculateAndDisplayRoute(this.directionsService, this.directionsDisplay, origin, destination, newWayPoints);
       }
@@ -254,7 +261,15 @@ export class CarreraPage implements OnInit {
    }
 
    paintGPX(){
-     this.loadXmlFile("assets/routes/Morning_Ride.gpx");
+     var gpxCarrera = this.carreraService.getCarreraGPX(this.nombreCarrera);
+     console.log('GPX Type', gpxCarrera);
+     if(gpxCarrera != null){
+       this.getGpxRoute(gpxCarrera);
+     }
+     else{
+      this.loadXmlFile("assets/routes/Morning_Ride.gpx");
+     }
+     
    }
 
   
