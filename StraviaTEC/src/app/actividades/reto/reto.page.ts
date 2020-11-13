@@ -82,7 +82,7 @@ export class RetoPage implements OnInit {
           {
             name: 'nombreA',
             type: 'text',
-            placeholder: '',
+            placeholder: 'Nombre de la actividad',
             attributes: {
               maxlength: 30,
             }

@@ -7,6 +7,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Actividad } from 'src/app/modelos/actividad';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 
 @Component({
@@ -111,7 +112,9 @@ export class InicioPage implements OnInit {
     }
   };
 
-  constructor(public toastController: ToastController, private http: HTTP, public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private router: Router, private route: ActivatedRoute) { 
+  constructor(private geolocation: Geolocation, public toastController: ToastController, private http: HTTP, public loadingController: LoadingController, public alertController: AlertController, private usuarioService: UsuarioService, private db: DatabaseService,private carreraService: CarreraService, private router: Router, private route: ActivatedRoute) { 
+    this.geolocation.getCurrentPosition().then((resp) => {
+    });
   }
   
   //Lista de carreas local

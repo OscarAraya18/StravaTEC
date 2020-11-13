@@ -75,7 +75,7 @@ export class ActividadLibrePage implements OnInit {
           {
             name: 'nombreA',
             type: 'text',
-            placeholder: '',
+            placeholder: 'Nombre de la actvidad',
             attributes: {
               maxlength: 30,
             }

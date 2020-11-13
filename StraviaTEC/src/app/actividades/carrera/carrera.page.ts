@@ -65,7 +65,7 @@ export class CarreraPage implements OnInit {
         {
           name: 'nombreA',
           type: 'text',
-          placeholder: '',
+          placeholder: 'Nombre de la actividad',
           attributes: {
             maxlength: 30,
           }
@@ -266,10 +266,6 @@ export class CarreraPage implements OnInit {
      if(gpxCarrera != null){
        this.getGpxRoute(gpxCarrera);
      }
-     else{
-      this.loadXmlFile("assets/routes/Morning_Ride.gpx");
-     }
-     
    }
 
   
