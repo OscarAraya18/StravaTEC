@@ -230,6 +230,11 @@ namespace EFConsole.DataAccess.Repositories
             return gruposNoAsociados;
         }
 
+        public List<Grupo> buscarPorNombre(string nombreGrupo)
+        {
+            return _context.Grupo.Where(x => x.Nombre.Contains(nombreGrupo)).ToList();
+        }
+
         /**         
          * Save the changes made to the database
          */

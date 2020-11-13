@@ -98,13 +98,13 @@ namespace EFConsole.DataAccess.Repositories
             // se retorna la lista
         }
 
-        public Carrera verCarreraPorNombre(string adminCarrera, string nombreCarrera)
+        public List<Carrera> verCarreraPorNombre(string adminCarrera, string nombreCarrera)
         {
-            return _context.Carrera.Where(x => x.Admindeportista == adminCarrera && x.Nombre == nombreCarrera).
+            return _context.Carrera.Where(x => x.Admindeportista == adminCarrera && x.Nombre.Contains(nombreCarrera)).
                 Include(x => x.CarreraCuentabancaria).
                 Include(x => x.CarreraPatrocinador).
                 Include(x => x.GrupoCarrera).
-                Include(x => x.CarreraCategoria).FirstOrDefault();
+                Include(x => x.CarreraCategoria).ToList();
         }
         public List<Carrera> verCarrerasInscritas(string usuarioDeportista)
         {
@@ -112,7 +112,10 @@ namespace EFConsole.DataAccess.Repositories
 
             var carrerasInscritas = _context.DeportistaCarrera.
                     Where(x => x.Usuariodeportista == usuarioDeportista).
-                    Include(x => x.Carrera).ToList();
+                    Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraCuentabancaria).
+                    Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraPatrocinador).ToList();
 
             foreach (var carrera in carrerasInscritas)
             {
@@ -144,16 +147,21 @@ namespace EFConsole.DataAccess.Repositories
         {
             List<Carrera> carreras = new List<Carrera>();
 
-            var grupos = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuario).Include(x => x.Grupo);
+            var grupos = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuario).Include(x => x.Grupo).ToList();
 
-            var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false).Include(x => x.CarreraCuentabancaria);
+            var carrerasPublicas = _context.Carrera.Where(x => x.Privacidad == false).Include(x => x.CarreraCuentabancaria).
+                                    Include(x => x.CarreraCategoria).
+                                    Include(x => x.CarreraPatrocinador).ToList();
 
             var carrerasInscritas = verCarrerasInscritas(usuario);
 
             var carrerasPrivadas = _context.GrupoCarrera.
                     Include(x => x.Carrera).
                     ThenInclude(x => x.CarreraCuentabancaria).
-                    Where(x => x.Carrera.Privacidad == true).ToList();
+                    Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraCategoria).
+                    Include(x => x.Carrera).
+                    ThenInclude(x => x.CarreraPatrocinador).ToList();
 
             foreach(var carrera in carrerasPrivadas)
             {
@@ -162,7 +170,7 @@ namespace EFConsole.DataAccess.Repositories
                     if(grupo.Nombregrupo.Equals(carrera.Nombregrupo) && grupo.Admindeportista.Equals(carrera.Admingrupo)
                         && !carrerasInscritas.Contains(carrera.Carrera))
                     {
-                        carreras.Add(carrera.Carrera);
+                       carreras.Add(carrera.Carrera);
                         break;
                     }
                 }
@@ -170,9 +178,9 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach(var carrera in carrerasPublicas)
             {
-                if (!carreras.Contains(carrera))
+                if (!carrerasInscritas.Contains(carrera))
                     carreras.Add(carrera);
-            }
+            }  
 
             return carreras;
         }
@@ -228,10 +236,15 @@ namespace EFConsole.DataAccess.Repositories
 
                 posicionCarrera.nombreCarrera = carrera.Nombre;
                 posicionCarrera.adminCarrera = carrera.Admindeportista;
+                posicionCarrera.recorridoGPX = carrera.Recorrido;
+                posicionCarrera.fecha = carrera.Fecha;
+                posicionCarrera.CarreraCuentabancaria = carrera.CarreraCuentabancaria.ToList();
+                posicionCarrera.CarreraPatrocinador = carrera.CarreraPatrocinador.ToList();
 
                 foreach (var actividad in actividades)
                 {
-                    if(actividad.Nombreretocarrera == carrera.Nombre && actividad.Adminretocarrera == carrera.Admindeportista)
+                    if(actividad.Nombreretocarrera == carrera.Nombre && actividad.Adminretocarrera == carrera.Admindeportista
+                        && (int)(DateTime.Today - carrera.Fecha ).TotalDays > 0)
                     {
                         var posActividad = new PosActividad()
                         {
@@ -240,6 +253,7 @@ namespace EFConsole.DataAccess.Repositories
                             tipoActividad = actividad.Tipoactividad
                         };
                         posicionCarrera.actividades.Add(posActividad);
+                        posicionCarrera.completada = true;
                     }
                 }
                 posicionCarrera.actividades = posicionCarrera.actividades.OrderBy(x => x.duracion).ToList();

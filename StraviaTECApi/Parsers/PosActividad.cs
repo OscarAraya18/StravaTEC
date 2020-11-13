@@ -10,7 +10,7 @@ namespace StraviaTECApi.Models
 
         public string usuarioDeportista { get; set; }
         public string tipoActividad { get; set; }
-
+        public string nombreActividad { get; set; }
         public TimeSpan duracion { get; set; }
     }
 }

@@ -111,6 +111,19 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet]
+        [Route("api/user/grupo")]
+        public IActionResult buscarGruposPorNombre([FromQuery] string nombreGrupo)
+        {
+            var resultado = _repository.buscarPorNombre(nombreGrupo);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
 
         [HttpPost]
         [Route("api/grupo/new")]

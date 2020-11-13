@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +24,49 @@ namespace EFConsole.DataAccess.Repositories
          * ------------------------------
          */
             
-        public void Create(Deportista deportista)
+        public void Create(DeportistaParser deportistaParser)
         {
-            if (deportista == null)
-                throw new System.ArgumentNullException(nameof(deportista));
-            
+            if (deportistaParser == null)
+                throw new ArgumentNullException(nameof(deportistaParser));
+
+            var deportista = new Deportista
+            {
+                Usuario = deportistaParser.Usuario,
+                Claveacceso = deportistaParser.Claveacceso,
+                Fechanacimiento = deportistaParser.Fechanacimiento,
+                Nombre = deportistaParser.Nombre,
+                Apellido1 = deportistaParser.Apellido1,
+                Apellido2 = deportistaParser.Apellido2,
+                Nombrecategoria = deportistaParser.Nombrecategoria,
+                Nacionalidad = deportistaParser.Nacionalidad,
+            };
+
+            if (deportistaParser.Foto != null)
+                deportista.Foto = Convert.FromBase64String(deportistaParser.Foto);
+
             _context.Deportista.Add(deportista);
 
         }
 
-        public void Update(Deportista deportista)
+        public void Update(DeportistaParser deportistaParser)
         {
-            if (deportista == null)
-                throw new System.ArgumentNullException(nameof(deportista));
+            if (deportistaParser == null)
+                throw new ArgumentNullException(nameof(deportistaParser));
+
+            var deportista = new Deportista
+            {
+                Usuario = deportistaParser.Usuario,
+                Claveacceso = deportistaParser.Claveacceso,
+                Fechanacimiento = deportistaParser.Fechanacimiento,
+                Nombre = deportistaParser.Nombre,
+                Apellido1 = deportistaParser.Apellido1,
+                Apellido2 = deportistaParser.Apellido2,
+                Nombrecategoria = deportistaParser.Nombrecategoria,
+                Nacionalidad = deportistaParser.Nacionalidad,
+            };
+
+            if (deportistaParser.Foto != null)
+                deportista.Foto = Convert.FromBase64String(deportistaParser.Foto);
 
             _context.Deportista.Update(deportista);
             _context.Entry(deportista).State = EntityState.Modified;
@@ -118,7 +149,7 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach (var carrera in carrerasInscritas)
             {
-                if ((int)(carrera.Carrera.Fecha - DateTime.Now).TotalDays == 0)
+                if ((int)(carrera.Carrera.Fecha - DateTime.Today).TotalDays == 0)
                 {
                     carreras.Add(carrera.Carrera);
                 }

@@ -78,7 +78,7 @@ CREATE TABLE ACTIVIDAD
 (
 	UsuarioDeportista	VARCHAR(20)			NOT NULL,
 	FechaHora			TIMESTAMP,
-	Nombre				VARCHAR(30),
+	Nombre				VARCHAR(100),
 	Duracion			TIME WITHOUT TIME ZONE,
 	Kilometraje			FLOAT8,
 	TipoActividad		VARCHAR(20),

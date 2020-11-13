@@ -1,6 +1,7 @@
 ﻿using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 
 namespace StraviaTECApi.Controllers
 {
@@ -107,7 +108,7 @@ namespace StraviaTECApi.Controllers
 
         [HttpPost]
         [Route("api/user/new")]
-        public IActionResult nuevoDeportista([FromBody] Deportista deportista)
+        public IActionResult nuevoDeportista([FromBody] DeportistaParser deportista)
         {
             if (ModelState.IsValid)
             {
@@ -156,7 +157,7 @@ namespace StraviaTECApi.Controllers
 
         [HttpPut]
         [Route("api/user/edit")]
-        public IActionResult actualizarDeportista([FromBody] Deportista deportista, [FromQuery] string usuario)
+        public IActionResult actualizarDeportista([FromBody] DeportistaParser deportista, [FromQuery] string usuario)
         {
             if (deportista.Usuario != usuario)
             {

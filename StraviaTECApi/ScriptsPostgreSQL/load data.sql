@@ -177,7 +177,13 @@ INSERT INTO public.deportista_carrera(
 		   ('malumababy', 'Endurance 2020', 'sam.astua', true),
 		   ('jbalvin', 'Endurance 2020', 'sam.astua', true),
 		   ('auronplay', 'Endurance 2020', 'sam.astua', true),
-		   ('cr7', 'Endurance 2020', 'sam.astua', true);
+		   ('cr7', 'Endurance 2020', 'sam.astua', true),
+		   ('etesech', 'The Best', 'cr7', true),
+		   ('ironman', 'The Best', 'cr7', true),
+		   ('sam.astua', 'The Best', 'cr7', true),
+		   ('kevintrox', 'The Best', 'cr7', true),
+		   ('ozuna', 'The Best', 'cr7', true),
+		   ('elpepe', 'The Best', 'cr7', true);
 
 -- COMPLETACIÓN DE CARRERAS
 INSERT INTO public.actividad(

@@ -68,7 +68,7 @@ namespace StraviaTECApi.Controllers
 
         [HttpPost]
         [Route("api/inscripcion/accept")]
-        public IActionResult nuevaInscripcion([FromBody] Inscripcion inscripcion)
+        public IActionResult aceptarInscripcion([FromBody] Inscripcion inscripcion)
         {
             if (ModelState.IsValid)
             {
