@@ -7,6 +7,7 @@
 	justify-content: center;
 	flex-direction: column;
 	margin-bottom: 15px;
+	margin-top: 15px;
 
 }
 .name{
@@ -14,11 +15,12 @@
 }
 
 .but{
-	margin-left:20px;
+	margin-right:10px;
 	margin-bottom: 15px;
 	background-color: #FF5733 ;
 	color: white;
 	margin-top: 20px;
+	margin-left: 10px;
 }
 .row{
 	display: flex;
@@ -31,4 +33,9 @@
 p{
 	text-align: left;
 	margin-left: 10px;
+}
+.recibo{
+max-width: 220px;
+max-height: 200px;
+
 }

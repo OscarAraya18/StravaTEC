@@ -1,0 +1,30 @@
+.mat-tab-label {
+    width: 20% !important;
+    padding: 5px;
+    background-color: white;
+    color: black;
+    font-weight: 700;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+    width: 20% !important;
+    padding: 5px;
+    background-color: white;
+
+    color: black;
+    font-weight: 700;
+}
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+    background-color: green;
+    height: 15px
+}
+.mat-tab-group{
+      background: url(/assets/fondo.jpg) no-repeat center center fixed;
+    background-size: cover;
+    margin-top: -5px;
+    min-height: 100vh;
+    width: 100%;
+}

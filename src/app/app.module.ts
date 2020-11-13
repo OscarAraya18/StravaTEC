@@ -14,6 +14,7 @@ import { InscripcionesComponent } from './vistas/organizador/inscripciones/inscr
 import { RetosComponent } from './vistas/organizador/retos/retos.component';
 import { GruposComponent } from './vistas/organizador/grupos/grupos.component';
 import { ReportesComponent } from './vistas/organizador/reportes/reportes.component';
+import { LogInComponent } from './vistas/organizador/log-in/log-in.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ReportesComponent } from './vistas/organizador/reportes/reportes.compon
     InscripcionesComponent,
     RetosComponent,
     GruposComponent,
-    ReportesComponent
+    ReportesComponent,
+    LogInComponent
   ],
   imports: [
     BrowserModule,

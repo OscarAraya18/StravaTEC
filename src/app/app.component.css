@@ -24,7 +24,10 @@
 
 
 .divPrin{
-	padding-top: 80px;
+	padding-top: 60px;
 	z-index: 0;
+	 background: url(/assets/fondo.jpg) no-repeat center center fixed;
+	 min-height: 100vh;
+
 	
 }

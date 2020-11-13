@@ -3,16 +3,23 @@
 		<div >
   <mat-card-header >
     <mat-card-title  >
-    	<h4>{{inscripcion.id}}</h4></mat-card-title>
-    <mat-card-subtitle> Recibo de pago: {{inscripcion.reciboPago}}</mat-card-subtitle>
+    	<h4>{{inscripcion.usuariodeportista}}</h4></mat-card-title>
+
   </mat-card-header>
+  <mat-card-content>
+    <img class="recibo" src="{{inscripcion.reciboPago}}" />
+    <p>Carrera: {{ inscripcion.nombrecarrera}}
+      </mat-card-content>
+   
   <mat-card-actions>
-    <button type="button" class="btn  but" (click)="actualiza(inscripcion.id,inscripcion.reciboPago)" >
+    <div>
+    <button type="button" class="btn  but" (click)="actualiza(inscripcion)" >
 	Aceptar
 	</button>
-    <button type="button" class="btn  but" (click)="eliminar(inscripcion.id,inscripcion.reciboPago)" >
+    <button type="button" class="btn  but" (click)="eliminar(inscripcion)" >
 	Denegar
 	</button>
+</div>
   </mat-card-actions>
   </div>
     

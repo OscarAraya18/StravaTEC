@@ -1,1 +1,143 @@
-<p>retos works!</p>
+<button type="button" class="btn button1" (click)="agregar()"  *ngIf="!formVisibility && !form2Visibility && !elimina">
+	<img class="img"  src="assets/add.svg">
+	Agregar reto
+</button>
+<div  class="container-fluid" >
+	<div class="wrapper" *ngIf="formVisibility || form2Visibility " >
+		<h2 class="name">Datos del reto</h2>
+		<form 
+              (ngSubmit)="submit(nombre.value,km.value,fecha2.value,alt.value,actividad.value,vis.value,cuentas.value)"
+              #f="ngForm">
+
+	
+		<p>
+			Nombre: <input type="text" [(ngModel)]="reto.nombre" #nombre maxlength="20" placeholder="Máximo 20 caracteres" class="inputred"  name="nombre" ngModel required/></p>
+			<p> Descripción: <textarea [(ngModel)]="reto.descripcion" maxlength="120" placeholder="Máximo 120 caracteres" cols="45" rows="3"  #cuentas name="cuentas" class="inputred" ngModel required > </textarea></p>
+<p>
+			<input #alt type="radio" id="alt" name="alt" value="Fondo" (change)="radio4($event)"  /> Fondo
+			<input #alt type="radio" id="alt" name="alt" value="Altitud" (change)="radio3($event)"  /> Altitud
+			
+		</p><p>
+  Tipo de actividad:
+			<select #actividad [(ngModel)]="reto.tipoactividad" class="inputred"  ngModel  name="actividad" required>
+					<option *ngFor="let actividad of actividades" [value]='actividad' > {{actividad}}</option>
+			</select></p>
+			<p> Disponible hasta <input #fecha2 [(ngModel)]="reto.periododisponibilidad" type="date" ngModel  name="fecha2" class="inputred"  required />
+</p> Kilometros totales: <input [(ngModel)]="reto.kmtotales" #km type="number" ngModel  name="km" class="inputred"  required />
+			<p>
+<div >
+	
+	Privacidad:  
+					<input #vis type="radio" id="vis" name="vis" value=true (change)="radio2($event)"/> Privado
+					<input #vis type="radio" id="vis" (change)="radio($event)" name="vis" value=false /> Publico
+			
+
+
+					<div *ngIf="visi" >
+	
+	Grupos autorizados: 
+	<div class="row">
+ <p *ngFor="let grupo of grupos" ><input type="checkbox" (change)="onCheckboxChangegroup(grupo,$event)" ngModel  name="grupo" [value]='grupo' class="inputred"  required /> {{grupo.nombre}}</p>
+</div>
+			
+</div>
+
+
+</div>
+<p></p>
+		
+
+ <p> Patrocinadores: </p>
+ <div class="row">
+
+ <p *ngFor="let patrocinador of patrocinadores" class="row2" >
+ 
+ 	<input (change)="onCheckboxChange2(patrocinador.nombrecomercial,$event)" type="checkbox" ngModel  name="patrocinador" [value]='patrocinador' class="inputred"  required /> 
+ 	
+ 	<img src="{{patrocinador.logo}}" class="img2">
+ {{patrocinador.nombrecomercial}}<br>
+ {{patrocinador.nombrerepresentante}} <br>{{patrocinador.numerotelrepresentante}}
+
+</p>
+
+</div>
+
+
+
+<div class= "cont"  *ngIf="formVisibility">
+	<button type="button" class="btn but" (click)="formVisibility = false">
+	Cancelar
+	</button>
+	<button type="button" class="btn but"
+	 mat-button
+	  type="submit"
+   [disabled]="f.invalid"
+                  >
+	Crear Reto
+	</button>
+
+
+</div>
+
+<div class= "cont"  *ngIf="form2Visibility">
+	<button type="button" class="btn  but" (click)="form2Visibility = false">
+	Cancelar
+	</button>
+	<button type="button" class="btn but"
+	 mat-button
+	
+   [disabled]="f.invalid"
+   (click)="modifica(nombre.value,km.value,fecha2.value,alt.value,actividad.value,vis.value,cuentas.value)"
+                  >
+	Modificar Reto
+	</button>
+
+
+</div>
+</form>
+
+		
+	</div>
+
+
+</div>
+<div class="row name" *ngIf="!formVisibility && !form2Visibility ">
+	<mat-card class="example-card " *ngFor="let reto of retos" >
+		<div >
+  <mat-card-header >
+    <mat-card-title  >
+    	<h4>{{reto.nombre}}</h4></mat-card-title>
+
+    <mat-card-subtitle>{{reto.tipoactividad}} <br> Disponible hasta {{reto.periododisponibilidad}}<br>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+  	<br>
+  	<p class="p2"> {{reto.descripcion}} </p>
+    
+     <div *ngIf="reto.privacidad" class="left">Privado<br>
+    	Grupos autorizados:
+    	 <div class="row" *ngFor="let grupo of reto.grupoReto" >
+     {{grupo.nombregrupo}}</div>
+     </div>
+
+    <p *ngIf="!reto.privacidad">Publico</p>
+     <p> {{reto.fondoaltitud}} </p>
+     <p> Kilometros totales: {{reto.kmtotales}} </p>
+      Patrocinadores: 
+       <div class="row left" *ngFor="let patrocinador of reto.retoPatrocinador" >
+     {{patrocinador.nombrepatrocinador}}</div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="button" class="btn  but" (click)="actualiza(reto)" >
+	Modificar
+	</button>
+    <button type="button" class="btn  but" (click)="eliminar(reto)" >
+	Eliminar
+	</button>
+  </mat-card-actions>
+  </div>
+    
+</mat-card>
+
+</div>

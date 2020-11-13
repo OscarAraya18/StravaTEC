@@ -1,1 +1,80 @@
-<p>grupos works!</p>
+<button type="button" class="btn button1" (click)="agregar()"  *ngIf="!formVisibility && !form2Visibility && !elimina">
+	<img class="img"  src="assets/add.svg">
+	Agregar grupo
+</button>
+<div  class="container-fluid" >
+	<div class="wrapper" *ngIf="formVisibility || form2Visibility " >
+		<h2 class="name">Datos del grupo</h2>
+		<form 
+              (ngSubmit)="submit(nombre.value)"
+              #f="ngForm">
+
+	
+		<p>
+			Nombre: <input [(ngModel)]="grupo.nombre"  type="text" #nombre  maxlength="20" placeholder="Máximo 20 caracteres" class="inputred"  name="nombre" ngModel required/></p>
+		
+
+		
+
+
+
+
+<div class= "cont"  *ngIf="formVisibility">
+	<button type="button" class="btn but" (click)="formVisibility = false">
+	Cancelar
+	</button>
+	<button type="button" class="btn but"
+	 mat-button
+	  type="submit"
+   [disabled]="f.invalid"
+                  >
+	Crear grupo
+	</button>
+
+
+</div>
+
+<div class= "cont"  *ngIf="form2Visibility">
+	<button type="button" class="btn  but" (click)="form2Visibility = false">
+	Cancelar
+	</button>
+	<button type="button" class="btn but"
+	 mat-button
+	
+   [disabled]="f.invalid"
+   (click)="modifica(nombre.value)"
+                  >
+	Modificar grupo
+	</button>
+
+
+</div>
+</form>
+
+		
+	</div>
+
+
+</div>
+<div class="row name" *ngIf="!formVisibility && !form2Visibility ">
+	<mat-card class="example-card " *ngFor="let grupo of grupos" >
+		<div >
+  <mat-card-header >
+    <mat-card-title  >
+    	<h4>{{grupo.nombre}}</h4></mat-card-title>
+  
+  </mat-card-header>
+ 
+  <mat-card-actions>
+    <button type="button" class="btn  but" (click)="actualiza(grupo)" >
+	Modificar
+	</button>
+    <button type="button" class="btn  but" (click)="eliminar(grupo)" >
+	Eliminar
+	</button>
+  </mat-card-actions>
+  </div>
+    
+</mat-card>
+
+</div>

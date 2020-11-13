@@ -1,0 +1,61 @@
+.user-img{
+    margin-top: 50px;
+    margin-bottom: 50px; 
+ }
+ .user-i{
+     height: 30px;
+ 
+ }
+ .modal-content{
+     background-color: #D0FCFC;
+     opacity: .85;
+     padding: 0 10px;
+     box-shadow: 0px 0px 3px #848484;
+     
+ }
+ .form-group input{
+     height: 42px;
+     font-size: 18px;
+     border: 0;
+     padding-left: 55px;
+ 
+ }
+ .form-group::before{
+     font-family: "Font Awesome\ 5 free";
+     position: absolute;
+     left: 28px;
+     font-size: 22px;
+     padding-top: 4px;
+ 
+ }
+ .form-group#user-group::before{
+     content: "\f007";
+ }
+ 
+ .form-group#contrasena-group::before{
+     content: "\f023";
+ }
+ 
+ button{
+     width: 60%;
+     margin: 5px 0 25px;
+ }
+ 
+ .forgot{
+     padding: 5px 0;
+ }
+ .forgot a{
+     color: white;
+ }
+ .main-section{
+    margin: 0 auto;
+    margin-top: 15%;
+    padding: 0;
+
+}
+.inputred {
+  border-radius: 10px;
+  border: 1px solid #FF5733 ;
+  margin-left: 5px;
+   background-color: rgba(151, 169, 147,0.8);
+}

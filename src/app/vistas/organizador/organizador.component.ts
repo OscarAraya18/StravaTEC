@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewEncapsulation} from '@angular/core';
 import { CarrerasComponent } from '../../vistas/organizador/carreras/carreras.component';
 import { InscripcionesComponent } from '../../vistas/organizador/inscripciones/inscripciones.component';
 import { RetosComponent } from '../../vistas/organizador/retos/retos.component';
@@ -8,7 +8,8 @@ import { ReportesComponent } from '../../vistas/organizador/reportes/reportes.co
 @Component({
   selector: 'app-organizador',
   templateUrl: './organizador.component.html',
-  styleUrls: ['./organizador.component.css']
+  styleUrls: ['./organizador.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class OrganizadorComponent implements OnInit {
 

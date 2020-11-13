@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Inscripcion } from 'src/app/modelos/inscripcion';
+import { LogInService} from 'src/app/services/log-in.service';
 
 @Component({
   selector: 'app-inscripciones',
@@ -7,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InscripcionesComponent implements OnInit {
 
-inscripciones: any[];
+inscripciones: Inscripcion[];
+inscripcion: Inscripcion;
 
 formVisibility: boolean;
 form2Visibility: boolean;
@@ -17,58 +20,53 @@ form2Visibility: boolean;
   ngOnInit(): void {
     this.formVisibility = false;
   	this.inscripciones = [
-    {
-        "id": "147852369",
-        "reciboPago": "0000000154",
-        "estado": ""
-    },
-    {
-        "id": "102364789",
-        "reciboPago": "0000001541",
-        "estado": ""
-    },
-    {
-        "id": "01258963",
-        "reciboPago": "000002154",
-        "estado": ""
-    },
-    {
-        "id": "856932147",
-        "reciboPago": "0000020154",
-        "estado": ""
-    },
-    {
-        "id": "15896345",
-        "reciboPago": "0000550154",
-        "estado": ""
-    }
-   
-
-];
+ {
+ "usuariodeportista": "cj",
+ "estado": "En espera",
+ "recibopago": null,
+ "nombrecarrera": "The Best",
+ "admincarrera": "cr7"
+ },
+ {
+ "usuariodeportista": "cj2",
+ "estado": "En espera",
+ "recibopago": null,
+ "nombrecarrera": "The Best",
+ "admincarrera": "cr7"
+ },
+ {
+ "usuariodeportista": "cj3",
+ "estado": "En espera",
+ "recibopago": null,
+ "nombrecarrera": "The Best",
+ "admincarrera": "cr7"
+ }
+]
+;
   }
 
 
 
 
- actualiza(id,recibo){
-  console.log(id);
-  console.log(recibo);
+ actualiza(id){
+  this.inscripcion = id;
+  console.log(this.inscripcion);
   console.log("Aceptado");
-  this.inscripciones = this.inscripciones.filter((i) => i.id !== id); // filtramos
+  this.inscripciones = this.inscripciones.filter((i) => i !== id); // filtramos
 }
 
 
 
 
 
-eliminar(id,recibo){
+eliminar(id){
+  this.inscripcion = id;
     const confirmed = window.confirm('¿Seguro que desea denegar esta inscripción?');
 if (confirmed) {
-console.log(id);
-  console.log(recibo);
+console.log(this.inscripcion);
   console.log("Rechazado");
 
-this.inscripciones = this.inscripciones.filter((i) => i.id !== id); // filtramos
+this.inscripciones = this.inscripciones.filter((i) => i !== id); // filtramos
 
 
 
