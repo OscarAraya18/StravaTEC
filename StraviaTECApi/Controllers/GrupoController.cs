@@ -165,9 +165,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpDelete]
         [Route("api/grupo/delete")]
-        public IActionResult eliminarGrupo([FromQuery] string nombreGrupo, [FromQuery] string usuario)
+        public IActionResult eliminarGrupo([FromQuery] int idGrupo, [FromQuery] string usuario)
         {
-            _repository.Delete(nombreGrupo, usuario);
+            _repository.Delete(idGrupo, usuario);
             _repository.SaveChanges();
             return Ok("Grupo eliminado correctamente");
         }

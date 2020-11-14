@@ -167,7 +167,7 @@ namespace EFConsole.DataAccess.Repositories
                 }
                 
             }
-            // se debe retornar el resultado
+
             return carreras;
         }
 
@@ -241,7 +241,7 @@ namespace EFConsole.DataAccess.Repositories
             && x.Nombrereto == actividad.Nombreretocarrera && x.Admindeportista == actividad.Adminretocarrera).
             Include(x => x.Reto).FirstOrDefault();
 
-            if (deportistaReto == null)
+            if (deportistaReto == null || deportistaReto.Reto.Tipoactividad != actividad.Tipoactividad)
                 return false;
 
             _context.Add(actividad);
@@ -268,7 +268,7 @@ namespace EFConsole.DataAccess.Repositories
             && x.Nombrecarrera == actividad.Nombreretocarrera && x.Admindeportista == actividad.Adminretocarrera).
             Include(x => x.Carrera).FirstOrDefault();
 
-            if (deportistaCarrera == null)
+            if (deportistaCarrera == null || deportistaCarrera.Carrera.Tipoactividad != actividad.Tipoactividad)
                 return false;
 
             if (deportistaCarrera.Carrera.Tipoactividad != actividad.Tipoactividad)

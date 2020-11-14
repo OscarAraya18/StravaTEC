@@ -41,9 +41,9 @@ namespace EFConsole.DataAccess.Repositories
             _context.Entry(grupo).State = EntityState.Modified;
         }
 
-        public void Delete(string nombre, string admin)
+        public void Delete(int idGrupo, string admin)
         {
-            var grupo = _context.Grupo.FirstOrDefault(x => x.Nombre == nombre && x.Admindeportista == admin);
+            var grupo = _context.Grupo.FirstOrDefault(x => x.Id == idGrupo && x.Admindeportista == admin);
 
             if (grupo == null)
             {
