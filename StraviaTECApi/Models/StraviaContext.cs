@@ -34,14 +34,14 @@ namespace StraviaTECApi.Models
         public virtual DbSet<Reto> Reto { get; set; }
         public virtual DbSet<RetoPatrocinador> RetoPatrocinador { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseNpgsql("Server=localhost;Database=StraviaDB;User Id=StraviaTECAdmin;Password=password;Port=5432");
             }
-        }
+        }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,7 +72,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombre)
                     .HasColumnName("nombre")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Nombreretocarrera)
                     .HasColumnName("nombreretocarrera")
@@ -377,22 +377,23 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<Grupo>(entity =>
             {
-                entity.HasKey(e => new { e.Nombre, e.Admindeportista })
+                entity.HasKey(e => new { e.Id, e.Admindeportista })
                     .HasName("grupo_pkey");
 
                 entity.ToTable("grupo");
 
-                entity.HasIndex(e => e.Nombre)
-                    .HasName("grupo_nombre_key")
-                    .IsUnique();
-
-                entity.Property(e => e.Nombre)
-                    .HasColumnName("nombre")
-                    .HasMaxLength(30);
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
                     .HasMaxLength(20);
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasColumnName("nombre")
+                    .HasMaxLength(30);
 
                 entity.HasOne(d => d.AdmindeportistaNavigation)
                     .WithMany(p => p.Grupo)
@@ -402,7 +403,7 @@ namespace StraviaTECApi.Models
 
             modelBuilder.Entity<GrupoCarrera>(entity =>
             {
-                entity.HasKey(e => new { e.Nombrecarrera, e.Admincarrera, e.Admingrupo, e.Nombregrupo })
+                entity.HasKey(e => new { e.Nombrecarrera, e.Admincarrera, e.Admingrupo, e.Idgrupo })
                     .HasName("grupo_carrera_pkey");
 
                 entity.ToTable("grupo_carrera");
@@ -419,24 +420,22 @@ namespace StraviaTECApi.Models
                     .HasColumnName("admingrupo")
                     .HasMaxLength(20);
 
-                entity.Property(e => e.Nombregrupo)
-                    .HasColumnName("nombregrupo")
-                    .HasMaxLength(30);
+                entity.Property(e => e.Idgrupo).HasColumnName("idgrupo");
+
+                entity.HasOne(d => d.Grupo)
+                    .WithMany(p => p.GrupoCarrera)
+                    .HasForeignKey(d => new { d.Idgrupo, d.Admingrupo })
+                    .HasConstraintName("grupo_carrera_idgrupo_admingrupo_fkey");
 
                 entity.HasOne(d => d.Carrera)
                     .WithMany(p => p.GrupoCarrera)
                     .HasForeignKey(d => new { d.Nombrecarrera, d.Admincarrera })
                     .HasConstraintName("grupo_carrera_nombrecarrera_admincarrera_fkey");
-
-                entity.HasOne(d => d.Grupo)
-                    .WithMany(p => p.GrupoCarrera)
-                    .HasForeignKey(d => new { d.Nombregrupo, d.Admingrupo })
-                    .HasConstraintName("grupo_carrera_nombregrupo_admingrupo_fkey");
             });
 
             modelBuilder.Entity<GrupoDeportista>(entity =>
             {
-                entity.HasKey(e => new { e.Usuariodeportista, e.Nombregrupo, e.Admindeportista })
+                entity.HasKey(e => new { e.Usuariodeportista, e.Idgrupo, e.Admindeportista })
                     .HasName("grupo_deportista_pkey");
 
                 entity.ToTable("grupo_deportista");
@@ -445,9 +444,7 @@ namespace StraviaTECApi.Models
                     .HasColumnName("usuariodeportista")
                     .HasMaxLength(20);
 
-                entity.Property(e => e.Nombregrupo)
-                    .HasColumnName("nombregrupo")
-                    .HasMaxLength(30);
+                entity.Property(e => e.Idgrupo).HasColumnName("idgrupo");
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -460,13 +457,13 @@ namespace StraviaTECApi.Models
 
                 entity.HasOne(d => d.Grupo)
                     .WithMany(p => p.GrupoDeportista)
-                    .HasForeignKey(d => new { d.Nombregrupo, d.Admindeportista })
-                    .HasConstraintName("grupo_deportista_nombregrupo_admindeportista_fkey");
+                    .HasForeignKey(d => new { d.Idgrupo, d.Admindeportista })
+                    .HasConstraintName("grupo_deportista_idgrupo_admindeportista_fkey");
             });
 
             modelBuilder.Entity<GrupoReto>(entity =>
             {
-                entity.HasKey(e => new { e.Nombrereto, e.Adminreto, e.Admingrupo, e.Nombregrupo })
+                entity.HasKey(e => new { e.Nombrereto, e.Adminreto, e.Admingrupo, e.Idgrupo })
                     .HasName("grupo_reto_pkey");
 
                 entity.ToTable("grupo_reto");
@@ -483,14 +480,12 @@ namespace StraviaTECApi.Models
                     .HasColumnName("admingrupo")
                     .HasMaxLength(20);
 
-                entity.Property(e => e.Nombregrupo)
-                    .HasColumnName("nombregrupo")
-                    .HasMaxLength(30);
+                entity.Property(e => e.Idgrupo).HasColumnName("idgrupo");
 
                 entity.HasOne(d => d.Grupo)
                     .WithMany(p => p.GrupoReto)
-                    .HasForeignKey(d => new { d.Nombregrupo, d.Admingrupo })
-                    .HasConstraintName("grupo_reto_nombregrupo_admingrupo_fkey");
+                    .HasForeignKey(d => new { d.Idgrupo, d.Admingrupo })
+                    .HasConstraintName("grupo_reto_idgrupo_admingrupo_fkey");
 
                 entity.HasOne(d => d.Reto)
                     .WithMany(p => p.GrupoReto)

@@ -9,7 +9,7 @@ namespace StraviaTECApi.Models
         public DateTime Fechahora { get; set; }
         public string Nombre { get; set; }
         public TimeSpan Duracion { get; set; }
-        public double? Kilometraje { get; set; }
+        public double Kilometraje { get; set; }
         public string Tipoactividad { get; set; }
         public string Recorridogpx { get; set; }
         public string Nombreretocarrera { get; set; }

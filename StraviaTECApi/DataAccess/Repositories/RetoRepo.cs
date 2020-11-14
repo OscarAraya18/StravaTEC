@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,21 +55,20 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public List<Reto> verEstadoRetos(string UsuarioDeportista)
+        public List<RetoParser> verEstadoRetos(string UsuarioDeportista)
         {
             List<Reto> retos = new List<Reto>();
 
             var deportistaRetos = _context.DeportistaReto.
                     Where(x => x.Usuariodeportista == UsuarioDeportista).
-                    Include(x => x.Reto).ToList();
-            // se debe retornar el avance que tiene el deportista
-            // el objetivo del reto
-            // también los días faltantes
+                    Include(x => x.Reto).
+                    ThenInclude(x => x.RetoPatrocinador).ToList();
+
             foreach (var reto in deportistaRetos)
             {
                 retos.Add(reto.Reto);
             }
-            return retos;
+            return generarJSONRetos(retos);
         }
 
         public List<Reto> verRetosIncompletos(string UsuarioDeportista)
@@ -112,25 +112,28 @@ namespace EFConsole.DataAccess.Repositories
             _context.Add(deportistaReto);
         }
 
-        public List<Reto> verRetosDisponibles(string usuarioDeportista)
+        public List<RetoParser> verRetosDisponibles(string usuarioDeportista)
         {
             List<Reto> retosNoInscritos = new List<Reto>();
 
             var retosInscritos = verRetosInscritos(usuarioDeportista);
 
-            var retosPublicos = _context.Reto.Where(x => x.Privacidad == false).ToList();
+            var retosPublicos = _context.Reto.Where(x => x.Privacidad == false).
+                                Include(x => x.RetoPatrocinador).ToList();
 
-            var grupos = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuarioDeportista).Include(x => x.Grupo);
+            var grupos = _context.GrupoDeportista.Where(x => x.Usuariodeportista == usuarioDeportista).
+                         Include(x => x.Grupo);
 
             var retosPrivados = _context.GrupoReto.
-                    Include(x => x.Reto).
-                    Where(x => x.Reto.Privacidad == true).ToList();
+                                Include(x => x.Reto).
+                                ThenInclude(x => x.RetoPatrocinador).
+                                Where(x => x.Reto.Privacidad == true).ToList();
 
             foreach (var reto in retosPrivados)
             {
                 foreach (var grupo in grupos)
                 {
-                    if (grupo.Nombregrupo.Equals(reto.Nombregrupo) && grupo.Admindeportista.Equals(reto.Admingrupo)
+                    if (grupo.Idgrupo == reto.Idgrupo && grupo.Admindeportista.Equals(reto.Admingrupo)
                         && !retosInscritos.Contains(reto.Reto))
                     {
                         retosNoInscritos.Add(reto.Reto);
@@ -141,11 +144,11 @@ namespace EFConsole.DataAccess.Repositories
 
             foreach (var reto in retosPublicos)
             {
-                if (!retosNoInscritos.Contains(reto))
+                if (!retosNoInscritos.Contains(reto) && !retosInscritos.Contains(reto))
                     retosNoInscritos.Add(reto);
             }
 
-            return retosNoInscritos;
+            return generarJSONRetos(retosNoInscritos);
         }
 
         public List<Reto> verRetosInscritos(string usuarioDeportista)
@@ -153,7 +156,7 @@ namespace EFConsole.DataAccess.Repositories
             List<Reto> retos = new List<Reto>();
 
             var deportistaReto = _context.DeportistaReto.Where(x => x.Usuariodeportista == usuarioDeportista).
-                Include(x => x.Reto).ToList();
+                Include(x => x.Reto).ThenInclude(x => x.RetoPatrocinador).ToList();
 
             foreach (var reto in deportistaReto)
             {
@@ -162,6 +165,53 @@ namespace EFConsole.DataAccess.Repositories
             }
 
             return retos;
+        }
+
+        public List<RetoParser> generarJSONRetos(List<Reto> listaRetos)
+        {
+            List<RetoParser> retosParser = new List<RetoParser>();
+
+            var patrocinadores = _context.Patrocinador.ToList();
+
+            foreach(var reto in listaRetos)
+            {
+                var retoParser = new RetoParser
+                {
+                    nombreReto = reto.Nombre,
+                    adminReto = reto.Admindeportista,
+                    fondoAltitud = reto.Fondoaltitud,
+                    tipoActividad = reto.Tipoactividad,
+                    privacidad = reto.Privacidad,
+                    kmTotales = reto.Kmtotales,
+                    descripcion = reto.Descripcion,
+                    fechaLimite = reto.Periododisponibilidad,
+                    diasFaltantes = (int)(reto.Periododisponibilidad - DateTime.Today).TotalDays
+                };
+
+                if(reto.DeportistaReto != null)
+                {
+                    retoParser.kmAcumulados = reto.DeportistaReto.First().Kmacumulados;
+                    retoParser.completado = reto.DeportistaReto.First().Completado;
+                }
+
+                foreach(var patrocinador in reto.RetoPatrocinador)
+                {
+                    var retoPatrocinador = patrocinadores.
+                        Where(x => x.Nombrecomercial == patrocinador.Nombrepatrocinador).
+                        FirstOrDefault();
+
+                    retoParser.RetoPatrocinador.Add(new PatrocinadorParser
+                    {
+                        Nombrecomercial = retoPatrocinador.Nombrecomercial,
+                        Nombrerepresentante = retoPatrocinador.Nombrerepresentante,
+                        Logo = retoPatrocinador.Logo,
+                        Numerotelrepresentante = retoPatrocinador.Numerotelrepresentante
+                    });
+                }
+
+                retosParser.Add(retoParser);
+            }
+            return retosParser;
         }
         /**         
         * Save the changes made to the database

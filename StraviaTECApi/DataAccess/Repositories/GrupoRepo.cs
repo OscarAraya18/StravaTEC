@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace EFConsole.DataAccess.Repositories
         public void Create(Grupo grupo)
         {
             if (grupo == null)
-                throw new System.ArgumentNullException(nameof(grupo));
+                throw new ArgumentNullException(nameof(grupo));
 
             _context.Grupo.Add(grupo);
 
@@ -34,11 +35,10 @@ namespace EFConsole.DataAccess.Repositories
         public void Update(Grupo grupo)
         {
             if (grupo == null)
-                throw new System.ArgumentNullException(nameof(grupo));
+                throw new ArgumentNullException(nameof(grupo));
 
             _context.Grupo.Update(grupo);
             _context.Entry(grupo).State = EntityState.Modified;
-
         }
 
         public void Delete(string nombre, string admin)
@@ -61,7 +61,7 @@ namespace EFConsole.DataAccess.Repositories
 
             var grupoAgregado = new GrupoDeportista();
             grupoAgregado.Admindeportista = grupo.Admindeportista;
-            grupoAgregado.Nombregrupo = grupo.Nombre;
+            grupoAgregado.Idgrupo = grupo.Id;
             grupoAgregado.Usuariodeportista = deportista.Usuario;
             _context.Add(grupoAgregado);
         }
@@ -95,12 +95,12 @@ namespace EFConsole.DataAccess.Repositories
             return gruposNoInscritos;
         }
 
-        public List<Reto> accederRetos(string nombreGrupo, string usuario)
+        public List<Reto> accederRetos(int idGrupo, string usuario)
         {
             List<Reto> retos = new List<Reto>();
 
             var verRetos = _context.GrupoReto.
-                    Where(x => x.Nombregrupo == nombreGrupo).
+                    Where(x => x.Idgrupo == idGrupo).
                     Include(x => x.Reto).
                     Where(x => x.Reto.Privacidad == true).ToList();
 
@@ -124,12 +124,12 @@ namespace EFConsole.DataAccess.Repositories
             // se debe retornar el resultado
         }
 
-        public List<Carrera> accederCarreras(string nombreGrupo, string usuario)
+        public List<Carrera> accederCarreras(int idGrupo, string usuario)
         {
             List<Carrera> carreras = new List<Carrera>();
 
             var verCarreras = _context.GrupoCarrera.
-                    Where(x => x.Nombregrupo == nombreGrupo).
+                    Where(x => x.Idgrupo == idGrupo).
                     Include(x => x.Carrera).
                     ThenInclude(x => x.CarreraCuentabancaria).
                     Where(x => x.Carrera.Privacidad == true).ToList();
@@ -230,9 +230,21 @@ namespace EFConsole.DataAccess.Repositories
             return gruposNoAsociados;
         }
 
-        public List<Grupo> buscarPorNombre(string nombreGrupo)
+        public List<Grupo> buscarPorNombre(string nombreGrupo, string usuario)
         {
-            return _context.Grupo.Where(x => x.Nombre.Contains(nombreGrupo)).ToList();
+            List<Grupo> gruposEncontradosNoAsociados = new List<Grupo>();
+
+            var gruposAsociados = verMisGruposAsociados(usuario);
+
+            var gruposEncontrados = _context.Grupo.Where(x => x.Nombre.Contains(nombreGrupo)).ToList();
+
+            foreach (var grupo in gruposEncontrados)
+            {
+                if (!gruposAsociados.Contains(grupo))
+                    gruposEncontradosNoAsociados.Add(grupo);
+            }
+
+            return gruposEncontradosNoAsociados;
         }
 
         /**         

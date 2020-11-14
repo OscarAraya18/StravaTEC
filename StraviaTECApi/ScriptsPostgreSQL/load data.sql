@@ -47,24 +47,24 @@ INSERT INTO public.patrocinador(
 	
 -- SE CREAN LOS GRUPOS	
 INSERT INTO public.grupo(
-	nombre, admindeportista)
-	VALUES ('Las Estrellas', 'sam.astua'),
-		   ('Los Toros', 'kevintrox'),
-		   ('Los Bichos', 'cr7'),
-		   ('Los Físicos', 'crespo');
+	id, nombre, admindeportista)
+	VALUES (1, 'Las Estrellas', 'sam.astua'),
+		   (2, 'Los Toros', 'kevintrox'),
+		   (3, 'Los Bichos', 'cr7'),
+		   (4, 'Los Físicos', 'crespo');
 
 -- SE AGREGAN DEPORTISTAS A LOS GRUPOS	   
 INSERT INTO public.grupo_deportista(
-	usuariodeportista, nombregrupo, admindeportista)
-	VALUES ('etesech', 'Las Estrellas', 'sam.astua'),
-		   ('elpepe', 'Las Estrellas', 'sam.astua'),
-		   ('ozuna', 'Las Estrellas', 'sam.astua'),
-		   ('sam.astua', 'Los Toros', 'kevintrox'),
-		   ('auronplay', 'Los Toros', 'kevintrox'),
-		   ('cj', 'Los Bichos', 'cr7'),
-		   ('auronplay', 'Los Bichos', 'cr7'),
-		   ('ironman', 'Los Físicos', 'crespo'),
-		   ('cr7', 'Los Físicos', 'crespo');
+	usuariodeportista, idgrupo, admindeportista)
+	VALUES ('etesech', 1, 'sam.astua'),
+		   ('elpepe', 1, 'sam.astua'),
+		   ('ozuna', 1, 'sam.astua'),
+		   ('sam.astua', 2, 'kevintrox'),
+		   ('auronplay', 2, 'kevintrox'),
+		   ('cj', 3, 'cr7'),
+		   ('auronplay', 3, 'cr7'),
+		   ('ironman', 4, 'crespo'),
+		   ('cr7', 4, 'crespo');
 		   
 -- SE CREAN CARRERAS	
 INSERT INTO public.carrera(
@@ -90,9 +90,9 @@ INSERT INTO public.carrera_patrocinador(
 
 -- SE AGREGA LOS GRUPOS A MOSTRAR PARA UNA CARRERA PRIVADA	
 INSERT INTO public.grupo_carrera(
-	nombrecarrera, admincarrera, admingrupo, nombregrupo)
-	VALUES ('Endurance 2020', 'sam.astua', 'sam.astua', 'Las Estrellas'),
-		   ('Endurance 2020', 'sam.astua', 'kevintrox', 'Los Toros');
+	nombrecarrera, admincarrera, admingrupo, idgrupo)
+	VALUES ('Endurance 2020', 'sam.astua', 'sam.astua', 1),
+		   ('Endurance 2020', 'sam.astua', 'kevintrox', 2);
 		   
 -- SE AGREGAN LAS CATEGORIAS DISPONIBLES A LAS CARRERAS
 INSERT INTO public.carrera_categoria(
@@ -143,9 +143,9 @@ INSERT INTO public.reto_patrocinador(
 	
 -- SE AGREGAN LOS GRUPOS VISIBLES PARA UNO DE LOS RETOS
 INSERT INTO public.grupo_reto(
-	nombrereto, adminreto, admingrupo, nombregrupo)
-	VALUES ('Reto 2', 'sam.astua', 'cr7', 'Los Bichos'),
-		   ('Reto 2', 'sam.astua', 'kevintrox', 'Los Toros');
+	nombrereto, adminreto, admingrupo, idgrupo)
+	VALUES ('Reto 2', 'sam.astua', 'cr7', 3),
+		   ('Reto 2', 'sam.astua', 'kevintrox', 2);
 
 
 -- SE INSCRIBEN DEPORTISTAS A LOS RETOS

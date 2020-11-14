@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,15 +24,28 @@ namespace EFConsole.DataAccess.Repositories
         * ------------------------------
         */
 
-        public bool Create(Inscripcion inscripcion, string nombreCarrera, string adminCarrera)
+        public bool Create(InscripcionParser inscripcionParser)
         {
-            if (inscripcion == null)
-                throw new ArgumentNullException(nameof(inscripcion));
+            if (inscripcionParser == null)
+                throw new ArgumentNullException(nameof(inscripcionParser));
+
+            var inscripcion = new Inscripcion
+            {
+                Usuariodeportista = inscripcionParser.Usuariodeportista,
+                Estado = inscripcionParser.Estado,
+                Nombrecarrera = inscripcionParser.Nombrecarrera,
+                Admincarrera = inscripcionParser.Admincarrera
+            };
+
+            if (inscripcionParser.Recibopago != null)
+                inscripcion.Recibopago = Convert.FromBase64String(inscripcionParser.Recibopago);
 
             _context.Inscripcion.Add(inscripcion);
 
-            var deportista = _context.Deportista.Where(x => x.Usuario == inscripcion.Usuariodeportista).FirstOrDefault();
-            var carrera = _context.Carrera.Where(x => x.Nombre == nombreCarrera && x.Admindeportista == adminCarrera).
+            var deportista = _context.Deportista.Where(x => x.Usuario == inscripcionParser.Usuariodeportista).FirstOrDefault();
+            
+            var carrera = _context.Carrera.Where(x => x.Nombre == inscripcion.Nombrecarrera 
+                            && x.Admindeportista == inscripcion.Admincarrera).
                             Include(x => x.CarreraCategoria).FirstOrDefault();
 
             foreach (var categoria in carrera.CarreraCategoria)
@@ -41,8 +55,8 @@ namespace EFConsole.DataAccess.Repositories
                     var inscripcionCarrera = new InscripcionCarrera();
                     inscripcionCarrera.Deportistainscripcion = inscripcion.Usuariodeportista;
                     inscripcionCarrera.Estadoinscripcion = inscripcion.Estado;
-                    inscripcionCarrera.Nombrecarrera = nombreCarrera;
-                    inscripcionCarrera.Admincarrera = adminCarrera;
+                    inscripcionCarrera.Nombrecarrera = inscripcion.Nombrecarrera;
+                    inscripcionCarrera.Admincarrera = inscripcion.Admincarrera;
 
                     _context.Add(inscripcionCarrera);
                     return true;
@@ -53,10 +67,21 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void Update(Inscripcion inscripcion)
+        public void Update(InscripcionParser inscripcionParser)
         {
-            if (inscripcion == null)
-                throw new System.ArgumentNullException(nameof(inscripcion));
+            if (inscripcionParser == null)
+                throw new ArgumentNullException(nameof(inscripcionParser));
+
+            var inscripcion = new Inscripcion
+            {
+                Usuariodeportista = inscripcionParser.Usuariodeportista,
+                Estado = inscripcionParser.Estado,
+                Nombrecarrera = inscripcionParser.Nombrecarrera,
+                Admincarrera = inscripcionParser.Admincarrera
+            };
+
+            if (inscripcionParser.Recibopago != null)
+                inscripcion.Recibopago = Convert.FromBase64String(inscripcionParser.Recibopago);
 
             _context.Inscripcion.Update(inscripcion);
             _context.Entry(inscripcion).State = EntityState.Modified;

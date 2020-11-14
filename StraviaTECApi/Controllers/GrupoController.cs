@@ -6,6 +6,7 @@ using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 
 namespace StraviaTECApi.Controllers
 {
@@ -34,9 +35,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/grupo/carreras")]
-        public IActionResult getCarreras([FromQuery] string nombreGrupo, [FromQuery] string usuario)
+        public IActionResult getCarreras([FromQuery] int idGrupo, [FromQuery] string usuario)
         {
-            var resultado = _repository.accederCarreras(nombreGrupo, usuario);
+            var resultado = _repository.accederCarreras(idGrupo, usuario);
 
             if (resultado == null)
             {
@@ -47,9 +48,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/grupo/retos")]
-        public IActionResult getRetos([FromQuery] string nombreGrupo, [FromQuery] string usuario)
+        public IActionResult getRetos([FromQuery] int idGrupo, [FromQuery] string usuario)
         {
-            var resultado = _repository.accederRetos(nombreGrupo, usuario);
+            var resultado = _repository.accederRetos(idGrupo, usuario);
 
             if (resultado == null)
             {
@@ -113,9 +114,9 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/user/grupo")]
-        public IActionResult buscarGruposPorNombre([FromQuery] string nombreGrupo)
+        public IActionResult buscarGruposPorNombre([FromQuery] string nombreGrupo, [FromQuery] string usuario)
         {
-            var resultado = _repository.buscarPorNombre(nombreGrupo);
+            var resultado = _repository.buscarPorNombre(nombreGrupo, usuario);
 
             if (resultado == null)
             {

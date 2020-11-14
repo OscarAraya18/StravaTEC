@@ -45,9 +45,22 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/carrera/admin/verCarrera")]
-        public IActionResult getCarreraPorNombre([FromQuery] string usuario, [FromQuery] string nombreCarrera)
+        public IActionResult GetCarreraAdministradaPorNombre([FromQuery] string usuario, [FromQuery] string nombreCarrera)
         {
-            var resultado = _repository.verCarreraPorNombre(usuario, nombreCarrera);
+            var resultado = _repository.verCarreraAdministradaPorNombre(usuario, nombreCarrera);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/carrera/user/buscarCarrera")]
+        public IActionResult GetCarreraPorNombre([FromQuery] string usuario, [FromQuery] string nombreCarrera)
+        {
+            var resultado = _repository.buscarCarreraPorNombre(usuario, nombreCarrera);
 
             if (resultado == null)
             {
@@ -58,7 +71,7 @@ namespace StraviaTECApi.Controllers
 
         [HttpGet]
         [Route("api/carrera/user/carrerasConPosiciones")]
-        public IActionResult getCarrerasConPosiciones([FromQuery] string usuario)
+        public IActionResult GetCarrerasConPosiciones([FromQuery] string usuario)
         {
             var resultado = _repository.carrerasConPosiciones(usuario);
 

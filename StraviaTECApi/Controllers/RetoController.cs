@@ -54,7 +54,7 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/reto/estado")]
+        [Route("api/user/reto/estado")]
         public IActionResult getEstadoRetos([FromQuery] string usuario)
         {
             var resultado = _repository.verEstadoRetos(usuario);

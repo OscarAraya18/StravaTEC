@@ -91,9 +91,21 @@ namespace EFConsole.DataAccess.Repositories
             return _context.Deportista.FirstOrDefault(x => x.Usuario == usuario);
         }
 
-        public List<Deportista> obtenerPorNombre(string nombre)
+        public List<Deportista> obtenerPorNombre(string nombre, string usuario)
         {
-            return _context.Deportista.Where(x => x.Nombre == nombre).ToList();
+            List<Deportista> deportistasDisponibles = new List<Deportista>();
+
+            var resultado = _context.Deportista.Where(x => x.Nombre.Contains(nombre)).ToList();
+
+            var deportistasAmigos = verAmigosAsociados(usuario);
+
+            foreach(var deportista in resultado)
+            {
+                if (!deportistasAmigos.Contains(deportista))
+                    deportistasDisponibles.Add(deportista);
+            }
+
+            return deportistasDisponibles;
         }
 
         public bool verificarLogin(Login login)

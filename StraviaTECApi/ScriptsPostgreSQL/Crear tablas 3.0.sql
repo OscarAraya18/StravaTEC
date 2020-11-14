@@ -79,7 +79,7 @@ CREATE TABLE ACTIVIDAD
 	UsuarioDeportista	VARCHAR(20)			NOT NULL,
 	FechaHora			TIMESTAMP,
 	Nombre				VARCHAR(100),
-	Duracion			TIME WITHOUT TIME ZONE,
+	Duracion			TIME WITHOUT TIME ZONE	NOT NULL,
 	Kilometraje			FLOAT8,
 	TipoActividad		VARCHAR(20),
 	RecorridoGPX		XML,
@@ -92,9 +92,10 @@ CREATE TABLE ACTIVIDAD
 
 CREATE TABLE GRUPO
 (
-	Nombre				VARCHAR(30)		NOT NULL   UNIQUE,
+	Id 					SERIAL,
+	Nombre				VARCHAR(30)		NOT NULL,
 	AdminDeportista		VARCHAR(20),
-	PRIMARY KEY         (Nombre, AdminDeportista)
+	PRIMARY KEY         (Id, AdminDeportista)
 );
 
 CREATE TABLE AMIGO_DEPORTISTA
@@ -107,10 +108,10 @@ CREATE TABLE AMIGO_DEPORTISTA
 
 CREATE TABLE GRUPO_DEPORTISTA
 (
-	UsuarioDeportista   VARCHAR(20),	
-	NombreGrupo			VARCHAR(30),
+	UsuarioDeportista   VARCHAR(20),
+	IdGrupo				INT,
 	AdminDeportista		VARCHAR(20),
-	PRIMARY KEY			(UsuarioDeportista, NombreGrupo, AdminDeportista)
+	PRIMARY KEY			(UsuarioDeportista, IdGrupo, AdminDeportista)
 );
 
 CREATE TABLE GRUPO_CARRERA
@@ -118,8 +119,8 @@ CREATE TABLE GRUPO_CARRERA
 	NombreCarrera   	VARCHAR(30),
 	AdminCarrera		VARCHAR(20),
 	AdminGrupo			VARCHAR(20),
-	NombreGrupo			VARCHAR(30),
-	PRIMARY KEY			(NombreCarrera, AdminCarrera, AdminGrupo, NombreGrupo)
+	IdGrupo				INT,
+	PRIMARY KEY			(NombreCarrera, AdminCarrera, AdminGrupo, IdGrupo)
 );
 
 CREATE TABLE GRUPO_RETO
@@ -127,8 +128,8 @@ CREATE TABLE GRUPO_RETO
 	NombreReto  		VARCHAR(30),
 	AdminReto			VARCHAR(20),
 	AdminGrupo			VARCHAR(20),
-	NombreGrupo			VARCHAR(30),
-	PRIMARY KEY		(NombreReto, AdminReto, AdminGrupo, NombreGrupo)
+	IdGrupo				INT,
+	PRIMARY KEY		(NombreReto, AdminReto, AdminGrupo, IdGrupo)
 );
 
 
@@ -222,17 +223,17 @@ ON DELETE CASCADE;
 -- GRUPO DEPORTISTA
 ALTER TABLE GRUPO_DEPORTISTA
 ADD FOREIGN KEY (UsuarioDeportista) REFERENCES DEPORTISTA(Usuario) ON DELETE CASCADE,
-ADD FOREIGN KEY (NombreGrupo, AdminDeportista) REFERENCES GRUPO(Nombre, AdminDeportista)
-ON DELETE CASCADE;
+ADD FOREIGN KEY (IdGrupo, AdminDeportista) REFERENCES GRUPO(Id, AdminDeportista)
+ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- GRUPO CARRERA
 ALTER TABLE GRUPO_CARRERA
-ADD FOREIGN KEY (NombreGrupo, AdminGrupo) REFERENCES GRUPO(Nombre, AdminDeportista) ON DELETE CASCADE,
+ADD FOREIGN KEY (IdGrupo, AdminGrupo) REFERENCES GRUPO(Id, AdminDeportista) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD FOREIGN KEY (NombreCarrera, AdminCarrera) REFERENCES CARRERA(Nombre, AdminDeportista) ON DELETE CASCADE;
 
 -- GRUPO RETO
 ALTER TABLE GRUPO_RETO
-ADD FOREIGN KEY (NombreGrupo, AdminGrupo) REFERENCES GRUPO(Nombre, AdminDeportista) ON DELETE CASCADE,
+ADD FOREIGN KEY (IdGrupo, AdminGrupo) REFERENCES GRUPO(Id, AdminDeportista) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD FOREIGN KEY (NombreReto, AdminReto) REFERENCES RETO(Nombre, AdminDeportista) ON DELETE CASCADE;
 
 -- CARRERA CATEGORIA

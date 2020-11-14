@@ -1,6 +1,7 @@
 ﻿using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using StraviaTECApi.Models;
+using StraviaTECApi.Parsers;
 
 namespace StraviaTECApi.Controllers
 {
@@ -47,12 +48,11 @@ namespace StraviaTECApi.Controllers
 
         [HttpPost]
         [Route("api/inscripcion/new")]
-        public IActionResult nuevaInscripcion([FromBody] Inscripcion inscripcion, [FromQuery] string nombreCarrera,
-            [FromQuery] string adminCarrera)
+        public IActionResult nuevaInscripcion([FromBody] InscripcionParser inscripcion)
         {
             if (ModelState.IsValid)
             {
-                var resultado =_repository.Create(inscripcion, nombreCarrera, adminCarrera);
+                var resultado =_repository.Create(inscripcion);
                 if (resultado)
                 {
                     if(_repository.SaveChanges())
@@ -63,7 +63,6 @@ namespace StraviaTECApi.Controllers
             }
 
             return BadRequest(ModelState);
-
         }
 
         [HttpPost]
@@ -84,7 +83,7 @@ namespace StraviaTECApi.Controllers
 
         [HttpPut]
         [Route("api/inscripcion/edit")]
-        public IActionResult actualizarInscripcion([FromBody] Inscripcion inscripcion, [FromQuery] string usuario)
+        public IActionResult actualizarInscripcion([FromBody] InscripcionParser inscripcion, [FromQuery] string usuario)
         {
             if (inscripcion.Usuariodeportista != usuario)
             {

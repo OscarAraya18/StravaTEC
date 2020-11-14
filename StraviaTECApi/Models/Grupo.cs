@@ -12,6 +12,7 @@ namespace StraviaTECApi.Models
             GrupoReto = new HashSet<GrupoReto>();
         }
 
+        public int Id { get; set; }
         public string Nombre { get; set; }
         public string Admindeportista { get; set; }
 

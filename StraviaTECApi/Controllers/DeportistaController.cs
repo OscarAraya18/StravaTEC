@@ -29,10 +29,10 @@ namespace StraviaTECApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/user/buscar/nombre")]
-        public IActionResult getDeportistaPorNombre([FromQuery] string nombre)
+        [Route("api/user/buscarPorNombre")]
+        public IActionResult getDeportistaPorNombre([FromQuery] string nombre, [FromQuery] string usuario)
         {
-            var resultado = _repository.obtenerPorNombre(nombre);
+            var resultado = _repository.obtenerPorNombre(nombre, usuario);
 
             if (resultado == null)
             {

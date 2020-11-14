@@ -17,8 +17,8 @@ namespace StraviaTECApi.Models
         public DateTime fecha { get; set; }
         public bool completada { get; set; }
         public List<PosActividad> actividades { get; set; }
-        public List<CarreraCuentabancaria> CarreraCuentabancaria { get; set; }
-        public  List<CarreraPatrocinador> CarreraPatrocinador { get; set; }
+        public List<CarreraCuentabancaria> carreraCuentabancaria { get; set; }
+        public  List<CarreraPatrocinador> carreraPatrocinador { get; set; }
 
     }
 }
