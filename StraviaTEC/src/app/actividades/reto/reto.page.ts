@@ -317,17 +317,22 @@ export class RetoPage implements OnInit {
   }
   
   writeGPX(){
+    var date = new Date();
+    var fecha = date.getFullYear() +'-'+(date.getMonth()+1) + '-'+date.getDate();
+    var hora = date.getHours() +':' + date.getMinutes() + ':' + date.getSeconds();
+    var fechaHoraString = fecha + ' ' + hora;
+
     var XMLWriter = require('xml-writer');
     var xw = new XMLWriter(true);
     xw.startDocument();
 
     xw.startElement('gpx').writeAttribute('creator', 'Kevin Acevedo Rodríguez');
 
-    xw.startElement('metadata','').writeElement('time','2020-10-16T18:47:01Z');
+    xw.startElement('metadata','').writeElement('time',fechaHoraString);
     xw.endElement();
 
     xw.startElement('trk')
-    xw.writeElement('name', 'Los relevos del diablo');
+    xw.writeElement('name', this.nombreReto);
     xw.writeElement('type', '1');
 
     xw.startElement('trkseg', '');

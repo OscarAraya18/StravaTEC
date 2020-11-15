@@ -23,9 +23,6 @@ export class CarreraService {
       if(nombreCarrera === this.listaCarreras[i].nombre){
         return this.listaCarreras[i].recorrido;
       }
-      else{
-        return null;
-      }
     }
   }
 }

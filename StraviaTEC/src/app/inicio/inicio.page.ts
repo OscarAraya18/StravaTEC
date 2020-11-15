@@ -148,8 +148,6 @@ export class InicioPage implements OnInit {
 
         this.db.getDeportistasCarrera().subscribe(devs => {
           this.deportistasCarrera = devs;
-          //Guardar esta lista de carreras en la lista de carreras del servicio
-          this.carreraService.setListaCarreras(devs);
         })
       }
     });
@@ -166,6 +164,7 @@ export class InicioPage implements OnInit {
     this.http.setServerTrustMode('nocheck');
     this.loadRetos();
     this.loadCarreras();
+    
 
 
   }
@@ -191,6 +190,8 @@ export class InicioPage implements OnInit {
    {}).then(
      data => {
        this.listaCarreras = JSON.parse(data.data);
+       this.carreraService.setListaCarreras(this.listaCarreras);
+       
      })
    .catch(err => {
      console.log(err);

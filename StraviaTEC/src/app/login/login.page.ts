@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
      .catch(err => {
        console.log(err);
        this.loadingController.dismiss();
-       this.presentToast('Nombre de usuario o contraseña es incorrecto');
+       this.presentToast('Error al iniciar sesión');
      });
      }
   

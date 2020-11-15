@@ -214,7 +214,7 @@ export class CarreraPage implements OnInit {
             origin: origin,
             destination: destination,
             waypoints: waypts,
-            optimizeWaypoints: true,
+            optimizeWaypoints: false,
             travelMode: google.maps.DirectionsTravelMode.WALKING
           },
           (response, status) => {
@@ -262,10 +262,7 @@ export class CarreraPage implements OnInit {
 
    paintGPX(){
      var gpxCarrera = this.carreraService.getCarreraGPX(this.nombreCarrera);
-     console.log('GPX Type', gpxCarrera);
-     if(gpxCarrera != null){
-       this.getGpxRoute(gpxCarrera);
-     }
+     this.getGpxRoute(gpxCarrera);
    }
 
   
