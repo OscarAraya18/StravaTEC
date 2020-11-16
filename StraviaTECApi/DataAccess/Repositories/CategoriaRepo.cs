@@ -14,6 +14,10 @@ namespace EFConsole.DataAccess.Repositories
             _context = context;
         }
 
+        /// <summary>
+        /// Método para acceder a todas las categorías existentes en la base de datos
+        /// </summary>
+        /// <returns>La lista con todas las categorias existentes</returns>
         public List<Categoria> obtenerTodas()
         {
             return _context.Categoria.ToList();

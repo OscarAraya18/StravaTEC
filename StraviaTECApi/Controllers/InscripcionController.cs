@@ -8,17 +8,22 @@ namespace StraviaTECApi.Controllers
     [ApiController]
     public class InscripcionController : ControllerBase
     {
-
         private readonly InscripcionRepo _repository;
 
+        // se inyecta el repositorio correspondiente
         public InscripcionController(InscripcionRepo repo)
         {
             _repository = repo;
         }
 
+        /// <summary>
+        /// Petición para acceder a las inscripciones en espera que tiene un deportista
+        /// </summary>
+        /// <param name="usuario">el usuario que realiza la consulta</param>
+        /// <returns>Un ok con el resultado en caso de éxito</returns>
         [HttpGet]
         [Route("api/inscripcion/enespera")]
-        public IActionResult verEnEspera([FromQuery] string usuario)
+        public IActionResult VerEnEspera([FromQuery] string usuario)
         {
             var resultado = _repository.verInscripcionesEspera(usuario);
 
@@ -26,14 +31,19 @@ namespace StraviaTECApi.Controllers
             {
                 return BadRequest();
             }
-
             return Ok(resultado);
-
         }
 
+        /// <summary>
+        /// Petición para ver las peticiones en espera que tiene
+        /// una carrera en específico
+        /// </summary>
+        /// <param name="nombreCarrera">el nombre de la carrera a consultar</param>
+        /// <param name="usuario">el usuario que realiza la consulta</param>
+        /// <returns>Un ok con el resultado en caso de éxito</returns>
         [HttpGet]
         [Route("api/inscripcion/carrera/enespera")]
-        public IActionResult verCarreraEnEspera([FromQuery] string nombreCarrera, [FromQuery] string usuario)
+        public IActionResult VerCarreraEnEspera([FromQuery] string nombreCarrera, [FromQuery] string usuario)
         {
             var resultado = _repository.verInscripcionesEsperaCarrera(nombreCarrera, usuario);
 
@@ -41,14 +51,17 @@ namespace StraviaTECApi.Controllers
             {
                 return BadRequest();
             }
-
             return Ok(resultado);
-
         }
 
+        /// <summary>
+        /// Petición para crear una nueva inscripción
+        /// </summary>
+        /// <param name="inscripcion">El objeto inscripción con la información correspondiente</param>
+        /// <returns>Un ok en caso de éxito</returns>
         [HttpPost]
         [Route("api/inscripcion/new")]
-        public IActionResult nuevaInscripcion([FromBody] InscripcionParser inscripcion)
+        public IActionResult NuevaInscripcion([FromBody] InscripcionParser inscripcion)
         {
             if (ModelState.IsValid)
             {
@@ -65,9 +78,14 @@ namespace StraviaTECApi.Controllers
             return BadRequest(ModelState);
         }
 
+        /// <summary>
+        /// Petición para aceptar una inscripción
+        /// </summary>
+        /// <param name="inscripcion">La inscripción a aceptar</param>
+        /// <returns>Un ok en caso de éxito</returns>
         [HttpPost]
         [Route("api/inscripcion/accept")]
-        public IActionResult aceptarInscripcion([FromBody] Inscripcion inscripcion)
+        public IActionResult AceptarInscripcion([FromBody] Inscripcion inscripcion)
         {
             if (ModelState.IsValid)
             {
@@ -76,14 +94,18 @@ namespace StraviaTECApi.Controllers
                     return Ok("Inscripcion aceptada correctamente");
                 return BadRequest("Ha ocurrido un error");
             }
-
             return BadRequest(ModelState);
-
         }
 
+        /// <summary>
+        /// Petición para actualizar una inscripción
+        /// </summary>
+        /// <param name="inscripcion">La inscripción actualizada</param>
+        /// <param name="usuario">El usuario que realiza la consulta</param>
+        /// <returns>Un ok en caso de éxito</returns>
         [HttpPut]
         [Route("api/inscripcion/edit")]
-        public IActionResult actualizarInscripcion([FromBody] InscripcionParser inscripcion, [FromQuery] string usuario)
+        public IActionResult ActualizarInscripcion([FromBody] InscripcionParser inscripcion, [FromQuery] string usuario)
         {
             if (inscripcion.Usuariodeportista != usuario)
             {
@@ -95,14 +117,18 @@ namespace StraviaTECApi.Controllers
             return Ok("Inscripcion actualizada correctamente");
         }
 
+        /// <summary>
+        /// Petición para eliminar/denegar una inscripción
+        /// </summary>
+        /// <param name="inscripcion">La inscripción a eliminar</param>
+        /// <returns>Un ok en caso de tener éxito</returns>
         [HttpDelete]
         [Route("api/inscripcion/delete")]
-        public IActionResult actualizarInscripcion([FromBody] Inscripcion inscripcion)
+        public IActionResult DenegarInscripcion([FromBody] Inscripcion inscripcion)
         {
             _repository.Delete(inscripcion);
             _repository.SaveChanges();
             return Ok("Inscripción eliminada correctamente");
         }
-
     }
 }

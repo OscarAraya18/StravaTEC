@@ -1,6 +1,5 @@
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\bin\Debug\netcoreapp3.1\StraviaTECApi.exe
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.csprojAssemblyReference.cache
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.AssemblyInfoInputs.cache
@@ -44,3 +43,4 @@ C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\S
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.genruntimeconfig.cache
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.csproj.CoreCompileInputs.cache
 C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\StraviaTECApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\DELL\Documents\GitHub\StravaTEC\StraviaTECApi\obj\Debug\netcoreapp3.1\scopedcss\bundle\StraviaTECApi.styles.css

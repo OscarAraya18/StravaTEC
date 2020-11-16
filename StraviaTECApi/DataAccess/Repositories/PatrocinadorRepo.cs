@@ -14,6 +14,10 @@ namespace EFConsole.DataAccess.Repositories
             _context = context;
         }
 
+        /// <summary>
+        /// Método para obtener todos los patrocinadores de la base de datos
+        /// </summary>
+        /// <returns>la lista con todos los patrocinadores</returns>
         public List<Patrocinador> obtenerTodos()
         {
             return _context.Patrocinador.ToList();

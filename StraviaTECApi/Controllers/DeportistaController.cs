@@ -10,14 +10,20 @@ namespace StraviaTECApi.Controllers
     {
         private readonly DeportistaRepo _repository;
 
+        // se inyecta el repositorio respectivo
         public DeportistaController(DeportistaRepo repo)
         {
             _repository = repo;
         }
 
+        /// <summary>
+        /// Petición para acceder a un deportista por su nombre de usuario
+        /// </summary>
+        /// <param name="usuario">el usuario a buscar</param>
+        /// <returns>Un ok con el usuario en caso de exito</returns>
         [HttpGet]
         [Route("api/user/getDeportista")]
-        public IActionResult getDeportista([FromQuery] string usuario)
+        public IActionResult GetDeportista([FromQuery] string usuario)
         {
             var resultado = _repository.obtenerPorUsuario(usuario);
 
@@ -28,9 +34,15 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        /// <summary>
+        /// Petición para buscar un deportista por coincidencias en el nombre
+        /// </summary>
+        /// <param name="nombre">el nombre a buscar</param>
+        /// <param name="usuario">el usuario que hace la consulta</param>
+        /// <returns>Un ok con el resultado en caso de éxito</returns>
         [HttpGet]
         [Route("api/user/buscarPorNombre")]
-        public IActionResult getDeportistaPorNombre([FromQuery] string nombre, [FromQuery] string usuario)
+        public IActionResult GetDeportistaPorNombre([FromQuery] string nombre, [FromQuery] string usuario)
         {
             var resultado = _repository.obtenerPorNombre(nombre, usuario);
 
@@ -41,9 +53,14 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        /// <summary>
+        /// Petición para ver las actividades de los amigos de un deportista específico
+        /// </summary>
+        /// <param name="usuario">El usuario que realiza la petición</param>
+        /// <returns>Un ok con la lista de actividades en caso de exito</returns>
         [HttpGet]
         [Route("api/user/amigos/actividades")]
-        public IActionResult getActividadesAmigos([FromQuery] string usuario)
+        public IActionResult GetActividadesAmigos([FromQuery] string usuario)
         {
             var resultado = _repository.verActividadesAmigos(usuario);
             if (resultado == null)
@@ -53,9 +70,14 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        /// <summary>
+        /// Petición para acceder a todos los deportistas NO amigos de un usuario específico
+        /// </summary>
+        /// <param name="usuario">El usuario que realiza la consulta</param>
+        /// <returns>Un ok con el resultado en caso de exito</returns>
         [HttpGet]
         [Route("api/user/noAmigos")]
-        public IActionResult getDeportistasNoAmigos([FromQuery] string usuario)
+        public IActionResult GetDeportistasNoAmigos([FromQuery] string usuario)
         {
             var resultado = _repository.mostrarTodosDeportistasNoAmigos(usuario);
 
@@ -66,9 +88,14 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        /// <summary>
+        /// Petición para acceder a los deportistas que son amigos de un deportista en específico
+        /// </summary>
+        /// <param name="usuario">El usuario que realiza la consulta</param>
+        /// <returns>Un ok con el resultado en caso de exito</returns>
         [HttpGet]
         [Route("api/user/amigos")]
-        public IActionResult getDeportistasAmigos([FromQuery] string usuario)
+        public IActionResult GetDeportistasAmigos([FromQuery] string usuario)
         {
             var resultado = _repository.verAmigosAsociados(usuario);
 
@@ -79,10 +106,14 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
-
+        /// <summary>
+        /// Petición para acceder a las carreras inscritas por un deportista específico
+        /// </summary>
+        /// <param name="usuario">El usuario que realiza la consulta</param>
+        /// <returns>Un ok con el usuario en específico</returns>
         [HttpGet]
         [Route("api/user/carreras")]
-        public IActionResult getCarrerasInscritas([FromQuery] string usuario)
+        public IActionResult GetCarrerasInscritas([FromQuery] string usuario)
         {
             var resultado = _repository.verCarrerasInscritas(usuario);
 
@@ -93,9 +124,14 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        /// <summary>
+        /// Petición para acceder a todos los retos incompletos de un deportista
+        /// </summary>
+        /// <param name="usuario">El usuario que realiza la consulta</param>
+        /// <returns>Un ok con el resultado en caso de éxito</returns>
         [HttpGet]
         [Route("api/user/retos")]
-        public IActionResult getRetosIncompletos([FromQuery] string usuario)
+        public IActionResult GetRetosIncompletos([FromQuery] string usuario)
         {
             var resultado = _repository.verRetosIncompletos(usuario);
 
@@ -106,9 +142,14 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        /// <summary>
+        /// Petición para crear un nuevo deportista
+        /// </summary>
+        /// <param name="deportista">El objeto deportista con la información respectiva</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/user/new")]
-        public IActionResult nuevoDeportista([FromBody] DeportistaParser deportista)
+        public IActionResult NuevoDeportista([FromBody] DeportistaParser deportista)
         {
             if (ModelState.IsValid)
             {
@@ -120,9 +161,14 @@ namespace StraviaTECApi.Controllers
             return BadRequest(ModelState);
         }
 
+        /// <summary>
+        /// Petición para verificar el login de un usuario
+        /// </summary>
+        /// <param name="login">El objeto login con su información respectiva</param>
+        /// <returns>Un ok en caso de exito, un BadRequest en caso contrario</returns>
         [HttpPost]
         [Route("api/user/login")]
-        public IActionResult verificarLogin([FromBody] Login login)
+        public IActionResult VerificarLogin([FromBody] Login login)
         {
             var resultado = _repository.verificarLogin(login);
 
@@ -132,19 +178,29 @@ namespace StraviaTECApi.Controllers
             return Ok("Inicio de sesión exitoso");
         }
 
+        /// <summary>
+        /// Petición para seguir un deportista
+        /// </summary>
+        /// <param name="amigo">el usuario del amigo a agregar</param>
+        /// <param name="usuario">el usuario que realiza la consulta</param>
+        /// <returns>Un Ok en caso de éxito</returns>
         [HttpPost]
         [Route("api/user/amigo/new")]
-        public IActionResult seguirDeportista([FromQuery] string amigo, [FromQuery] string usuario)
+        public IActionResult SeguirDeportista([FromQuery] string amigo, [FromQuery] string usuario)
         {
             _repository.seguirDeportista(usuario, amigo);
             _repository.SaveChanges();
             return Ok("Amigo agregado correctamente");
         }
 
-
+        /// <summary>
+        /// Petición para registrar una actividad
+        /// </summary>
+        /// <param name="actividad">EL objeto actividad con la información respectiva</param>
+        /// <returns>Un ok en caso de éxito</returns>
         [HttpPost]
         [Route("api/user/registrar/actividad")]
-        public IActionResult registrarActividades([FromBody] Actividad actividad)
+        public IActionResult RegistrarActividades([FromBody] Actividad actividad)
         {
             var resultado = _repository.registrarActividades(actividad);
 
@@ -155,9 +211,15 @@ namespace StraviaTECApi.Controllers
             return BadRequest("Ha ocurrido un error");
         }
 
+        /// <summary>
+        /// Petición para actualizar la información de un deportista
+        /// </summary>
+        /// <param name="deportista">El objeto deportista con la información actualizada</param>
+        /// <param name="usuario">El usuario que realiza la consulta</param>
+        /// <returns>Un ok en caso de exito</returns>
         [HttpPut]
         [Route("api/user/edit")]
-        public IActionResult actualizarDeportista([FromBody] DeportistaParser deportista, [FromQuery] string usuario)
+        public IActionResult ActualizarDeportista([FromBody] DeportistaParser deportista, [FromQuery] string usuario)
         {
             if (deportista.Usuario != usuario)
             {
@@ -169,9 +231,14 @@ namespace StraviaTECApi.Controllers
             return Ok("Deportista actualizado correctamente");
         }
 
+        /// <summary>
+        /// Petición para eliminar un deportista específico
+        /// </summary>
+        /// <param name="usuario">El usuario del deportista a eliminar</param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("api/deportista/delete")]
-        public IActionResult eliminarDeportista([FromQuery] string usuario)
+        public IActionResult EliminarDeportista([FromQuery] string usuario)
         {
             _repository.Delete(usuario);
             _repository.SaveChanges();
