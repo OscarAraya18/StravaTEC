@@ -186,13 +186,12 @@ namespace StraviaTECApi.Controllers
         /// Petición para agregar un deportista a un grupo
         /// </summary>
         /// <param name="grupo">El objeto grupo</param>
-        /// <param name="usuario">el usuario que hay que agregar al grupo</param>
         /// <returns>Un ok en caso de éxito</returns>
         [HttpPost]
         [Route("api/grupo/new/deportista")]
-        public IActionResult AgregarAGrupo([FromBody] Grupo grupo, [FromQuery] string usuario)
+        public IActionResult AgregarAGrupo([FromBody] GrupoDeportista grupo)
         {
-            _repository.agregarAgrupo(usuario, grupo);
+            _repository.agregarAgrupo(grupo);
             _repository.SaveChanges();
             return Ok("Agregado correctamente");
         }

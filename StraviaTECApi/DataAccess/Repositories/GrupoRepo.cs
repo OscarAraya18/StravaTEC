@@ -55,18 +55,13 @@ namespace EFConsole.DataAccess.Repositories
         }
 
         /// <summary>
-        /// método para agregar un deportista a un determinado grupo
+        /// Método para agregar un deportista a un grupo determinado
         /// </summary>
-        /// <param name="usuarioDeportista"> el usuario que se quiere agregar</param>
-        /// <param name="grupo"> el grupo al cual se agrega el usuario</param>
-        public void agregarAgrupo(string usuarioDeportista, Grupo grupo)
+        /// <param name="grupoDeportista"></param>
+        public void agregarAgrupo(GrupoDeportista grupoDeportista)
         {
-           // se crea una relacion para grupo y deportista
-            var grupoAgregado = new GrupoDeportista();
-            grupoAgregado.Admindeportista = grupo.Admindeportista;
-            grupoAgregado.Idgrupo = grupo.Id;
-            grupoAgregado.Usuariodeportista = usuarioDeportista;
-            _context.Add(grupoAgregado);
+           // se agrega una relacion para grupo y deportista
+            _context.Add(grupoDeportista);
         }
 
         /// <summary>
