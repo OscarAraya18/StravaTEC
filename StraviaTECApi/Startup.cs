@@ -1,14 +1,13 @@
-using System;
+using EFConsole.DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using StraviaTECApi.Models;
-using EFConsole.DataAccess.Repositories;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using StraviaTECApi.Models;
 
 namespace StraviaTECApi
 {

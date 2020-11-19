@@ -9,6 +9,7 @@ namespace StraviaTECApi.Models
         public string Admindeportista { get; set; }
         public string Cuentabancaria { get; set; }
 
+        // uno a muchos
         public virtual Carrera Carrera { get; set; }
     }
 }

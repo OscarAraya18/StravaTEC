@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StraviaTECApi.Models;
 using StraviaTECApi.Parsers;
 using System;
@@ -342,6 +341,26 @@ namespace EFConsole.DataAccess.Repositories
 
             return carrerasConPosiciones;
         }
+
+        public string verParticipantesPorCarrera(string nombreCarrera, string adminCarrera)
+        {
+
+            //var reporte = new ReportController();
+
+            //return reporte.Reporte_participantes(nombreCarrera, adminCarrera);
+            return "Reporte participantes";
+        }
+
+        public string verPosicionesPorCarrera(string nombreCarrera, string adminCarrera)
+        {
+
+            //var reporte = new ReportController();
+
+            //return reporte.Reporte_posiciones(nombreCarrera, adminCarrera);
+            return "Reporte posiciones";
+        }
+
+
         /**         
          * Save the changes made to the database
          */

@@ -21,7 +21,10 @@ namespace StraviaTECApi.Models
         public double Kmtotales { get; set; }
         public string Descripcion { get; set; }
 
+        // uno a muchos
         public virtual Deportista AdmindeportistaNavigation { get; set; }
+
+        // muchos a muchos
         public virtual ICollection<DeportistaReto> DeportistaReto { get; set; }
         public virtual ICollection<GrupoReto> GrupoReto { get; set; }
         public virtual ICollection<RetoPatrocinador> RetoPatrocinador { get; set; }

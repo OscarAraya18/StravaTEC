@@ -29,7 +29,10 @@ namespace StraviaTECApi.Models
         public string Nacionalidad { get; set; }
         public byte[] Foto { get; set; }
 
+        // uno a muchos
         public virtual Categoria NombrecategoriaNavigation { get; set; }
+
+        // muchos a muchos
         public virtual ICollection<Actividad> Actividad { get; set; }
         public virtual ICollection<AmigoDeportista> AmigoDeportistaAmigo { get; set; }
         public virtual ICollection<AmigoDeportista> AmigoDeportistaUsuariodeportistaNavigation { get; set; }

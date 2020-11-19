@@ -16,6 +16,7 @@ namespace StraviaTECApi.Models
         public string Nombrerepresentante { get; set; }
         public string Numerotelrepresentante { get; set; }
 
+        // muchos a muchos
         public virtual ICollection<CarreraPatrocinador> CarreraPatrocinador { get; set; }
         public virtual ICollection<RetoPatrocinador> RetoPatrocinador { get; set; }
     }

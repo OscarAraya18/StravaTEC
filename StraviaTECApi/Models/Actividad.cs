@@ -16,6 +16,7 @@ namespace StraviaTECApi.Models
         public string Adminretocarrera { get; set; }
         public int? Banderilla { get; set; }
 
+        // uno a muchos
         public virtual Deportista UsuariodeportistaNavigation { get; set; }
     }
 }

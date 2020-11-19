@@ -11,6 +11,7 @@ namespace StraviaTECApi.Models
         public bool Completado { get; set; }
         public double Kmacumulados { get; set; }
 
+        // uno a muchos
         public virtual Reto Reto { get; set; }
         public virtual Deportista UsuariodeportistaNavigation { get; set; }
     }

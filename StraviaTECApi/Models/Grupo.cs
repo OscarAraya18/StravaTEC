@@ -16,7 +16,10 @@ namespace StraviaTECApi.Models
         public string Nombre { get; set; }
         public string Admindeportista { get; set; }
 
+        // uno a muchos
         public virtual Deportista AdmindeportistaNavigation { get; set; }
+
+        // muchos a muchos
         public virtual ICollection<GrupoCarrera> GrupoCarrera { get; set; }
         public virtual ICollection<GrupoDeportista> GrupoDeportista { get; set; }
         public virtual ICollection<GrupoReto> GrupoReto { get; set; }

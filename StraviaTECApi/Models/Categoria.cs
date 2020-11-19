@@ -14,6 +14,7 @@ namespace StraviaTECApi.Models
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
 
+        // muchos a muchos
         public virtual ICollection<CarreraCategoria> CarreraCategoria { get; set; }
         public virtual ICollection<Deportista> Deportista { get; set; }
     }

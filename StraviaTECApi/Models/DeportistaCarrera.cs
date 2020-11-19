@@ -10,6 +10,7 @@ namespace StraviaTECApi.Models
         public string Admindeportista { get; set; }
         public bool? Completada { get; set; }
 
+        // uno a muchos
         public virtual Carrera Carrera { get; set; }
         public virtual Deportista UsuariodeportistaNavigation { get; set; }
     }

@@ -135,7 +135,7 @@ CREATE TABLE GRUPO_RETO
 
 CREATE TABLE CARRERA_PATROCINADOR
 (
-	NombrePatrocinador	VARCHAR(30),	
+	NombrePatrocinador	VARCHAR(50),	
 	NombreCarrera		VARCHAR(100),
 	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY		(NombrePatrocinador, NombreCarrera, AdminDeportista)
@@ -151,7 +151,7 @@ CREATE TABLE CARRERA_CATEGORIA
 
 CREATE TABLE RETO_PATROCINADOR
 (
-	NombrePatrocinador	VARCHAR(30),	
+	NombrePatrocinador	VARCHAR(50),	
 	NombreReto			VARCHAR(100),
 	AdminDeportista		VARCHAR(20),
 	PRIMARY KEY		(NombrePatrocinador, NombreReto, AdminDeportista)

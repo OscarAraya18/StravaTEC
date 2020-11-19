@@ -9,6 +9,7 @@ namespace StraviaTECApi.Models
         public int Idgrupo { get; set; }
         public string Admindeportista { get; set; }
 
+        // uno a muchos
         public virtual Grupo Grupo { get; set; }
         public virtual Deportista UsuariodeportistaNavigation { get; set; }
     }

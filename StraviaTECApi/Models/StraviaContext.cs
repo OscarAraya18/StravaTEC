@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace StraviaTECApi.Models
 {
@@ -214,7 +212,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrepatrocinador)
                     .HasColumnName("nombrepatrocinador")
-                    .HasMaxLength(30);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
@@ -598,7 +596,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrepatrocinador)
                     .HasColumnName("nombrepatrocinador")
-                    .HasMaxLength(30);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")

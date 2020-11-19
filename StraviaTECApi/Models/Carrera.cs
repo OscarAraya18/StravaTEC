@@ -23,7 +23,10 @@ namespace StraviaTECApi.Models
         public string Tipoactividad { get; set; }
         public bool Privacidad { get; set; }
 
+        // uno a muchos
         public virtual Deportista AdmindeportistaNavigation { get; set; }
+
+        // muchos a muchos
         public virtual ICollection<CarreraCategoria> CarreraCategoria { get; set; }
         public virtual ICollection<CarreraCuentabancaria> CarreraCuentabancaria { get; set; }
         public virtual ICollection<CarreraPatrocinador> CarreraPatrocinador { get; set; }

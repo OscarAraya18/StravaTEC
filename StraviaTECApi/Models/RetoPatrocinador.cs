@@ -9,6 +9,7 @@ namespace StraviaTECApi.Models
         public string Nombrereto { get; set; }
         public string Admindeportista { get; set; }
 
+        // uno a muchos
         public virtual Patrocinador NombrepatrocinadorNavigation { get; set; }
         public virtual Reto Reto { get; set; }
     }
