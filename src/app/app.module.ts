@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,7 +34,8 @@ import { LogInComponent } from './vistas/organizador/log-in/log-in.component';
     AppRoutingModule,
     MatTabsModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

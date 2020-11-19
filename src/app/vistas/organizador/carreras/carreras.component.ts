@@ -5,6 +5,10 @@ import { CarreraCuentaBancaria } from 'src/app/modelos/carrera-cuenta-bancaria';
 import { CarreraPatrocinador } from 'src/app/modelos/carrera-patrocinador';
 import { GrupoCarrera } from 'src/app/modelos/grupo-carrera';
 import { LogInService} from 'src/app/services/log-in.service';
+import { GrupoService} from 'src/app/services/grupo.service';
+import { Grupo } from 'src/app/modelos/grupo';
+import { Patrocinador } from 'src/app/modelos/patrocinador';
+import { CarreraService} from 'src/app/services/carrera.service';
 
 @Component({
   selector: 'app-carreras',
@@ -25,53 +29,9 @@ form2Visibility: boolean;
 elimina: boolean;
 visibilidad: string;
 actividades = ["Nadar","Correr","Ciclismo","Senderismo","Kayak","Caminata"];
-categorias = ["Junior","Sub-23","Elite","Master-A","Master-B","Master-C"];
-patrocinadores =[
- {
- "nombrecomercial": "Grupo INS",
- "logo": "https://acortar.link/gGMhs",
- "nombrerepresentante": "Róger Guillermo Arias Agüero",
- "numerotelrepresentante": "(+506)2287-6000"
- },
- {
- "nombrecomercial": "CoopeTarrazú",
- "logo": "https://acortar.link/jtm5s",
- "nombrerepresentante": "Yendry Leiva",
- "numerotelrepresentante": "(+506)2546-8615"
- },
- {
- "nombrecomercial": "KOLBI",
- "logo": "https://acortar.link/rI9vm",
- "nombrerepresentante": "Marjorie González Cascante",
- "numerotelrepresentante": "(+506)2255-1155"
- },
- {
- "nombrecomercial": "TDMAS",
- "logo": "https://acortar.link/L2LyQ",
- "nombrerepresentante": "Andres Nicolas",
- "numerotelrepresentante": "(+506)2232-2222"
- }
-]
-;
-grupos = [
- {
- "nombre": "Las Estrellas",
- "admindeportista": "sam.astua",
- },
- {
- "nombre": "Los Toros",
- "admindeportista": "kevintrox"
- },
- {
- "nombre": "Los Bichos",
- "admindeportista": "cr7"
- },
- {
- "nombre": "Los Físicos",
- "admindeportista": "crespo"
- }
-];
-
+categorias: string[];
+patrocinadores: Patrocinador[];
+grupos: Grupo[];
 checkedListcat = [];
 checkedListpatr = [];
 checkedListgroup = [];
@@ -81,133 +41,27 @@ patrocinadoresCarrera = [];
 cuentasCarrera = [];
 
 cuentas = [];
+cuentastr:string;
 base64img;
 visi = false;
 
-  constructor(private _logInService: LogInService) { }
+  constructor(private _logInService: LogInService,private _GroupService: GrupoService,
+    private _CarreraService: CarreraService) { }
 
   ngOnInit(): void {
-    this.formVisibility = false;
-  	this.carreras = [
- {
- "nombre": "Endurance 2020",
- "admindeportista": "sam.astua",
- "fecha": "2020-12-10",
- "recorrido": null,
- "costo": 15000,
- "tipoactividad": "Ciclismo",
- "privacidad": true,
-"carreraCategoria": [
- {
- "nombrecategoria": "Master B",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- },
- {
- "nombrecategoria": "Master C",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- },
- {
- "nombrecategoria": "Sub-23",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- }
- ],
- "carreraCuentabancaria": [
- {
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua",
- "cuentabancaria": "CR05010044498887679823"
- },
- {
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua",
- "cuentabancaria": "CR02410056898889747823"
- },
+    this._GroupService.getGrupos().subscribe(data => this.grupos = data );
+    this._CarreraService.getPatrocinadores().subscribe(data => this.patrocinadores = data );
+    this._CarreraService.getCategorias().subscribe(data => this.categorias = data );
+    this._CarreraService.getCarreras().subscribe(data => {this.carreras = data; console.log(data);
+     for(let i = 0 ; i < this.carreras.length; i++) {
+        this._CarreraService.getCarrera(this.carreras[i].nombre).subscribe(data => {this.carreras[i] = data; console.log(data)} );
 
- ],
- "carreraPatrocinador": [
- {
- "nombrepatrocinador": "CoopeTarrazú",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- },
- {
- "nombrepatrocinador": "TDMAS",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- }
- ],
-"grupoCarrera": [
-{
- "nombrecarrera": "Carrera 2020",
- "admincarrera": "sam.astua",
- "admingrupo": "kevintrox",
- "nombregrupo": "Los Toros"
-},
-{
- "nombrecarrera": "Carrera 2020",
- "admincarrera": "sam.astua",
- "admingrupo": "sam.astua",
- "nombregrupo": "Las Estrellas"
- }
-]
- },
- {
- "nombre": "The Best",
- "admindeportista": "cr7",
- "fecha": "2020-12-20",
- "recorrido": null,
- "costo": 40000,
- "tipoactividad": "Correr",
- "privacidad": false,
-"carreraCategoria": [
- {
- "nombrecategoria": "Master B",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- },
- {
- "nombrecategoria": "Master C",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- },
- {
- "nombrecategoria": "Sub-23",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- }
- ],
- "carreraCuentabancaria": [
- {
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua",
- "cuentabancaria": "CR05010044498887679823"
- },
- {
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua",
- "cuentabancaria": "CR02410056898889747823"
- }
- ],
- "carreraPatrocinador": [
- {
- "nombrepatrocinador": "CoopeTarrazú",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- },
- {
- "nombrepatrocinador": "TDMAS",
- "nombrecarrera": "Carrera 2020",
- "admindeportista": "sam.astua"
- }
- ],
-"grupoCarrera": [
-]
- }
-]
-;
+     }
+   } );
+
+
+    this.formVisibility = false;
+  	
   }
 
 
@@ -218,7 +72,7 @@ agregar(){
 
 }
 
-submit(nombre,fecha,costo,cuentas,actividad,visibilidad){
+submit (nombre, fecha, costo, cuentas, actividad, visibilidad){
   this.carrera = new Carrera();
   this.carrera.nombre = nombre;
   this.carrera.fecha = fecha;
@@ -236,7 +90,7 @@ submit(nombre,fecha,costo,cuentas,actividad,visibilidad){
       }
   this.carrera.carreraCategoria = this.categoriasCarrera;
 
- this.cuentas = cuentas.split(",");
+ this.cuentas = this.cuentastr.split(",");
 
   for(let i = 0 ; i < this.cuentas.length; i++) {
       this.cuenta = new CarreraCuentaBancaria();
@@ -265,7 +119,7 @@ submit(nombre,fecha,costo,cuentas,actividad,visibilidad){
       this.gruposCarrera.push(this.grupo);
   }
   this.carrera.grupoCarrera = this.gruposCarrera;
-
+ this._CarreraService.nuevaCarrera(this.carrera).subscribe(data => {});
 
  console.log(this.checkedListpatr);
  console.log(this.checkedListgroup);
@@ -278,6 +132,8 @@ submit(nombre,fecha,costo,cuentas,actividad,visibilidad){
  this.cuentasCarrera = [];
  this.patrocinadoresCarrera = [];
  this.carreras.push(this.carrera);
+
+
 this.formVisibility = false;
 
 
@@ -344,64 +200,30 @@ myReader.readAsDataURL(file);
 
  actualiza(carrera){
   this.form2Visibility = true;
+  this._CarreraService.getCarrera(carrera.nombre).subscribe(data => {this.carrera = data; console.log(data)} );
+
   this.carrera = carrera;
   console.log(carrera);
 
 }
 
-modifica(nombre,fecha,costo,cuentas,actividad,visibilidad){
+modifica(nombre,fecha,costo,actividad,visibilidad){
 console.log("modifica")
- this.carrera = new Carrera();
-  this.carrera.nombre = nombre;
+
+ 
   this.carrera.fecha = fecha;
-    this.carrera.admindeportista = this._logInService.getUsuario();
+  this.carrera.admindeportista = this._logInService.getUsuario();
   this.carrera.costo = costo;
-  this.carrera.tipoactividad = actividad;
+
   this.carrera.privacidad = this.visi;
   this.carrera.recorrido = this.base64img;
-  for(let i = 0 ; i < this.checkedListcat.length; i++) {
-      this.categoria = new CarreraCategoria();
-      this.categoria.nombrecategoria = this.checkedListcat[i];
-      this.categoria.nombrecarrera = nombre;
-      this.categoria.admindeportista = this._logInService.getUsuario();
-      this.categoriasCarrera.push(this.categoria);
-      }
-  this.carrera.carreraCategoria = this.categoriasCarrera;
-
- this.cuentas = cuentas.split(",");
-
-  for(let i = 0 ; i < this.cuentas.length; i++) {
-      this.cuenta = new CarreraCuentaBancaria();
-      this.cuenta.cuentabancaria = this.cuentas[i];
-      this.cuenta.nombrecarrera = nombre;
-      this.cuenta.admindeportista = this._logInService.getUsuario();
-      this.cuentasCarrera.push(this.cuenta);
-  }
-  this.carrera.carreraCuentabancaria = this.cuentasCarrera;
-
-  for(let i = 0 ; i < this.checkedListpatr.length; i++) {
-      this.patrocinador = new CarreraPatrocinador();
-      this.patrocinador.nombrepatrocinador = this.checkedListpatr[i];
-      this.patrocinador.nombrecarrera = nombre;
-      this.patrocinador.admindeportista = this._logInService.getUsuario();
-      this.patrocinadoresCarrera.push(this.patrocinador);
-  }
-  this.carrera.carreraPatrocinador= this.patrocinadoresCarrera;
-
-  for(let i = 0 ; i < this.checkedListgroup.length; i++) {
-      this.grupo = new GrupoCarrera();
-      this.grupo.nombregrupo= this.checkedListgroup[i].nombre;
-      this.grupo.admingrupo= this.checkedListgroup[i].admindeportista;
-      this.grupo.nombrecarrera = nombre;
-      this.grupo.admincarrera = this._logInService.getUsuario();
-      this.gruposCarrera.push(this.grupo);
-  }
-  this.carrera.grupoCarrera = this.gruposCarrera;
 
 
- console.log(this.checkedListpatr);
- console.log(this.checkedListgroup);
  console.log(this.carrera);
+
+
+this._CarreraService.actualizaCarrera(this.carrera).subscribe(data => {});
+
  this.checkedListcat = [];
  this.checkedListpatr = [];
  this.checkedListgroup = [];
@@ -410,6 +232,9 @@ console.log("modifica")
  this.cuentasCarrera = [];
  this.patrocinadoresCarrera = [];
  this.form2Visibility = false;
+
+
+
 
 
   for(let i = 0 ; i < this.carreras.length; i++) {
@@ -445,7 +270,7 @@ eliminar(id){
 if (confirmed) {
 this.elimina = false;
 
-
+this._CarreraService.borraCarrera(id.nombre).subscribe(data => {});
 this.carreras = this.carreras.filter((i) => i !== id); // filtramos
 
 

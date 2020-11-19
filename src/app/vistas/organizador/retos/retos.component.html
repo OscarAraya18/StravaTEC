@@ -33,7 +33,7 @@
 			
 
 
-					<div *ngIf="visi" >
+					<div *ngIf="visi && formVisibility" >
 	
 	Grupos autorizados: 
 	<div class="row">
@@ -47,8 +47,8 @@
 <p></p>
 		
 
- <p> Patrocinadores: </p>
- <div class="row">
+ <p *ngIf="formVisibility"> Patrocinadores: </p>
+ <div *ngIf="formVisibility" class="row">
 
  <p *ngFor="let patrocinador of patrocinadores" class="row2" >
  
@@ -62,7 +62,7 @@
 
 </div>
 
-
+<br>
 
 <div class= "cont"  *ngIf="formVisibility">
 	<button type="button" class="btn but" (click)="formVisibility = false">

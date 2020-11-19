@@ -11,16 +11,39 @@ import { LogInService} from 'src/app/services/log-in.service';
 })
 export class LogInComponent implements OnInit {
 invalid = false;
+user = new LogIn();
 constructor( private router: Router,private _logInService: LogInService) { }
 
   ngOnInit(): void {
   }
 
 ingresar(usuario, contrasena): void{
+this.user.Usuario = usuario;
+this.user.ClaveAcceso = contrasena;
+this._logInService.setUsuario(usuario);
+console.log(this.user);
+
+this._logInService.login(this.user).
+subscribe(data => {
+
 this.invalid = false;
 this.router.navigate(['/organizador']);
-this._logInService.setUsuario(usuario);
+},
+error => {
 
+        console.log(error);  
+        if (error.status === 400){
+          this.user.Usuario = "";
+          this.user.ClaveAcceso = "";
+          this.invalid = true;
+        
+        }else{
+        	this.invalid = false;
+		this.router.navigate(['/organizador']);
+
+        }
+
+      });
 
   }
 

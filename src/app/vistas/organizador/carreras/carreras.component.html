@@ -41,12 +41,12 @@
 	Recorrido( Archivo .gpx):  <input type="file" (change)="onFileChanged($event)" class="custom-file-upload"
            id="file"
             name="file" class="inputred" ngModel required />
-<p> Cuentas Bancarias: <textarea cols="40" rows="3" placeholder="Separe las cuentas con coma" #cuentas name="cuentas" class="inputred" ngModel required > </textarea></p>
-<p> Categorías: </p>
-<div class="row">
- <p *ngFor="let categoria of categorias" ><input type="checkbox" (change)="onCheckboxChange(categoria,$event)" ngModel  name="categoria" [value]='categoria' class="inputred"  required /> {{categoria}}</p></div>
- <p> Patrocinadores: </p>
- <div class="row">
+<p  *ngIf="formVisibility" > Cuentas Bancarias: <textarea [(ngModel)]="cuentastr" cols="40" rows="3" placeholder="Separe las cuentas con coma" #cuentas name="cuentas" class="inputred" ngModel required > </textarea></p>
+<p  *ngIf="formVisibility"> Categorías: </p>
+<div   *ngIf="formVisibility" class="row">
+ <p *ngFor="let categoria of categorias" ><input type="checkbox" (change)="onCheckboxChange(categoria.nombre,$event)" ngModel  name="categoria" [value]='categoria.nombre' class="inputred"  required /> {{categoria.nombre}}</p></div>
+ <p   *ngIf="formVisibility"> Patrocinadores: </p>
+ <div   *ngIf="formVisibility" class="row">
 
  <p *ngFor="let patrocinador of patrocinadores" >
  
@@ -85,7 +85,7 @@
 	 mat-button
 	
    [disabled]="f.invalid"
-   (click)="modifica(nombre.value,fecha.value,costo.value,cuentas.value,actividad.value,vis.value)"
+   (click)="modifica(nombre.value,fecha.value,costo.value,actividad.value,vis.value)"
 
                   >
 	Modificar Carrera

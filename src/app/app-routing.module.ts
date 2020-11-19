@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: 'organizador',
     component: OrganizadorComponent
-  },
+  }
 
 ];
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogIn } from 'src/app/modelos/log-in';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -8,10 +9,10 @@ import { LogIn } from 'src/app/modelos/log-in';
 export class LogInService {
 Usuario: string;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-   login( LogIn){
-    //return this.http.post<string>('/api/Productores/login', productor);
+   login( user: LogIn){
+    return this.http.post<string>('https://localhost:44371/api/user/login', user);
   }
   setUsuario(Usuario: string){
     this.Usuario = Usuario;

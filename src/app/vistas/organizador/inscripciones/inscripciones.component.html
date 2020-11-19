@@ -1,4 +1,34 @@
-<div class="row name">
+<div class="row name" *ngIf="!formVisibility">
+  <mat-card class="example-card " *ngFor="let carrera of carreras" >
+    <div >
+  <mat-card-header >
+    <mat-card-title  >
+      <h4>Carrera: </h4> {{carrera.nombre}}</mat-card-title>
+
+  </mat-card-header>
+   
+  <mat-card-actions>
+    <div>
+    <button type="button" class="btn  but" (click)="ver(carrera.nombre)" >
+  Ver las inscripciones
+  </button>
+    
+</div>
+  </mat-card-actions>
+  </div>
+    
+</mat-card>
+
+</div>
+
+
+
+
+<div  *ngIf="formVisibility" >
+   <button type="button" class="btn  but" (click)="nover()" >
+  Volver
+  </button>
+  <div class="row name">
 	<mat-card class="example-card " *ngFor="let inscripcion of inscripciones" >
 		<div >
   <mat-card-header >
@@ -8,7 +38,7 @@
   </mat-card-header>
   <mat-card-content>
     <img class="recibo" src="{{inscripcion.reciboPago}}" />
-    <p>Carrera: {{ inscripcion.nombrecarrera}}
+   
       </mat-card-content>
    
   <mat-card-actions>
@@ -24,5 +54,6 @@
   </div>
     
 </mat-card>
+</div>
 
 </div>
