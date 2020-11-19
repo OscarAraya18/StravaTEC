@@ -34,15 +34,6 @@ namespace StraviaTECApi.Models
         public virtual DbSet<Reto> Reto { get; set; }
         public virtual DbSet<RetoPatrocinador> RetoPatrocinador { get; set; }
 
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Server=localhost;Database=StraviaDB;User Id=StraviaTECAdmin;Password=password;Port=5432");
-            }
-        }*/
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Actividad>(entity =>
@@ -76,7 +67,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombreretocarrera)
                     .HasColumnName("nombreretocarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Recorridogpx)
                     .HasColumnName("recorridogpx")
@@ -131,7 +122,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombre)
                     .HasColumnName("nombre")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -172,7 +163,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -198,7 +189,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -227,7 +218,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -322,7 +313,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -354,7 +345,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -410,7 +401,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admincarrera)
                     .HasColumnName("admincarrera")
@@ -470,7 +461,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Adminreto)
                     .HasColumnName("adminreto")
@@ -506,7 +497,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecarrera)
                     .HasColumnName("nombrecarrera")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admincarrera)
                     .HasColumnName("admincarrera")
@@ -538,7 +529,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrecomercial)
                     .HasColumnName("nombrecomercial")
-                    .HasMaxLength(30);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Logo)
                     .HasColumnName("logo")
@@ -566,7 +557,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombre)
                     .HasColumnName("nombre")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")
@@ -611,7 +602,7 @@ namespace StraviaTECApi.Models
 
                 entity.Property(e => e.Nombrereto)
                     .HasColumnName("nombrereto")
-                    .HasMaxLength(30);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Admindeportista)
                     .HasColumnName("admindeportista")

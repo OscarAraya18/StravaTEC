@@ -111,6 +111,32 @@ namespace StraviaTECApi.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet]
+        [Route("api/carrera/admin/verParticipantes")]
+        public IActionResult GetParticipantes([FromQuery] string nombreCarrera, [FromQuery] string usuario)
+        {
+            var resultado = _repository.verParticipantesPorCarrera(nombreCarrera, usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        [Route("api/carrera/admin/verPosiciones")]
+        public IActionResult GetPosiciones([FromQuery] string nombreCarrera, [FromQuery] string usuario)
+        {
+            var resultado = _repository.verPosicionesPorCarrera(nombreCarrera, usuario);
+
+            if (resultado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultado);
+        }
+
         /// <summary>
         /// Petición para crear una nueva carrera
         /// </summary>

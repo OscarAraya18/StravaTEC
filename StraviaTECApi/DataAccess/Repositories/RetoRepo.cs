@@ -238,7 +238,7 @@ namespace EFConsole.DataAccess.Repositories
                     diasFaltantes = (int)(reto.Periododisponibilidad - DateTime.Today).TotalDays
                 };
                 // se agrega el estado actual del reto
-                if(reto.DeportistaReto != null)
+                if(reto.DeportistaReto.Count != 0)
                 {
                     retoParser.kmAcumulados = reto.DeportistaReto.First().Kmacumulados;
                     retoParser.completado = reto.DeportistaReto.First().Completado;

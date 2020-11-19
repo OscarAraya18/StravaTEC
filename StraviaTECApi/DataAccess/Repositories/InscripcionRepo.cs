@@ -29,6 +29,7 @@ namespace EFConsole.DataAccess.Repositories
             if (inscripcionParser == null)
                 throw new ArgumentNullException(nameof(inscripcionParser));
 
+
             // se crea un ainscripción para guardar en la base de datos
             var inscripcion = new Inscripcion
             {
@@ -44,29 +45,7 @@ namespace EFConsole.DataAccess.Repositories
 
             _context.Inscripcion.Add(inscripcion);
 
-            // se accede al deportista que quiere realizar la inscripción
-            var deportista = _context.Deportista.Where(x => x.Usuario == inscripcionParser.Usuariodeportista).FirstOrDefault();
-            
-            // se accede a la carrera a inscribirse
-            var carrera = _context.Carrera.Where(x => x.Nombre == inscripcion.Nombrecarrera 
-                            && x.Admindeportista == inscripcion.Admincarrera).
-                            Include(x => x.CarreraCategoria).FirstOrDefault();
-
-            foreach (var categoria in carrera.CarreraCategoria)
-            {
-                if (categoria.Nombrecategoria == deportista.Nombrecategoria) // valida si existe una categoría igual a la del deportista en la carrera
-                {
-                    var inscripcionCarrera = new InscripcionCarrera();
-                    inscripcionCarrera.Deportistainscripcion = inscripcion.Usuariodeportista;
-                    inscripcionCarrera.Estadoinscripcion = inscripcion.Estado;
-                    inscripcionCarrera.Nombrecarrera = inscripcion.Nombrecarrera;
-                    inscripcionCarrera.Admincarrera = inscripcion.Admincarrera;
-
-                    _context.Add(inscripcionCarrera);
-                    return true;
-                }
-            }
-            return false;
+            return true;
         }
 
         public void Update(InscripcionParser inscripcionParser)
@@ -92,10 +71,13 @@ namespace EFConsole.DataAccess.Repositories
 
         }
 
-        public void Delete(Inscripcion inscripcion)
+        public void Delete(string nombreCarerra, string adminDeportista, string usuario)
         {
+            var inscripcion = _context.Inscripcion.Where(x => x.Admincarrera == adminDeportista &&
+            x.Nombrecarrera == nombreCarerra && x.Usuariodeportista == usuario).FirstOrDefault();
+            
             if (inscripcion == null)
-                throw new System.ArgumentNullException(nameof(inscripcion));
+                throw new ArgumentNullException(nameof(inscripcion));
 
             _context.Inscripcion.Remove(inscripcion);
 

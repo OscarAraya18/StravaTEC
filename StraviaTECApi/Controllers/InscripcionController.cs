@@ -120,13 +120,16 @@ namespace StraviaTECApi.Controllers
         /// <summary>
         /// Petición para eliminar/denegar una inscripción
         /// </summary>
-        /// <param name="inscripcion">La inscripción a eliminar</param>
-        /// <returns>Un ok en caso de tener éxito</returns>
+        /// <param name="adminCarrera">administrador de la carrera a inscribir</param>
+        /// <param name="nombreCarrera">el nombre de la carrera a inscribir</param>
+        /// <param name="usuario">el usuario que realizó la inscripción</param>
+        /// <returns>Un ok en caso de éxito</returns>
         [HttpDelete]
         [Route("api/inscripcion/delete")]
-        public IActionResult DenegarInscripcion([FromBody] Inscripcion inscripcion)
+        public IActionResult DenegarInscripcion([FromQuery] string adminCarrera, [FromQuery] string nombreCarrera, 
+            [FromQuery] string usuario)
         {
-            _repository.Delete(inscripcion);
+            _repository.Delete(nombreCarrera, adminCarrera, usuario);
             _repository.SaveChanges();
             return Ok("Inscripción eliminada correctamente");
         }
