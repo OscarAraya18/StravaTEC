@@ -1,0 +1,41 @@
+.example-card {
+ max-width: 250px;
+  background-color:#D0FCFC;
+	border-radius: 20px;
+	box-shadow: 10px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	margin-bottom: 15px;
+	margin-top: 15px;
+
+}
+.name{
+	text-align: center;
+}
+
+.but{
+	margin-right:10px;
+	margin-bottom: 15px;
+	background-color: #FF5733 ;
+	color: white;
+	margin-top: 20px;
+	margin-left: 10px;
+}
+.row{
+	display: flex;
+	justify-content:space-around;
+	flex-direction: row;
+	width: 95%;
+	margin-left: 10px;
+
+}
+p{
+	text-align: left;
+	margin-left: 10px;
+}
+.recibo{
+max-width: 220px;
+max-height: 200px;
+
+}
