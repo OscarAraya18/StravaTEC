@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StraviaTECReports", "StraviaTECReports\StraviaTECReports.csproj", "{639BB870-0D96-4E23-964F-F695ACF64074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StraviaTECReportsAPI", "StraviaTECReportsAPI\StraviaTECReportsAPI.csproj", "{A10FD8B2-C785-4DEE-AD4E-261874B33B39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{639BB870-0D96-4E23-964F-F695ACF64074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{639BB870-0D96-4E23-964F-F695ACF64074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{639BB870-0D96-4E23-964F-F695ACF64074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{639BB870-0D96-4E23-964F-F695ACF64074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A10FD8B2-C785-4DEE-AD4E-261874B33B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A10FD8B2-C785-4DEE-AD4E-261874B33B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A10FD8B2-C785-4DEE-AD4E-261874B33B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A10FD8B2-C785-4DEE-AD4E-261874B33B39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F29CF4F-CEE7-434C-ACE4-0B6A10FEB3AA}
+	EndGlobalSection
+EndGlobal
