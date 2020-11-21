@@ -1,5 +1,5 @@
 export class GrupoCarrera {
-nombregrupo: string;
+idgrupo: number;
 nombrecarrera: string;
 admincarrera: string;
 admingrupo: string;
