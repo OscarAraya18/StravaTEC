@@ -1,0 +1,308 @@
+/*---------------------------------------ESTILOS PARA EL MENU LATERAL----------------------------------------------*/
+.menuLateral{
+    position: relative;
+    top: 0vh;
+    left: -35vw;
+    height: 100vh;
+    width: 30vw;
+    align-self:center;
+    background-color: #ff5100;
+    border-right: 2px solid black;
+}
+
+.contenedor{
+    position: absolute;
+    top: 0px;
+    left: 30vw;
+    height: 100vh;
+    width: 70vw;
+    background: rgba(90.2, 96.9, 99.6, 0.6);
+  }
+
+
+.fotoDePerfilUsuario{
+    position: relative;
+    border-radius: 50%;
+    top: 20px;
+    left: 27%;
+    width: 13vw;
+    height: 26vh;
+}
+
+.textoNombreDelUsuario{
+    text-align: center;
+    position:relative;
+    top:25px;
+    color: white;
+    font-size: xxx-large;
+}
+
+.textoNombreDeUsuario{
+    text-align: center;
+    position:relative;
+    top:15px;
+    color: white;
+    font-size: xx-large;
+}
+
+.botonRegistrarActividad{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 6%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonSeguirDeportistas{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 8%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonBuscarCarrerasRetos{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 10%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonBuscarGrupos{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 12%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonMisCarrerasRetos{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 12%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.logo{
+    position:relative;
+    border-radius: 50%;
+    top:24%;
+    left:-26%;
+    width: 20%;
+    cursor: pointer;
+}
+
+.fondoDePantalla{
+    position: absolute;
+    top: 0px;
+    left: 30vw;
+    height: 100vh;
+    width: 70vw;
+}
+
+.iconoModificar{
+    position: relative;
+    cursor: pointer;
+    width: 3.5vw;
+    top: -420px;
+    left: -330px;
+}
+
+
+/*----------------------------------------ESTILOS PARA LOS TEXTOS----------------------------------------------*/
+.textoTusCarreras{
+    position: absolute;
+    border-radius: 10px;
+    width: 30vw;
+    height: 8vh;
+    top: 30px;
+    left: 2.5vw;
+    font-size: xx-large;
+    background-color: #ff5700;
+    color: white;
+    border-color: black;
+}
+
+.textoTusRetos{
+    position: absolute;
+    border-radius: 10px;
+    width: 30vw;
+    height: 8vh;
+    top: 30px;
+    left: 37.5vw;
+    font-size: xx-large;
+    background-color: #ff5700;
+    color: white;
+    border-color: black;
+}
+.textoNombreCarreraRetoEncontrada{
+    position: relative;
+    top: 20px;
+    left: 5px;
+    color: black;
+    font-size: x-large;
+    white-space: nowrap;
+}
+
+.textoActividadCarreraRetoEncontrada{
+    position: relative;
+    top: 25px;
+    left: 5px;
+    color: black;
+    font-size: large;
+    white-space: nowrap;
+}
+
+.textoInformacionCarreraRetoEncontrada{
+    position: relative;
+    top: 25px;
+    left: 5px;
+    color: white;
+    font-size: medium;
+    white-space: nowrap;
+}
+
+.textoTablaPosicionesCarreraEncontrada{
+    position: relative;
+    border-radius: 10px;
+    width: 30vw;
+    height: 6vh;
+    top: 255px;
+    left: 1vw;
+    font-size: larger;
+    background-color: #ff5700;
+    color: white;
+    border-color: black;
+    text-align-last:center;
+}
+
+.textoCuentasBancariasCarreraEncontrada{
+    position: relative;
+    border-radius: 10px;
+    width: 31vw;
+    height: 6vh;
+    top: 30px;
+    left: 0.3vw;
+    font-size: medium;
+    background-color:gray;
+    color: white;
+    border-color: black;
+    text-align-last:center;
+}
+
+#patrocinadoresCarreraEncontrada{
+    position: relative;
+    top: -330px;
+    left: 260px;
+    height: 10vh;
+    width: 12vw;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+
+.fichaPatrocinador{
+    display: inline-flex;
+    background:gray;
+    height: 10vh;
+    width: 10.6vw;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.textoNombrePatrocinador{
+    font-size: smaller;
+}
+
+.logoPatrocinador{
+    position:relative;
+    top:0px;
+    left:0px;
+    width: 8vw;
+    height: 9vh;
+}
+
+#patrocinadoresRetoEncontrado{
+    position: relative;
+    top: -115px;
+    left: 270px;
+    height:20vh;
+    width: 12vw;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+
+
+
+/*--------------------------------ESTILOS PARA LAS FICHAS DE CARRERAS Y RETOS---------------------------------*/
+#carrerasEncontradas{
+    position: absolute;
+    top: 115px;
+    left: 0px;
+    height: 82.5%;
+    width: 35vw;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+#retosEncontrados{
+    position: absolute;
+    top: 115px;
+    left: 35vw;
+    height: 82.5%;
+    width: 35vw;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.fichaCarrera{
+    display: inline-flex;
+    background: rgba(90.2, 96.9, 99.6, 0.8);
+    height: 70vh;
+    width: 33.7vw;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.fichaReto{
+    display: inline-flex;
+    background: rgba(90.2, 96.9, 99.6, 0.8);
+    height: 33vh;
+    width: 33.7vw;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+agm-map{
+    position: relative;
+    top: 5px;
+    left: 5px;
+    width: 420px;
+    height: 200px;
+}

@@ -1,0 +1,74 @@
+<div class="container menuLateral">
+    <img class="fondoDePantalla" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604690470/CE3101/Primer%20Proyecto/Muro_Wallpaper.jpg">
+    
+    <img class="fotoDePerfilUsuario" [src]="fotoDePerfilUsuario">
+    
+    <h1 class="textoNombreDelUsuario">{{nombreDelUsuario}}</h1>
+    <h1 class="textoNombreDeUsuario">@{{nombreDeUsuario}}</h1>
+
+    <button class="botonRegistrarActividad" disabled="true" routerLinkActive="active">
+		Registrar Actividad
+    </button>
+    
+    <button class="botonSeguirDeportistas" (click)="goToSeguirDeportistas()" routerLinkActive="active">
+		Seguir Deportistas
+    </button>
+    
+    <button class="botonBuscarCarrerasRetos" (click)="goToBuscarCarrerasRetos()" routerLinkActive="active">
+		Buscar Carreras y Retos
+    </button>
+    
+    <button class="botonBuscarGrupos" (click)="goToBuscarGrupos()" routerLinkActive="active">
+		Buscar Grupos
+    </button>
+    
+    <button class="botonMisCarrerasRetos" (click)="goToMisCarrerasRetos()" routerLinkActive="active">
+		Mis Carreras y Retos
+    </button>
+
+    <img class="logo"
+     src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604793824/Icono.png" (click)="goToMiMuro()" routerLinkActive="active">
+     <img class="iconoModificar"
+    src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604985038/Configurar_Logo.png"
+    (click)="goToModificarCuenta()">
+</div>
+
+
+<div class="container contenedor">
+
+  <select class="inputCarreraRealizada" [disabled]="noEsCarrera" title="Carrera Realizada" id="carreraRealizada">
+    <option value="Carrera" selected>Seleccione una carrera</option>
+    <option *ngFor='let carrera of posiblesCarreras; let i = index'>{{carrera.nombre}}</option>
+  </select>
+
+  <select class="inputRetoRealizado" [disabled]="noEsReto" title="Reto Realizado" id="retoRealizado">
+    <option value="Reto" selected>Seleccione un reto</option>
+    <option *ngFor='let reto of posiblesRetos; let i = index'>{{reto.nombre}}</option>
+  </select>
+
+  <button class="inputActividadLibre" disabled="true">Actividad Libre</button>
+
+
+
+  
+  <input class="inputFecha" type="text" placeholder="Fecha" onfocus="(this.type='date')" onblur="(this.type='text')" id="fecha">
+
+  <input class="inputActividadRealizada" type="text" placeholder="Actividad Realizada" id="actividadRealizada" [disabled]="noEsActividadLibre">
+
+  <input class="inputHoraInicio" type="text" placeholder="Hora de Inicio" onfocus="(this.type='time')" onblur="(this.type='text')" id="horaInicio">
+
+  <input class="inputDistanciaRecorrida" type="number" placeholder="Distancia Recorrida en Kilometros" id="distanciaRecorrida">
+
+  <input class="inputDuracion" type="text" step="1" placeholder="Duración" onfocus="(this.type='time')" onblur="(this.type='text')" id="duracion">
+
+  <input type="file" id="ruta" (change)="subidaRuta($event)" accept=".gpx" style="display:none">
+  <button class="inputRuta" onclick="document.getElementById('ruta').click()">{{nombreRuta}}</button>
+
+  <button class="botonRegistrarActividadParaGuardar" (click)="registrarActividad()">Registrar Actividad</button>
+
+
+  <input type="checkbox" [checked]="!noEsCarrera" class="checkBoxCarrera" (click)="habilitarEsCarrera()">
+  <input type="checkbox" [checked]="!noEsReto" class="checkBoxReto" (click)="habilitarEsReto()">
+  <input type="checkbox" [checked]="!noEsActividadLibre" class="checkBoxActividadLibre" (click)="habilitarEsActividadLibre()">
+
+</div>

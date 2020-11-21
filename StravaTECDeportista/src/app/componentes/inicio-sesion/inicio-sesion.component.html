@@ -1,0 +1,17 @@
+<img class="fondoDePantalla" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604627934/CE3101/Primer%20Proyecto/Login_Wallpaper.jpg">
+
+
+<div class="container contenedor">
+	<img class="logo" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604628573/CE3101/Primer%20Proyecto/Logo.png">
+	<input class="nombreDeUsuario" type="text" placeholder="Nombre de Usuario" id="nombreDeUsuario">
+	<input class="claveDeAcceso" [type]="tipoInput" [placeholder]="textoInput" id="claveDeAcceso">
+
+	<button class="botonInicioSesion" (click)="iniciarSesion()" routerLinkActive="active">
+		{{textoBoton}}
+	</button>
+ 
+	<h2 class="textoRegistro" [routerLink]="['registro-deportista']">¿No tienes una cuenta aún? Regístrate aquí.</h2>
+</div>
+
+
+

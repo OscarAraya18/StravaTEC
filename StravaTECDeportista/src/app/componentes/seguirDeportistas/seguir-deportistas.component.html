@@ -1,0 +1,60 @@
+<div class="container menuLateral">
+    <img class="fondoDePantalla" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604690470/CE3101/Primer%20Proyecto/Muro_Wallpaper.jpg">
+    
+    <img class="fotoDePerfilUsuario" [src]="fotoDePerfilUsuario">
+    
+    <h1 class="textoNombreDelUsuario">{{nombreDelUsuario}}</h1>
+
+    <h1 class="textoNombreDeUsuario">@{{nombreDeUsuario}}</h1>
+
+    <button class="botonRegistrarActividad" (click)="goToRegistrarActividad()" routerLinkActive="active">
+		Registrar Actividad
+    </button>
+    
+    <button class="botonSeguirDeportistas" disabled="true" routerLinkActive="active">
+		Seguir Deportistas
+    </button>
+    
+    <button class="botonBuscarCarrerasRetos" (click)="goToBuscarCarrerasRetos()" routerLinkActive="active">
+		Buscar Carreras y Retos
+    </button>
+    
+    <button class="botonBuscarGrupos" (click)="goToBuscarGrupos()" routerLinkActive="active">
+		Buscar Grupos
+    </button>
+    
+    <button class="botonMisCarrerasRetos" (click)="goToMisCarrerasRetos()" routerLinkActive="active">
+		Mis Carreras y Retos
+    </button>
+
+    <img class="logo"
+     src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604793824/Icono.png" (click)="goToMiMuro()" routerLinkActive="active">
+     <img class="iconoModificar"
+    src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604985038/Configurar_Logo.png"
+    (click)="goToModificarCuenta()">
+</div>
+
+<div class="container contenedor">
+    <input class="inputDeportista" type="text" placeholder="Coloque el nombre de un deportista" id="deportista">
+    
+    <button class="botonBuscar" (click)="buscarDeportista()">Buscar</button>
+
+
+    <div id="deportistasEncontrados">
+        <div class="container fichaDeportista" *ngFor="let deportista of cantidadDeportistasEncontrados; let i = index">
+              <div>
+                <h1 class="textoNombreDeportistaEncontrado">{{deportistasEncontrados[i].nombre}}</h1>
+                <h2 class="textoNombreDeUsuarioDeportistaEncontrado">@{{deportistasEncontrados[i].nombreUsuario}}</h2>
+              </div>
+              <button class="botonSeguir" (click)="seguirDeportista(deportistasEncontrados[i].nombreUsuario)">Seguir Deportista</button>
+              <img 
+              class="fotoDePerfilDeportistaEncontrado" 
+              [src]="fotosCorregidas[i]"
+              *ngIf="tieneFotoPerfil[i]; else noTieneFoto"
+              >
+              <ng-template #noTieneFoto>
+              <img class="fotoDePerfilDeportistaEncontrado" [src]="placeHolderFotoPerfil">
+              </ng-template>
+        </div>
+    </div>
+</div>
