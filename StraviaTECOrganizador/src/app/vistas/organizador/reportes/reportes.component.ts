@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { CarreraService} from 'src/app/services/carrera.service';
+import { Carrera } from 'src/app/modelos/carrera';
+import { ReporteService} from 'src/app/services/reporte.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-reportes',
@@ -7,97 +11,100 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportesComponent implements OnInit {
 
- carreras: any[];
+ carreras: Carrera[];
 
 formVisibility: boolean;
 form2Visibility: boolean;
 elimina: boolean;
+pdf: string;
+pdf2: string;
 
-  constructor() { }
+  constructor(private _CarreraService: CarreraService,
+    private downloadService: ReporteService) { }
 
   ngOnInit(): void {
-    this.formVisibility = false;
-  	this.carreras = [
-    {
-        "nombre": "Carrera 1",
-        "fecha": "20/12/2020",
-        "tipoActividad": "Correr",
-        "visibilidad": "Privada",
-        "costo": "20000",
-        "cuentasBancarias": "CR23015108410026012345 wesrdctfyguh",
-        "categorias": "Junior",
-        "patrocinadores": "Coca Cola"
-    },
-    {
-        "nombre": "Carrera 2",
-        "fecha": "20/12/2020",
-        "tipoActividad": "Nadar",
-        "visibilidad": "Privada",
-        "costo": "20000",
-        "cuentasBancarias": "CR23015108410026012345",
-        "categorias": "Junior",
-        "patrocinadores": "Coca Cola"
-    },
-    {
-        "nombre": "Carrera 3",
-        "fecha": "20/12/2020",
-        "tipoActividad": "Ciclismo",
-        "visibilidad": "Privada",
-        "costo": "20000",
-        "cuentasBancarias": "CR23015108410026012345",
-        "categorias": "Junior",
-        "patrocinadores": "Coca Cola"
-    },
-    {
-        "nombre": "Carrera 4",
-        "fecha": "20/12/2020",
-        "tipoActividad": "Senderismo",
-        "visibilidad": "Privada",
-        "costo": "20000",
-        "cuentasBancarias": "CR23015108410026012345",
-        "categorias": "Junior",
-        "patrocinadores": "Coca Cola"
-    }
+    this.formVisibility = true;
+  	 this._CarreraService.getCarreras().subscribe(data => {this.carreras = data; console.log(data);} );
 
-];
-  }
-
-
-agregar(){
-  this.formVisibility = true;
-
-}
-
-submit(nombre,fecha,costo,cuentas,actividad,visibilidad){
 
 
 }
 
 
 
- actualiza(){
+
+
+ actualiza(nombre){
+   this.formVisibility = false;
   this.form2Visibility = true;
+
+     this.downloadService.getParticipantes(nombre).subscribe(data => {this.pdf = data; 
+
+      const byteCharacters = atob(this.pdf);
+      const byteNumbers = new Array(byteCharacters.length);
+for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+}
+const byteArray = new Uint8Array(byteNumbers);
+        let blob = new Blob([byteArray], { type: "application/pdf"});
+    //change download.pdf to the name of whatever you want your file to be
+    saveAs(blob, "Participantes"+nombre+".pdf");
+this.pdf = 'data:application/pdf;base64,' + this.pdf;
+        console.log(data);
+
+
+
+
+      });
+
+     
+
+ 
+
+
 }
 
-modifica(nombre,fecha,costo,cuentas,actividad,visibilidad){
 
+
+
+
+eliminar(nombre){
+   this.formVisibility = false;
+  this.elimina = true;
+ 
+this.downloadService.getPosiciones(nombre).subscribe(data => {this.pdf2 = data; 
+    const byteCharacters = atob(this.pdf2);
+      const byteNumbers = new Array(byteCharacters.length);
+for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+}
+const byteArray = new Uint8Array(byteNumbers);
+        let blob = new Blob([byteArray], { type: "application/pdf"});
+    //change download.pdf to the name of whatever you want your file to be
+    saveAs(blob, "Posiciones"+nombre+".pdf");
+
+this.pdf2 = 'data:application/pdf;base64,' + this.pdf2;
+        console.log(data)});
 
 
 }
 
-
-
-eliminar(id){
-    const confirmed = window.confirm('¿Seguro que desea eliminar esta carrera?');
-if (confirmed) {
-this.elimina = false;
-
-
-this.carreras = this.carreras.filter((i) => i.nombre !== id); // filtramos
-
-
-
+  dostuff(b64Data){
+    const byteCharacters = atob(b64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    //const blob = new Blob([byteArray], {type: 'application/pdf'});
+    //console.log(blob)
+    return byteArray
+  }
+  Volver(){
+    this.formVisibility = true;
+    this.form2Visibility = false;
+    this.elimina = false;
+  }
 }
-}
-}
+
 
