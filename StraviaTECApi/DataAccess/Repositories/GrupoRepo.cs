@@ -254,10 +254,19 @@ namespace EFConsole.DataAccess.Repositories
             var gruposDeportista = _context.GrupoDeportista.
                 Where(x => x.Usuariodeportista == usuarioDeportista).
                 Include(x => x.Grupo).ToList();
+            
+            var gruposTotales = _context.Grupo.ToList();
 
             foreach(var grupo in gruposDeportista)
             {
-                grupos.Add(grupo.Grupo);
+                foreach(var grupoT in gruposTotales)
+                {
+                    if(grupo.Grupo.Id == grupoT.Id && grupo.Grupo.Admindeportista == grupoT.Admindeportista)
+                    {
+                        grupos.Add(grupoT);
+                        break;
+                    }
+                }
             }
 
             return grupos;

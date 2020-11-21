@@ -226,12 +226,14 @@ namespace EFConsole.DataAccess.Repositories
                        carreras.Add(carrera.Carrera);
                         break;
                     }
+                    break;
                 }
             }
 
             foreach(var carrera in carrerasPublicas)
             {
-                if (!carrerasInscritas.Contains(carrera) && (int)(carrera.Fecha - DateTime.Today).TotalDays >= 0) // se valida que no esté vencida
+                if (!carrerasInscritas.Contains(carrera) && !carreras.Contains(carrera) 
+                    && (int)(carrera.Fecha - DateTime.Today).TotalDays >= 0) // se valida que no esté vencida
                     carreras.Add(carrera);
             }  
             // se genera un JSON específico para la parte de deportista
