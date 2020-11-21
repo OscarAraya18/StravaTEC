@@ -1,0 +1,156 @@
+.fondoDePantalla{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+}
+
+.contenedor{
+    position: relative;
+    top: 30px;
+    left: 10px;
+    height: 90vh;
+    width: 100vw;
+    align-self:center;
+    border-radius: 20px;
+    background: rgba(90.2, 96.9, 99.6, 0.6);
+}
+
+.logo{
+    position: relative;
+    top: 20px;
+    left:485px;
+    height: 140px;
+    width: 145px;
+    cursor: pointer;
+  }
+  
+  .primerNombre{
+    position: absolute;
+    border-radius: 10px;
+    top: 160px;
+    left: 70px;
+    width: 30vw;
+    text-align: center;
+    border-color: black;
+  }
+
+  .segundoNombre{
+    position: absolute;
+    border-radius: 10px;
+    top: 240px;
+    left: 70px;
+    width: 30vw;
+    text-align: center;
+    border-color: black;
+  }
+
+  .primerApellido{
+    position: absolute;
+    border-radius: 10px;
+    top: 320px;
+    left: 70px;
+    width: 30vw;
+
+    text-align: center;
+  
+    border-color: black;
+  
+  }
+
+  .segundoApellido{
+    position: absolute;
+    border-radius: 10px;
+    top: 400px;
+    left: 70px;
+    width: 30vw;
+
+    text-align: center;
+  
+    border-color: black;
+  
+  }
+
+  .fechaDeNacimiento{
+    position: absolute;
+    border-radius: 10px;
+    top: 480px;
+    left: 70px;
+    width: 30vw;
+
+    text-align: center;
+  
+    border-color: black;
+    cursor: pointer;
+  
+  }
+
+  .nombreDeUsuario{
+    position: absolute;
+    border-radius: 10px;
+    top: 240px;
+    left: 665px;
+    width: 30vw;
+
+    text-align: center;
+  
+    border-color: black;
+  
+  }
+
+  .claveDeAcceso{
+    position: absolute;
+    border-radius: 10px;
+    top: 320px;
+    left: 665px;
+    width: 30vw;
+
+    text-align: center;
+  
+    border-color: black;
+  
+  }
+
+  .nacionalidad{
+    position: absolute;
+    border-radius: 10px;
+    top: 162px;
+    left: 665px;
+    width: 30vw;
+
+    text-align-last: center;
+  
+    border-color: black;
+
+    cursor: pointer;
+  
+  }
+
+  .fotoDePerfil{
+    position: absolute;
+    border-radius: 10px;
+    top: 400px;
+    left: 665px;
+    width: 30vw;
+
+    text-align-last: center;
+  
+    border-color: black;
+  
+  }
+
+  .botonRegistroDeportista{
+    position: absolute;
+    border-radius: 10px;
+    top: 480px;
+    left: 665px;
+    width: 30vw;
+  
+    background-color: #ff5700;
+    color: white;
+    border-color: black;
+  }
+
+
+
+
+

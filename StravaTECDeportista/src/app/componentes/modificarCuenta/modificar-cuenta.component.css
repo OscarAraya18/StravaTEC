@@ -1,0 +1,326 @@
+/*---------------------------------------ESTILOS PARA EL MENU LATERAL----------------------------------------------*/
+.menuLateral{
+    position: relative;
+    top: 0vh;
+    left: -35vw;
+    height: 100vh;
+    width: 30vw;
+    align-self:center;
+    background-color: #ff5100;
+    border-right: 2px solid black;
+}
+
+.contenedor{
+    position: absolute;
+    top: 0px;
+    left: 30vw;
+    height: 100vh;
+    width: 70vw;
+    background: rgba(90.2, 96.9, 99.6, 0.6);
+  }
+
+
+.fotoDePerfilUsuario{
+    position: relative;
+    border-radius: 50%;
+    top: 20px;
+    left: 27%;
+    width: 13vw;
+    height: 26vh;
+}
+
+.textoNombreDelUsuario{
+    text-align: center;
+    position:relative;
+    top:25px;
+    color: white;
+    font-size: xxx-large;
+}
+
+.textoNombreDeUsuario{
+    text-align: center;
+    position:relative;
+    top:15px;
+    color: white;
+    font-size: xx-large;
+}
+
+.botonRegistrarActividad{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 6%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonSeguirDeportistas{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 8%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonBuscarCarrerasRetos{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 10%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonBuscarGrupos{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 12%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.botonMisCarrerasRetos{
+    position: relative;
+    border-radius: 10px;
+    font-size: larger;
+    top: 12%;
+    left: 17%;
+    width: 250px;
+    background-color: gray;
+    color: white;
+}
+
+.logo{
+    position:relative;
+    border-radius: 50%;
+    top:24%;
+    left:-26%;
+    width: 20%;
+    cursor: pointer;
+}
+
+.fondoDePantalla{
+    position: absolute;
+    top: 0px;
+    left: 30vw;
+    height: 100vh;
+    width: 70vw;
+}
+
+.iconoModificar{
+    position: relative;
+    width: 3.5vw;
+    top: -420px;
+    left: -330px;
+}
+
+/*--------------------------------------ESTILOS PARA LOS CHECKBOX----------------------------------------------*/
+.checkBoxPrimerNombre{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 5vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+.checkBoxSegundoNombre{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 15vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+.checkBoxPrimerApellido{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 25vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+.checkBoxSegundoApellido{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 35vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+.checkBoxFechaNacimiento{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 45vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+.checkBoxNacionalidad{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 55vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+.checkBoxClaveAcceso{
+    position: absolute;
+    width: 7vw;
+    height: 7vh;
+    top: 65vh;
+    left: 32vw;
+    cursor: pointer;
+}
+
+/*-----------------------------------------ESTILOS PARA LOS INPUT----------------------------------------------*/
+.inputPrimerNombre{
+    position: absolute;
+    border-radius: 10px;
+    border-color: black;
+    text-align: center;
+    width: 30vw;
+    height: 7vh;
+    top: 5vh;
+    left: 40px;
+}
+
+.inputSegundoNombre{
+    position: absolute;
+    border-radius: 10px;
+    border-color: black;
+    text-align: center;
+    width: 30vw;
+    height: 7vh;
+    top: 15vh;
+    left: 40px;
+}
+
+.inputPrimerApellido{
+    position: absolute;
+    border-radius: 10px;
+    border-color: black;
+    text-align: center;
+    width: 30vw;
+    height: 7vh;
+    top: 25vh;
+    left: 40px;
+}
+
+.inputSegundoApellido{
+    position: absolute;
+    border-radius: 10px;
+    border-color: black;
+    text-align: center;
+    width: 30vw;
+    height: 7vh;
+    top: 35vh;
+    left: 40px;
+}
+
+.inputFechaNacimiento{
+    position: absolute;
+    cursor: pointer;
+    border-radius: 10px;
+    border-color: black;
+    text-align-last: center;
+    width: 30vw;
+    height: 7vh;
+    top: 45vh;
+    left: 40px;
+}
+
+.inputNacionalidad{
+    position: absolute;
+    border-radius: 10px;
+    top: 55vh;
+    left: 40px;
+    width: 30vw;
+    height: 7vh;
+    text-align-last: center;
+    border-color: black;
+    cursor: pointer; 
+}
+
+.inputClaveAcceso{
+    position: absolute; 
+    border-radius: 10px;
+    border-color: black;
+    text-align: center; 
+    width: 30vw;
+    height: 7vh;
+    top: 65vh;
+    left: 40px;
+}
+
+.inputCambiarFotoPerfil{
+    position: absolute;
+    border-radius: 10px;
+    border-color: black;
+    text-align: center;
+    width: 15vw;
+    height: 7vh;
+    top: 79vh;
+    left: 18vw;
+}
+
+.inputReestablecerFotoPerfil{
+    position: absolute;
+    border-radius: 10px;
+    border-color: black;
+    text-align: center;
+    width: 15vw;
+    height: 7vh;
+    top: 87vh;
+    left: 18vw;
+}
+
+.nuevaFotoPerfil{
+    position: absolute;
+    border-radius: 50%;
+    top: 77vh;
+    left: 60px;
+    width: 9vw;
+    height: 20vh;
+}
+
+.inputGuardarCambios{
+    position: absolute;
+    border-radius: 10px;
+    width: 26vw;
+    height: 17vh;
+    top: 25vh;
+    left: 550px;
+    font-size: xx-large;
+    background-color: #ff5700;
+    color: white;
+    border-color: black;
+}
+
+.inputEliminarCuenta{
+    position: absolute;
+    border-radius: 10px;
+    width: 26vw;
+    height: 17vh;
+    top: 45vh;
+    left: 550px;
+    font-size: xx-large;
+    background-color: #a00000;
+    color: white;
+    border-color: black;
+}

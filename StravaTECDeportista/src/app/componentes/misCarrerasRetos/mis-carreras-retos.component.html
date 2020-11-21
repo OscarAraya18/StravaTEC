@@ -1,0 +1,133 @@
+<div class="container menuLateral">
+    <img class="fondoDePantalla" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604690470/CE3101/Primer%20Proyecto/Muro_Wallpaper.jpg">
+    
+    <img class="fotoDePerfilUsuario" [src]="fotoDePerfilUsuario">
+    
+    <h1 class="textoNombreDelUsuario">{{nombreDelUsuario}}</h1>
+
+    <h1 class="textoNombreDeUsuario">@{{nombreDeUsuario}}</h1>
+
+    <button class="botonRegistrarActividad" (click)="goToRegistrarActividad()" routerLinkActive="active">
+		Registrar Actividad
+    </button>
+    
+    <button class="botonSeguirDeportistas" (click)="goToSeguirDeportistas()" routerLinkActive="active">
+		Seguir Deportistas
+    </button>
+    
+    <button class="botonBuscarCarrerasRetos" (click)="goToBuscarCarrerasRetos()" routerLinkActive="active">
+		Buscar Carreras y Retos
+    </button>
+    
+    <button class="botonBuscarGrupos" (click)="goToBuscarGrupos()" routerLinkActive="active">
+		Buscar Grupos
+    </button>
+    
+    <button class="botonMisCarrerasRetos" disabled="true" routerLinkActive="active">
+		Mis Carreras y Retos
+    </button>
+
+    <img class="logo"
+     src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604793824/Icono.png" (click)="goToMiMuro()" routerLinkActive="active">
+     <img class="iconoModificar"
+    src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604985038/Configurar_Logo.png"
+    (click)="goToModificarCuenta()">
+</div>
+
+<div class="container contenedor">
+  <div>
+    <button class="textoTusCarreras" disabled="true">Tus Carreras</button>
+    <div id="carrerasEncontradas">
+      <div class="container fichaCarrera" *ngFor="let fichaCarrera of cantidadCarrerasEncontradas; let i = index">
+        <div>
+          <h1 class="textoNombreCarreraRetoEncontrada">{{carrerasEncontradas[i].nombre}}</h1>
+          <h1 class="textoActividadCarreraRetoEncontrada">{{carrerasEncontradas[i].actividad}}</h1>
+          <h1 class="textoInformacionCarreraRetoEncontrada">
+            Fecha: {{carrerasEncontradas[i].fecha}}.
+            <br>
+            Costo de Inscripción: ₡{{carrerasEncontradas[i].costo}}.
+          </h1>
+          <select class="textoCuentasBancariasCarreraEncontrada">
+            <option selected>Cuentas Bancarias</option>
+            <option 
+              *ngFor="let patrocinador of carrerasEncontradas[i].cuentasBancarias; let h = index">
+              {{carrerasEncontradas[i].cuentasBancarias[h]}}
+            </option>
+          </select>
+          <div *ngIf="carrerasEncontradas[i].finalizada; else noFinalizada">
+            <select class="textoTablaPosicionesCarreraEncontrada">
+              <option selected>Tabla de Posiciones</option>
+              <option 
+                *ngFor="let participante of carrerasEncontradas[i].tablaDePosiciones; let j = index">
+                {{j+1}}. {{carrerasEncontradas[i].tablaDePosiciones[j].usuarioDeportista}} {{carrerasEncontradas[i].tablaDePosiciones[j].duracion}}
+              </option>
+            </select>
+          </div> 
+
+          <ng-template #noFinalizada>
+            <select 
+              class="textoTablaPosicionesCarreraEncontrada"
+              disabled=true>
+              <option selected>La carrera no ha finalizado aún</option>
+            </select>
+          </ng-template>
+
+          <agm-map [latitude]="rutas[i][0].latitud" [zoom]=14 [longitude]="rutas[i][0].longitud" *ngIf = "tieneRuta[i]; else noTieneRuta">
+            <agm-marker *ngFor='let posicion of rutas[i]'
+              [latitude]="posicion.latitud" 
+              [longitude]="posicion.longitud"
+              [iconUrl]="icon">
+            </agm-marker>
+          </agm-map>
+
+          <ng-template #noTieneRuta>
+            <agm-map [latitude]=20 [zoom]=1 [longitude]=0></agm-map>
+          </ng-template>
+
+          
+          <div id="patrocinadoresCarreraEncontrada">
+            <div class="container fichaPatrocinador" *ngFor="let fichaPatrocinador of carrerasEncontradas[i].patrocinadores; let m = index">
+              <img class="logoPatrocinador" [src] = "carrerasEncontradas[i].patrocinadores[m].logo">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <button class="textoTusRetos" disabled="true">Tus Retos</button>
+    <div id="retosEncontrados">
+      <div class="container fichaReto" *ngFor="let fichaReto of cantidadRetosEncontrados; let i = index">
+        <div>
+          <h1 class="textoNombreCarreraRetoEncontrada">{{retosEncontrados[i].nombre}}</h1>
+          <h1 class="textoActividadCarreraRetoEncontrada">{{retosEncontrados[i].actividad}}</h1>
+          <h1 class="textoInformacionCarreraRetoEncontrada">
+            Días restantes: {{retosEncontrados[i].diasRestantes}} días. 
+            <br>
+            Fecha de Finalización: {{retosEncontrados[i].fechaDeFinalizacion}}.
+            <br>
+            Fondo o Altitud: {{retosEncontrados[i].fondoAltitud}}.
+            <br>
+          </h1>
+          <h1 class="textoActividadCarreraRetoEncontrada">
+            Objetivo: {{retosEncontrados[i].objetivo}}.
+            <br>
+            Progreso Actual: {{retosEncontrados[i].progresoActual}}.
+            <br>
+          </h1>
+
+          <div id="patrocinadoresRetoEncontrado">
+            <div class="container fichaPatrocinador" *ngFor="let fichaPatrocinador of retosEncontrados[i].patrocinadores; let m = index">
+              <img class="logoPatrocinador" [src] = "retosEncontrados[i].patrocinadores[m].logo">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

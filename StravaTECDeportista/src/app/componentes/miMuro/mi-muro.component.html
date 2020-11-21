@@ -1,0 +1,93 @@
+
+<div class="container menuLateral">
+    <img class="fondoDePantalla" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604690470/CE3101/Primer%20Proyecto/Muro_Wallpaper.jpg">
+    
+    <img class="fotoDePerfilUsuario" [src]="fotoDePerfilUsuario">
+    
+    <h1 class="textoNombreDelUsuario">{{nombreDelUsuario}}</h1>
+    <h1 class="textoNombreDeUsuario">@{{nombreDeUsuario}}</h1>
+
+    <button class="botonRegistrarActividad" (click)="goToRegistroActividad()" routerLinkActive="active">
+		Registrar Actividad
+    </button>
+    
+    <button class="botonSeguirDeportistas" (click)="goToSeguirDeportistas()" routerLinkActive="active">
+		Seguir Deportistas
+    </button>
+    
+    <button class="botonBuscarCarrerasRetos" (click)="goToBuscarCarrerasRetos()" routerLinkActive="active">
+		Buscar Carreras y Retos
+    </button>
+    
+    <button class="botonBuscarGrupos" (click)="goToBuscarGrupos()" routerLinkActive="active">
+		Buscar Grupos
+    </button>
+    
+    <button class="botonMisCarrerasRetos" (click)="goToMisCarrerasRetos()" routerLinkActive="active">
+		Mis Carreras y Retos
+    </button>
+
+    <img class="logo"
+     src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604793824/Icono.png"
+    [routerLink]="['']" routerLinkActive="active">
+
+    <img class="iconoModificar"
+    src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604985038/Configurar_Logo.png"
+    (click)="goToModificarCuenta()">
+</div>
+
+<div id="actividades">
+  <div class="container fichaActividad" *ngFor="let container of cantidadFichasActividad; let i = index">
+
+    <img 
+      class="fotoDePerfilFichaActividad" 
+      [src]="metadaDataFoto+informacionFichasActividad[i].fotoPerfil"
+      *ngIf="tieneFotoPerfil[i]; else noTieneFoto"
+      >
+    <ng-template #noTieneFoto>
+      <img class="fotoDePerfilFichaActividad" [src]="placeHolderFotoPerfil">
+    </ng-template>
+
+    
+    <agm-map [latitude]="rutas[i][0].latitud" [zoom]=14 [longitude]="rutas[i][0].longitud" *ngIf="tieneRuta[i]; else noTieneRuta">
+      <agm-marker *ngFor='let posicion of rutas[i]'
+        [latitude]="posicion.latitud" 
+        [longitude]="posicion.longitud"
+        [iconUrl]="icon">
+      </agm-marker>
+    </agm-map>
+
+    <ng-template #noTieneRuta>
+      <agm-map [latitude]=20 [zoom]=1 [longitude]=0></agm-map>
+    </ng-template>
+
+    <div>
+      <h1 class="textoNombreDelUsuarioFichaActividad">{{informacionFichasActividad[i].nombre}}</h1>
+      <h2 class="textoNombreDeUsuarioFichaActividad">@{{informacionFichasActividad[i].nombreDeUsuario}}</h2>
+    <img class="botonLike" (click)="darLike(informacionFichasActividad[i].idPublicacion)" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604805951/Like_Logo.png">
+      <h4 class="cantidadLikes">0</h4>
+    </div>
+
+    <h3 class="textoAvisoFichaActividad">
+      Fecha: {{informacionFichasActividad[i].fecha}} 
+      <br>
+      Hora: {{informacionFichasActividad[i].hora}}
+      <br>
+      Nombre: {{informacionFichasActividad[i].nombreCompeticionReto}}
+      <br>
+      Tipo de Actividad : {{informacionFichasActividad[i].actividadRealizada}}
+      <br>
+      Distancia: {{informacionFichasActividad[i].distanciaRecorrida}}
+      <br>
+      Duración: {{informacionFichasActividad[i].duracion}}
+    </h3>
+        
+
+  
+  </div>
+</div>
+    
+
+
+
+

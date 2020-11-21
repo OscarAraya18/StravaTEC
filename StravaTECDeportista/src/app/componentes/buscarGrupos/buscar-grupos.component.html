@@ -1,0 +1,53 @@
+<div class="container menuLateral">
+    <img class="fondoDePantalla" src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604690470/CE3101/Primer%20Proyecto/Muro_Wallpaper.jpg">
+    
+    <img class="fotoDePerfilUsuario" [src]="fotoDePerfilUsuario">
+    
+    <h1 class="textoNombreDelUsuario">{{nombreDelUsuario}}</h1>
+
+    <h1 class="textoNombreDeUsuario">@{{nombreDeUsuario}}</h1>
+
+    <button class="botonRegistrarActividad" (click)="goToRegistrarActividad()" routerLinkActive="active">
+		Registrar Actividad
+    </button>
+    
+    <button class="botonSeguirDeportistas" (click)="goToSeguirDeportistas()" routerLinkActive="active">
+		Seguir Deportistas
+    </button>
+    
+    <button class="botonBuscarCarrerasRetos" (click)="goToBuscarCarrerasRetos()" routerLinkActive="active">
+		Buscar Carreras y Retos
+    </button>
+    
+    <button class="botonBuscarGrupos" disabled="true" routerLinkActive="active">
+		Buscar Grupos
+    </button>
+    
+    <button class="botonMisCarrerasRetos" (click)="goToMisCarrerasRetos()" routerLinkActive="active">
+		Mis Carreras y Retos
+    </button>
+
+    <img class="logo"
+     src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604793824/Icono.png" (click)="goToMiMuro()" routerLinkActive="active">
+     
+     <img class="iconoModificar"
+    src="https://res.cloudinary.com/dfionqbqe/image/upload/v1604985038/Configurar_Logo.png"
+    (click)="goToModificarCuenta()">
+</div>
+
+<div class="container contenedor">
+    <input class="inputGrupo" type="text" placeholder="Coloque el nombre de un grupo" id="grupo">
+    
+    <button class="botonBuscar" (click)="buscarGrupos()">Buscar</button>
+
+    <div id="gruposEncontrados">
+        <div class="container fichaGrupo" *ngFor="let grupo of cantidadGruposEncontrados; let i = index">
+              <div>
+                <h1 class="textoNombreGrupoEncontrado">{{gruposEncontrados[i].nombre}}</h1>
+                <h2 class="textoAdministradorGrupoEncontrado">Administrado por: @{{gruposEncontrados[i].administrador}}</h2>
+              </div>
+              <button class="botonUnirse" (click)="unirGrupo(i)">Unirse</button>
+        </div>
+    </div>
+</div>
+
